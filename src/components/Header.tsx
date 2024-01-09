@@ -4,11 +4,11 @@ import Github from "../assets/Github.svg";
 
 const Header = () => {
   return (
-    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-black">
-      <div className="h-full flex justify-center items-center w-40">
+    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-border px-12 fixed bg-[#ffffff3e]">
+      <div className="h-full flex justify-center items-center">
         <h1>Atlantic UI</h1>
       </div>
-      <div className="h-full flex items-center gap-8 mr-10">
+      <div className="h-full flex items-center gap-8">
         <Link
           className="text-textSecondary hover:text-textPrimary"
           href="/components"
@@ -28,7 +28,10 @@ const Header = () => {
           Docs
         </Link>
         <div>
-          <a href="#">
+          <a
+            href="https://github.com/krishpatel023/Atlantic-UI"
+            target="_blank"
+          >
             <Image src={Github} alt="Github Image" />
           </a>
         </div>
