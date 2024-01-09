@@ -8,11 +8,33 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      // backgroundImage: {
+      //   'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      //   'gradient-conic':
+      //     'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      // },
+      colors: {
+        border : "var(--border)",
+        // input : ;
+        // ring : ;
+        background : "var(--background)",
+        foreground : "var(--foreground)",
+        accent: "var(--accent)",
+
+        primary: "var(--primary)",
+        primaryHover: "var(--primary-foreground)",
+        secondary: "var(--secondary)",
+
+        textPrimary: "var(--text-primary)",
+        textSecondary: "var(--text-secondary)",
+        textComplementary : "var(--text-complementary)",
+        
       },
+      // borderRadius: {
+      //   lg: "var(--radius)",
+      //   md: "calc(var(--radius) - 2px)",
+      //   sm: "calc(var(--radius) - 4px)",
+      // },
     },
   },
   plugins: [],
