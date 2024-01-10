@@ -5,14 +5,33 @@ import Github from "@/assets/Github.svg";
 import Google from "@/assets/Google.svg";
 import { useState } from "react";
 import clsx from "clsx";
+import Link from "next/link";
 
-export default function Login() {
+export default function SignUp() {
   const [username, setUsername] = useState<string | null>();
   const [usernameError, setUsernameError] = useState<string | null>(null);
 
   const [password, setPassword] = useState<string | null>();
-  const [passwordError, setPasswordError] = useState<string | null>();
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  const [name, setName] = useState<string | null>();
+  const [nameError, setNameError] = useState<string | null>(null);
+
+  const handleNameChange = (name: string) => {
+    setNameError(null);
+
+    var validRegex: RegExp = new RegExp(/[a-zA-Z]/g);
+    var validRegex_space: RegExp = new RegExp(/[\s]/g);
+    if (name === undefined || name === "") {
+      setNameError("Name must not be empty");
+    }
+    if (name.match(validRegex) && !name.match(validRegex)) {
+      setNameError("Name must not be empty");
+    }
+    if (!name.match(validRegex)) {
+      setNameError("Please enter a valid name");
+    } else setName(name);
+  };
   //EMAIL VALIDATION ALONG WITH STORING
   const handleUsernameChange = (val: string) => {
     setUsernameError(null);
@@ -132,36 +151,61 @@ export default function Login() {
 
   //SignIn
   const handleSignIn = () => {
-    if (username && password) {
-      handleUsernameChange(username);
-      handlePasswordChange(password);
+    if (!usernameError && !passwordError && !nameError) {
+      //Remove this
+      alert("Signed Up Successfully");
     } else {
-      if (username) {
-        setPasswordError("Please enter a valid Password");
-      } else if (password) {
-        setUsernameError("Please enter a valid Email");
-      } else {
-        setUsernameError("Please enter a valid Email");
+      if (!password) {
         setPasswordError("Please enter a valid Password");
       }
+      if (!username) {
+        setUsernameError("Please enter a valid Email");
+      }
+      if (!name) {
+        setNameError("Please enter a valid Name");
+      }
     }
-    //Remove this
-    alert("Signed In");
   };
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="w-[40%] h-full flex flex-col justify-center items-center bg-[url('../assets/Background.svg')] bg-center bg-no-repeat bg-contain">
         <div className="w-3/4 flex flex-col gap-4">
-          <h1 className="text-5xl font-bold text-textPrimary">Welcome Back</h1>
+          <h1 className="text-5xl font-bold text-textPrimary">Welcome</h1>
           <span className="text-2xl font-normal text-textPrimary">
-            Log in to start creating your dream website. A low code kickstart to
-            develop your websites faster.
+            Sign up to start creating your dream website. A low code kickstart
+            to develop your websites faster.
           </span>
         </div>
       </div>
       <div className="w-[60%] h-full flex justify-center items-center">
         <div className="w-[50%]">
           <div className="flex flex-col gap-2 w-full">
+            <label htmlFor="name" className="text-lg text-textPrimary">
+              Name
+            </label>
+            <input
+              type="text"
+              placeholder="Your Name"
+              className={clsx(
+                "block w-full h-12 rounded-md border-2 shadow-sm px-4",
+                {
+                  "border-red-600 focus:border-red-600 focus:ring focus:ring-red-600 focus:ring-opacity-50":
+                    nameError !== null,
+                  "focus:ring focus:ring-primary-200 focus:ring-opacity-50":
+                    nameError === null,
+                }
+              )}
+              onChange={(e) => {
+                handleNameChange(e.target.value);
+              }}
+            />
+            {nameError !== null ? (
+              <span className="text-red-600 text-sm font-normal">
+                {nameError}
+              </span>
+            ) : null}
+          </div>
+          <div className="flex flex-col gap-2 w-full mt-6">
             <label htmlFor="username" className="text-lg text-textPrimary">
               Email
             </label>
@@ -213,22 +257,22 @@ export default function Login() {
               </span>
             ) : null}
           </div>
-          <div className="mt-4 flex gap-2">
+          {/* <div className="mt-4 flex gap-2">
             <input type="checkbox" name="" id="" />
             <span>Remember me</span>
-          </div>
+          </div> */}
           <div className="mt-6 flex flex-col gap-4">
             <button
               className="w-full h-12 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center "
               onClick={handleSignIn}
             >
-              Sign In
+              Sign Up
             </button>
-
-            <span className="text-accent underline">Forget Password?</span>
             <p>
-              Don't have an account?{" "}
-              <span className="text-accent underline">Sign Up</span>
+              Have an account?{" "}
+              <Link href={"/signin"} className="text-accent underline">
+                Sign In
+              </Link>
             </p>
           </div>
 

@@ -37,7 +37,7 @@ const Header = () => {
         </div>
         <Link
           className="w-20 h-8 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center "
-          href="/login"
+          href="/signin"
         >
           Login
         </Link>
