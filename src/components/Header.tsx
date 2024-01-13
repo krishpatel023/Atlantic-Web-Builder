@@ -4,7 +4,7 @@ import Github from "../assets/Github.svg";
 
 const Header = () => {
   return (
-    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-border px-12 fixed bg-[#ffffff3e]">
+    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-border px-12 ">
       <div className="h-full flex justify-center items-center">
         <h1>Atlantic UI</h1>
       </div>

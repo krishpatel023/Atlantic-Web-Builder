@@ -150,7 +150,7 @@ export default function SignUp() {
   };
 
   //SignIn
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     if (!usernameError && !passwordError && !nameError) {
       //Remove this
       alert("Signed Up Successfully");
@@ -264,7 +264,7 @@ export default function SignUp() {
           <div className="mt-6 flex flex-col gap-4">
             <button
               className="w-full h-12 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center "
-              onClick={handleSignIn}
+              onClick={handleSignUp}
             >
               Sign Up
             </button>

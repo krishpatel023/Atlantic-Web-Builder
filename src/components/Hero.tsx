@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <div className="w-full h-[100vh] flex justify-center items-center bg-[url('../assets/Background.svg')] bg-no-repeat	bg-center	">
+    <div className="w-full h-[calc(100vh-4rem)] flex justify-center items-center bg-[url('../assets/Background.svg')] bg-no-repeat	bg-center	">
       <div className="flex flex-col justify-center items-center text-center gap-6">
         <h1 className="text-5xl font-bold text-textPrimary w-1/2">
           Make the websites in lightspeed using Atlantic UI
