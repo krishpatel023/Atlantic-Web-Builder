@@ -151,7 +151,14 @@ export default function SignUp() {
 
   //SignIn
   const handleSignUp = () => {
-    if (!usernameError && !passwordError && !nameError) {
+    if (
+      !usernameError &&
+      !passwordError &&
+      !nameError &&
+      name &&
+      username &&
+      password
+    ) {
       //Remove this
       alert("Signed Up Successfully");
     } else {

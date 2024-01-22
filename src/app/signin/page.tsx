@@ -12,7 +12,7 @@ export default function SignIn() {
   const [usernameError, setUsernameError] = useState<string | null>(null);
 
   const [password, setPassword] = useState<string | null>();
-  const [passwordError, setPasswordError] = useState<string | null>();
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   //EMAIL VALIDATION ALONG WITH STORING
   const handleUsernameChange = (val: string) => {
@@ -133,7 +133,7 @@ export default function SignIn() {
 
   //SignIn
   const handleSignIn = () => {
-    if (!usernameError && !passwordError) {
+    if (!usernameError && !passwordError && username && password) {
       //Remove this
       alert("Signed In");
     } else {

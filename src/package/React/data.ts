@@ -1,10 +1,11 @@
-import { Component } from "react";
-import Header from "../React/Header/Header";
+import { Component, ReactNode } from "react";
+import Header, { HeaderCode } from "../React/Header/Header";
 
 export interface Variants {
   name: string;
   id: number;
   component: React.FC;
+  code: React.FC;
 }
 
 export interface Components {
@@ -32,6 +33,7 @@ export const variants: Variants[] = [
     name: "Header with search",
     id: 100,
     component: Header,
+    code: HeaderCode,
   },
 ];
 

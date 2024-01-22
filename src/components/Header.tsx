@@ -10,20 +10,20 @@ const Header = () => {
       </div>
       <div className="h-full flex items-center gap-8">
         <Link
-          className="text-textSecondary hover:text-textPrimary"
           href="/components"
+          className="text-textSecondary hover:text-textPrimary"
         >
           Components
         </Link>
         <Link
-          className="text-textSecondary hover:text-textPrimary"
           href="/website"
+          className="text-textSecondary hover:text-textPrimary"
         >
           Website Builder
         </Link>
         <Link
-          className="text-textSecondary hover:text-textPrimary"
           href="/docs"
+          className="text-textSecondary hover:text-textPrimary"
         >
           Docs
         </Link>
@@ -36,8 +36,8 @@ const Header = () => {
           </a>
         </div>
         <Link
-          className="w-20 h-8 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center "
           href="/signin"
+          className="w-20 h-8 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center"
         >
           Login
         </Link>
