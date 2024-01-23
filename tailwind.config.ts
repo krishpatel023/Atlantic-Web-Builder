@@ -25,6 +25,11 @@ const config: Config = {
         textComplementary: "var(--text-complementary)",
       },
     },
+    screens: {
+      lg: { max: "1200px" },
+      md: { max: "1000px" },
+      sm: { max: "600px" },
+    },
   },
   plugins: [],
 };

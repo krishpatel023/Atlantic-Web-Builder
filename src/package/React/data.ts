@@ -1,11 +1,10 @@
-import { Component, ReactNode } from "react";
 import Header, { HeaderCode } from "../React/Header/Header";
 
 export interface Variants {
   name: string;
   id: number;
   component: React.FC;
-  code: React.FC;
+  code: string;
 }
 
 export interface Components {
@@ -24,6 +23,66 @@ export const components: Components[] = [
   },
   {
     name: "Hero",
+    variants: [100],
+  },
+  {
+    name: "Header2",
+    variants: [100],
+  },
+  {
+    name: "Footer2",
+    variants: [100],
+  },
+  {
+    name: "Hero2",
+    variants: [100],
+  },
+  {
+    name: "Header3",
+    variants: [100],
+  },
+  {
+    name: "Footer3",
+    variants: [100],
+  },
+  {
+    name: "Hero3",
+    variants: [100],
+  },
+  {
+    name: "Header4",
+    variants: [100],
+  },
+  {
+    name: "Footer4",
+    variants: [100],
+  },
+  {
+    name: "Hero4",
+    variants: [100],
+  },
+  {
+    name: "Header5",
+    variants: [100],
+  },
+  {
+    name: "Footer5",
+    variants: [100],
+  },
+  {
+    name: "Hero5",
+    variants: [100],
+  },
+  {
+    name: "Header6",
+    variants: [100],
+  },
+  {
+    name: "Footer6",
+    variants: [100],
+  },
+  {
+    name: "Hero6",
     variants: [100],
   },
 ];

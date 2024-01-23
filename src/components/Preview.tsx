@@ -7,8 +7,17 @@ import {
   FindVariantsOfAComponent,
   Variants,
 } from "@/package/React/data";
-import { renderToString } from "react-dom/server";
+
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import js from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
+import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
+import prism from "react-syntax-highlighter/dist/esm/styles/prism/prism";
+import { Check, Copy } from "lucide-react";
+
 export default function Preview({ variant }: { variant: Variants }) {
+  SyntaxHighlighter.registerLanguage("jsx", jsx);
+
   const [mode, setMode] = useState<"preview" | "code">("preview");
 
   const handleModeChange = (): void => {
@@ -18,11 +27,20 @@ export default function Preview({ variant }: { variant: Variants }) {
       setMode("preview");
     }
   };
+  const [btnClick, setBtnClick] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(variant.code);
+    setBtnClick(true);
+    const time = setTimeout(handleCopyBtn, 1000);
+  };
 
+  function handleCopyBtn() {
+    setBtnClick(false);
+  }
   return (
     <>
       {variant ? (
-        <div className="w-full ">
+        <div className="w-full">
           <div className="w-full h-16 flex justify-between items-center">
             <h1 className="font-semibold text-xl text-textPrimary">
               Header with Search
@@ -46,37 +64,38 @@ export default function Preview({ variant }: { variant: Variants }) {
                   Code
                 </button>
               </div>
-              <button className="w-10 h-10 bg-secondary flex justify-center items-center rounded-md">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"
-                  />
-                </svg>
+              <button
+                className={clsx(
+                  "w-10 h-10 bg-secondary flex justify-center items-center rounded-md",
+                  { "text-green-600": btnClick === true }
+                )}
+                onClick={handleCopy}
+              >
+                {btnClick === false ? <Copy size={20} /> : <Check size={20} />}
               </button>
             </div>
           </div>
 
           {/* BOX */}
-          <div className="w-full min-h-80  border-[2px] border-border rounded-md">
+          <div className="w-full border-[2px] border-border rounded-md bg-slate-100">
             {mode === "preview" ? (
-              <div className="w-full flex justify-center items-center">
+              <div
+                className="w-full h-full flex justify-center items-center max-w-[calc(((100vw*0.85)-8rem)*0.85)] 
+              md:max-w-[calc((100vw*0.85)*0.90)]"
+              >
                 <variant.component />
               </div>
             ) : null}
             {mode === "code" ? (
-              <div className="w-full flex justify-start items-start">
-                <code>
-                  <variant.component />
-                </code>
+              <div className="w-full min-h-80 max-w-[calc(((100vw*0.85)-8rem)*0.85)] md:max-w-[calc((100vw*0.85)*0.90)]">
+                <SyntaxHighlighter
+                  language="jsx"
+                  style={atomDark}
+                  customStyle={{ width: "100", minHeight: "21rem" }}
+                  showLineNumbers
+                >
+                  {variant.code}
+                </SyntaxHighlighter>
               </div>
             ) : null}
           </div>

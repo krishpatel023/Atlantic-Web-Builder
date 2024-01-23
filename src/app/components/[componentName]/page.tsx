@@ -8,6 +8,7 @@ import {
   FindVariantsOfAComponent,
   Variants,
 } from "@/package/React/data";
+import SidebarForComponentsList from "@/components/SidebarForComponentsList";
 
 export default function Components({
   params,
@@ -31,18 +32,23 @@ export default function Components({
   return (
     <>
       {variantsData ? (
-        <div className="w-[calc(100vw-15rem)] flex justify-between">
-          <div className="w-[calc(100%-8rem)] flex flex-col items-center">
-            <div className="w-[90%]">
-              {variantsData.map((variant) => (
-                <Preview variant={variant} key={variant.id} />
-              ))}
+        <>
+          <div className="w-[15%] h-[calc(100vh-4rem)] sticky">
+            <SidebarForComponentsList active={params.componentName} />
+          </div>
+          <div className="w-[85%] flex justify-between">
+            <div className="w-[calc(100%-8rem)] flex flex-col items-center md:w-full py-6">
+              <div className="w-[90%]">
+                {variantsData.map((variant) => (
+                  <Preview variant={variant} key={variant.id} />
+                ))}
+              </div>
+            </div>
+            <div className="md:hidden py-8">
+              <OnThisPage variantsData={variantsData} />
             </div>
           </div>
-          <div className="lg:block sm:hidden">
-            <OnThisPage variantsData={variantsData} />
-          </div>
-        </div>
+        </>
       ) : null}
     </>
   );
