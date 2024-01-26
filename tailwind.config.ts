@@ -10,8 +10,8 @@ const config: Config = {
     extend: {
       colors: {
         border: "var(--border)",
-        // input : ;
-        // ring : ;
+
+        //Website
         background: "var(--background)",
         foreground: "var(--foreground)",
         accent: "var(--accent)",
@@ -23,6 +23,17 @@ const config: Config = {
         textPrimary: "var(--text-primary)",
         textSecondary: "var(--text-secondary)",
         textComplementary: "var(--text-complementary)",
+
+        // Atlantic UI styles
+        aui_primary: "var(--aui-primary)",
+        aui_text: "var(--aui-text)",
+        aui_text_secondary: "var(--aui-text-secondary)",
+        aui_accent: "var(--aui-accent)",
+        aui_accent_hover: "var(--aui-accent-hover)",
+        aui_text_accent: "var(--aui-text-accent)",
+        aui_accent_secondary: "var(--aui-accent-secondary)",
+        aui_border: "var(--aui-border)",
+        aui_ring: "var(--aui-ring)",
       },
     },
     screens: {
@@ -32,5 +43,12 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern:
+        /(bg|text|border|ring)-(aui_primary|aui_text|aui_text_secondary|aui_accent|aui_accent_hover|aui_text_accent|aui_accent_secondary|aui_border)/,
+      variants: ["hover", "focus"],
+    },
+  ],
 };
 export default config;

@@ -43,7 +43,7 @@ export default function Preview({ variant }: { variant: Variants }) {
         <div className="w-full">
           <div className="w-full h-16 flex justify-between items-center">
             <h1 className="font-semibold text-xl text-textPrimary">
-              Header with Search
+              {variant.name}
             </h1>
             <div className="flex justify-center items-center h-full gap-4">
               <div className="flex gap-2 bg-secondary rounded-md h-10 justify-center items-center px-2">
@@ -77,28 +77,29 @@ export default function Preview({ variant }: { variant: Variants }) {
           </div>
 
           {/* BOX */}
-          <div className="w-full border-[2px] border-border rounded-md bg-slate-100">
-            {mode === "preview" ? (
+
+          {mode === "preview" ? (
+            <div className="w-full flex justify-center items-center  border-[2px] border-border rounded-md bg-slate-200">
               <div
-                className="w-full h-full flex justify-center items-center max-w-[calc(((100vw*0.85)-8rem)*0.85)] 
+                className="w-[95%] min-h-80 flex justify-center items-center max-w-[calc(((100vw*0.85)-8rem)*0.85)] 
               md:max-w-[calc((100vw*0.85)*0.90)]"
               >
                 <variant.component />
               </div>
-            ) : null}
-            {mode === "code" ? (
-              <div className="w-full min-h-80 max-w-[calc(((100vw*0.85)-8rem)*0.85)] md:max-w-[calc((100vw*0.85)*0.90)]">
-                <SyntaxHighlighter
-                  language="jsx"
-                  style={atomDark}
-                  customStyle={{ width: "100", minHeight: "21rem" }}
-                  showLineNumbers
-                >
-                  {variant.code}
-                </SyntaxHighlighter>
-              </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
+          {mode === "code" ? (
+            <div className="w-full min-h-80 max-w-[calc(((100vw*0.85)-8rem)*0.85)] md:max-w-[calc((100vw*0.85)*0.90)]">
+              <SyntaxHighlighter
+                language="jsx"
+                style={atomDark}
+                customStyle={{ width: "100", minHeight: "21rem" }}
+                showLineNumbers
+              >
+                {variant.code}
+              </SyntaxHighlighter>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </>

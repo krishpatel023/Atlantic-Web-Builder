@@ -33,18 +33,20 @@ export default function Components({
     <>
       {variantsData ? (
         <>
-          <div className="w-[15%] h-[calc(100vh-4rem)] sticky">
+          <div className="w-[15%] h-[calc(100vh-4rem)] fixed">
             <SidebarForComponentsList active={params.componentName} />
           </div>
+          <div className="min-w-[15%]"></div>
           <div className="w-[85%] flex justify-between">
             <div className="w-[calc(100%-8rem)] flex flex-col items-center md:w-full py-6">
-              <div className="w-[90%]">
+              <div className="w-[90%] flex flex-col gap-20">
                 {variantsData.map((variant) => (
                   <Preview variant={variant} key={variant.id} />
                 ))}
               </div>
             </div>
-            <div className="md:hidden py-8">
+            <div className="md:hidden min-w-60 py-8 right-0"></div>
+            <div className="md:hidden py-8 fixed right-0">
               <OnThisPage variantsData={variantsData} />
             </div>
           </div>

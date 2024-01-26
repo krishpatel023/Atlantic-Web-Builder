@@ -24,6 +24,22 @@
     --text-complementary: #ffffff;
 
     --radius: 1 rem;
+
+    /* FOR COMPONENTS */
+
+    --aui-primary: #ffffff;
+
+    --aui-text: #000000;
+    --aui-text-secondary: #71717a;
+
+    --aui-accent: #000000;
+    --aui-accent-hover: #242424;
+    --aui-text-accent: #ffffff;
+    --aui-accent-secondary: #71717a;
+
+    --aui-ring: rgb(79, 155, 255);
+
+    --aui-border: #dfdfe3;
   }
 
   .dark {

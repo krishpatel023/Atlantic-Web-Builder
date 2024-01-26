@@ -1,12 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import Github from "../assets/Github.svg";
+import Logo from "../assets/logo.png";
 
 const Header = () => {
   return (
-    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-border px-12 ">
-      <div className="h-full flex justify-center items-center">
-        <h1>Atlantic UI</h1>
+    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-border px-12 bg-background">
+      <div className="h-full w-[10rem] flex justify-center items-center">
+        <Link href="/" className="h-full flex justify-center items-center">
+          <Image src={Logo} alt="Logo" className="h-[50%] object-contain" />
+        </Link>
       </div>
       <div className="h-full flex items-center gap-8">
         <Link

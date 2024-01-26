@@ -25,9 +25,9 @@ export default function OnThisPage({
   return (
     <div className="w-60">
       <h1 className="font-semibold">On this page</h1>
-      <div className="mt-2">
+      <div className="mt-2 flex flex-col gap-1 border-l-[2px] border-gray-300">
         {variantsData?.map((variants, i) => (
-          <span className="border-l-[2px] border-gray-400 px-1" key={i}>
+          <span className="px-2" key={i}>
             {variants.name}
           </span>
         ))}

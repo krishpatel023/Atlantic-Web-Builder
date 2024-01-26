@@ -7,9 +7,10 @@ export default function ComponentsLayout({
 }) {
   return (
     <div className="w-full">
-      <div className="w-full">
+      <div className="w-full fixed">
         <Header />
       </div>
+      <div className="min-h-16"></div>
       <div className="w-full min-h-[calc(100vh-4rem)] flex">{children}</div>
     </div>
   );

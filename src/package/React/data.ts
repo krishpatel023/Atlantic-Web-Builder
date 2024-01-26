@@ -1,4 +1,6 @@
-import Header, { HeaderCode } from "../React/Header/Header";
+import Header_1, { HeaderCode_1 } from "./Header/Header_1";
+import Header_2, { HeaderCode_2 } from "./Header/Header_2";
+import Header_3, { HeaderCode_3 } from "./Header/Header_3";
 
 export interface Variants {
   name: string;
@@ -15,84 +17,36 @@ export interface Components {
 export const components: Components[] = [
   {
     name: "Header",
-    variants: [100],
+    variants: [1, 2, 3],
   },
   {
     name: "Footer",
-    variants: [100],
+    variants: [1],
   },
   {
     name: "Hero",
-    variants: [100],
-  },
-  {
-    name: "Header2",
-    variants: [100],
-  },
-  {
-    name: "Footer2",
-    variants: [100],
-  },
-  {
-    name: "Hero2",
-    variants: [100],
-  },
-  {
-    name: "Header3",
-    variants: [100],
-  },
-  {
-    name: "Footer3",
-    variants: [100],
-  },
-  {
-    name: "Hero3",
-    variants: [100],
-  },
-  {
-    name: "Header4",
-    variants: [100],
-  },
-  {
-    name: "Footer4",
-    variants: [100],
-  },
-  {
-    name: "Hero4",
-    variants: [100],
-  },
-  {
-    name: "Header5",
-    variants: [100],
-  },
-  {
-    name: "Footer5",
-    variants: [100],
-  },
-  {
-    name: "Hero5",
-    variants: [100],
-  },
-  {
-    name: "Header6",
-    variants: [100],
-  },
-  {
-    name: "Footer6",
-    variants: [100],
-  },
-  {
-    name: "Hero6",
-    variants: [100],
+    variants: [1],
   },
 ];
 
 export const variants: Variants[] = [
   {
-    name: "Header with search",
-    id: 100,
-    component: Header,
-    code: HeaderCode,
+    name: "Header Default",
+    id: 1,
+    component: Header_1,
+    code: HeaderCode_1,
+  },
+  {
+    name: "Header with Fields (On This Site)",
+    id: 2,
+    component: Header_2,
+    code: HeaderCode_2,
+  },
+  {
+    name: "Header with Search",
+    id: 3,
+    component: Header_3,
+    code: HeaderCode_3,
   },
 ];
 
