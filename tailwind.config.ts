@@ -5,6 +5,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/package/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -35,6 +36,11 @@ const config: Config = {
         aui_border: "var(--aui-border)",
         aui_ring: "var(--aui-ring)",
       },
+      screens: {
+        aui_lg: { max: "1000px" },
+        aui_md: { max: "800px" },
+        aui_sm: { max: "400px" },
+      },
     },
     screens: {
       lg: { max: "1200px" },
@@ -47,7 +53,7 @@ const config: Config = {
     {
       pattern:
         /(bg|text|border|ring)-(aui_primary|aui_text|aui_text_secondary|aui_accent|aui_accent_hover|aui_text_accent|aui_accent_secondary|aui_border)/,
-      variants: ["hover", "focus"],
+      variants: ["hover", "focus", "aui_sm", "aui_md", "aui_lg"],
     },
   ],
 };

@@ -81,7 +81,7 @@ export default function Preview({ variant }: { variant: Variants }) {
           {mode === "preview" ? (
             <div className="w-full flex justify-center items-center  border-[2px] border-border rounded-md bg-slate-200">
               <div
-                className="w-[95%] min-h-80 flex justify-center items-center max-w-[calc(((100vw*0.85)-8rem)*0.85)] 
+                className="w-[98%] min-h-80 flex justify-center items-center 
               md:max-w-[calc((100vw*0.85)*0.90)]"
               >
                 <variant.component />
@@ -89,7 +89,7 @@ export default function Preview({ variant }: { variant: Variants }) {
             </div>
           ) : null}
           {mode === "code" ? (
-            <div className="w-full min-h-80 max-w-[calc(((100vw*0.85)-8rem)*0.85)] md:max-w-[calc((100vw*0.85)*0.90)]">
+            <div className="w-full min-h-80 max-w-[calc((100vw*0.85)*0.90)]">
               <SyntaxHighlighter
                 language="jsx"
                 style={atomDark}

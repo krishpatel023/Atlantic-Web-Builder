@@ -1,3 +1,4 @@
+import Footer_1, { FooterCode_1 } from "./Footer/Footer_1";
 import Header_1, { HeaderCode_1 } from "./Header/Header_1";
 import Header_2, { HeaderCode_2 } from "./Header/Header_2";
 import Header_3, { HeaderCode_3 } from "./Header/Header_3";
@@ -21,7 +22,7 @@ export const components: Components[] = [
   },
   {
     name: "Footer",
-    variants: [1],
+    variants: [4],
   },
   {
     name: "Hero",
@@ -47,6 +48,12 @@ export const variants: Variants[] = [
     id: 3,
     component: Header_3,
     code: HeaderCode_3,
+  },
+  {
+    name: "Footer Default",
+    id: 4,
+    component: Footer_1,
+    code: FooterCode_1,
   },
 ];
 
