@@ -13,7 +13,7 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import js from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
 import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
 import prism from "react-syntax-highlighter/dist/esm/styles/prism/prism";
-import { Check, Copy } from "lucide-react";
+import { ArrowsOut, Checks, Copy } from "@phosphor-icons/react/dist/ssr";
 
 export default function Preview({ variant }: { variant: Variants }) {
   SyntaxHighlighter.registerLanguage("jsx", jsx);
@@ -46,6 +46,14 @@ export default function Preview({ variant }: { variant: Variants }) {
               {variant.name}
             </h1>
             <div className="flex justify-center items-center h-full gap-4">
+              <a
+                href={`/preview/${variant.id}`}
+                target="_blank"
+                className=" h-10 hover:scale-110 transition-all duration-200 flex justify-center items-center text-center gap-4 px-4  rounded-lg  text-textPrimary bg-secondary"
+              >
+                Open In Fullscreeen
+                <ArrowsOut size={24} />
+              </a>
               <div className="flex gap-2 bg-secondary rounded-md h-10 justify-center items-center px-2">
                 <button
                   className={clsx("w-24 h-8 rounded-md ", {
@@ -71,7 +79,7 @@ export default function Preview({ variant }: { variant: Variants }) {
                 )}
                 onClick={handleCopy}
               >
-                {btnClick === false ? <Copy size={20} /> : <Check size={20} />}
+                {btnClick === false ? <Copy size={20} /> : <Checks size={20} />}
               </button>
             </div>
           </div>
@@ -79,7 +87,7 @@ export default function Preview({ variant }: { variant: Variants }) {
           {/* BOX */}
 
           {mode === "preview" ? (
-            <div className="w-full flex justify-center items-center  border-[2px] border-border rounded-md bg-slate-200">
+            <div className="w-full flex justify-center items-center  border-[2px] border-border rounded-md bg-slate-200 py-10">
               <div
                 className="w-[98%] min-h-80 flex justify-center items-center 
               md:max-w-[calc((100vw*0.85)*0.90)]"

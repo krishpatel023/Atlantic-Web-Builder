@@ -1,7 +1,10 @@
 import Footer_1, { FooterCode_1 } from "./Footer/Footer_1";
+import Footer_2, { FooterCode_2 } from "./Footer/Footer_2";
+
 import Header_1, { HeaderCode_1 } from "./Header/Header_1";
 import Header_2, { HeaderCode_2 } from "./Header/Header_2";
 import Header_3, { HeaderCode_3 } from "./Header/Header_3";
+import Hero_1, { HeroCode_1 } from "./Hero/Hero_1";
 
 export interface Variants {
   name: string;
@@ -22,11 +25,11 @@ export const components: Components[] = [
   },
   {
     name: "Footer",
-    variants: [4],
+    variants: [4, 5],
   },
   {
     name: "Hero",
-    variants: [1],
+    variants: [6],
   },
 ];
 
@@ -55,6 +58,18 @@ export const variants: Variants[] = [
     component: Footer_1,
     code: FooterCode_1,
   },
+  {
+    name: "Footer Flexed",
+    id: 5,
+    component: Footer_2,
+    code: FooterCode_2,
+  },
+  {
+    name: "Hero Default",
+    id: 6,
+    component: Hero_1,
+    code: HeroCode_1,
+  },
 ];
 
 // Function that returns the component from the component name
@@ -79,4 +94,16 @@ export const FindVariantsOfAComponent = (variantsArray: Array<number>) => {
     }
   }
   return ReturnArray;
+};
+
+//Function that returns a single Variant based on the Id
+
+export const FindVariantFromId = (variantId: number) => {
+  // var ReturnVariant: Variants | null = null;
+  for (var i = 0; i <= variants.length - 1; i++) {
+    if (variants[i].id === variantId) {
+      return variants[i];
+    }
+  }
+  return null;
 };
