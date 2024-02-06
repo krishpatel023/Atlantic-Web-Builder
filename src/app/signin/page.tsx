@@ -224,7 +224,7 @@ export default function SignIn() {
 
             <span className="text-accent underline">Forget Password?</span>
             <p>
-              Don't have an account?{" "}
+              {"Don't have an account?"}
               <Link href={"/signup"} className="text-accent underline">
                 Sign Up
               </Link>

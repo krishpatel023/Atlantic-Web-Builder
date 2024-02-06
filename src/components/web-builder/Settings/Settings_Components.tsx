@@ -60,7 +60,7 @@ const Component = ({ componentName }: { componentName: string }) => {
           )}
         >
           {variantsData?.map((variant, i) => (
-            <Dragable className="w-[90%] flex flex-col items-end">
+            <Dragable className="w-[90%] flex flex-col items-end" key={i}>
               <div
                 className="w-full bg-secondary min-h-8 rounded-lg px-4 py-2 flex items-center justify-between"
                 key={i}

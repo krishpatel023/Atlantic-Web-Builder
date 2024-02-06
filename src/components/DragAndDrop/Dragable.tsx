@@ -3,22 +3,22 @@ import React, { useContext } from "react";
 
 type DragableProps = React.PropsWithChildren<{
   className?: string;
+  [key: string]: any;
 }>;
 
 export const Dragable: React.FC<DragableProps> = (props) => {
   const { onDrag } = useContext(DragAndDropContext);
 
+  const { key, className, children, ...rest } = props;
   return (
-    <div className={`${props.className}`} draggable onDragStart={onDrag}>
+    <div
+      className={`${props.className}`}
+      draggable
+      onDragStart={onDrag}
+      {...props.key}
+      {...rest}
+    >
       {props.children}
-    </div>
-  );
-};
-
-const MyComponent = () => {
-  return (
-    <div className="w-full bg-black">
-      <h1 className="font-bold">Hello</h1>
     </div>
   );
 };
