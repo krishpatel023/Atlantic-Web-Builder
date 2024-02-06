@@ -38,7 +38,7 @@ const Component = ({ componentName }: { componentName: string }) => {
     if (DataObtained) {
       setVariantsData(FindVariantsOfAComponent(DataObtained?.variants));
     }
-  }, []);
+  }, [componentName]);
 
   console.log(variantsData);
 

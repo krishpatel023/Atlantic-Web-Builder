@@ -23,7 +23,7 @@ export default function PreviewFullscreen({
       const myVal = new Number(params.previewId);
       getVariantData(parseInt(params.previewId));
     }
-  }, [variantsData]);
+  }, [variantsData, params.previewId]);
 
   const getVariantData = (id: number) => {
     var data: Variants | null = FindVariantFromId(id);

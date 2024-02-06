@@ -27,7 +27,7 @@ export default function SignIn() {
 
   const validateEmail = (email: string) => {
     var validRegex: RegExp = new RegExp(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     );
 
     if (email.match(validRegex)) {

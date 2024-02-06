@@ -25,7 +25,7 @@ export default function Components({
     if (DataObtained) {
       setVariantsData(FindVariantsOfAComponent(DataObtained?.variants));
     }
-  }, []);
+  }, [params.componentName]);
 
   console.log(variantsData);
 

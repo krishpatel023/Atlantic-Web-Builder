@@ -5,7 +5,7 @@ import SideBar from "@/components/web-builder/SideBar/SideBar";
 import DragAndDropWrapper from "@/context/dragAndDrop/DragAndDropWrapper";
 import { useEffect, useState } from "react";
 
-export default function page() {
+export default function Page() {
   const [sidebarActive, setSidebarActive] = useState<boolean>(true);
 
   const handleSidebar = () => {
