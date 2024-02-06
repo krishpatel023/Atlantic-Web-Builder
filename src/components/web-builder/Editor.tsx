@@ -8,6 +8,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import clsx from "clsx";
 import { useState } from "react";
+import { Dropable } from "../DragAndDrop/Dropable";
 
 export default function Editor({ sidebarActive }: { sidebarActive: boolean }) {
   const [active, setActive] = useState<"sm" | "md" | "lg">("sm");
@@ -59,7 +60,9 @@ export default function Editor({ sidebarActive }: { sidebarActive: boolean }) {
             <Desktop size={24} />
           </button>
         </div>
-        <div className="min-w-[98%] max-w-[98%] h-[calc(100vh-4rem)] mt-2 bg-background rounded-t-lg"></div>
+        <Dropable className="min-w-[98%] max-w-[98%] h-[calc(100vh-4rem)] mt-2">
+          <div className="min-w-full h-full  bg-background rounded-t-lg"></div>
+        </Dropable>
       </div>
     </>
   );
