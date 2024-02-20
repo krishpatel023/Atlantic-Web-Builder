@@ -28,22 +28,22 @@ const Container = ({ element }: Props) => {
     const componentType = e.dataTransfer.getData("componentType") as EditorBtns;
 
     switch (componentType) {
-      case "text":
-        dispatch({
-          type: "ADD_ELEMENT",
-          payload: {
-            containerId: id,
-            elementDetails: {
-              content: { innerText: "Text Element" },
-              id: v4(),
-              name: "Text",
-              styles: ["text-aui-primary"],
-              type: "text",
-              special: [],
-            },
-          },
-        });
-        break;
+      // case "text":
+      //   dispatch({
+      //     type: "ADD_ELEMENT",
+      //     payload: {
+      //       containerId: id,
+      //       elementDetails: {
+      //         content: { innerText: "Text Element" },
+      //         id: v4(),
+      //         name: "Text",
+      //         styles: ["text-aui-primary"],
+      //         type: "text",
+      //         special: [],
+      //       },
+      //     },
+      //   });
+      //   break;
       case "component":
         if (componentData) {
           dispatch({

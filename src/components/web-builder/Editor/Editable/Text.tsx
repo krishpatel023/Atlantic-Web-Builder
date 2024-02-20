@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 export default function Text({ element }: { element: EditorElement }) {
   const [textValue, setTextValue] = useState<string>("text");
 
-  useEffect(() => {
-    if (
-      !Array.isArray(element.content) &&
-      element.content.innerText !== undefined
-    ) {
-      setTextValue(element.content.innerText);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     !Array.isArray(element.content) &&
+  //     element.content.innerText !== undefined
+  //   ) {
+  //     setTextValue(element.content.innerText);
+  //   }
+  // }, []);
 
   const handleChange = (textVal: string) => {
     setTextValue(textVal);

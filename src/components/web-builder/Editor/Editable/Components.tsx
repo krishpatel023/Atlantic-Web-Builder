@@ -95,13 +95,15 @@ export default function Components({ element }: { element: EditorElement }) {
                   handleElementSelection(e);
                 }}
               >
-                {content.map((childElement) => (
-                  <Recursive element={childElement} />
+                {content.map((childElement, i) => (
+                  <Recursive element={childElement} key={i} />
                 ))}
               </element.tag>
             </Selected>
           ) : (
-            content.map((childElement) => <Recursive element={childElement} />)
+            content.map((childElement, i) => (
+              <Recursive element={childElement} key={i} />
+            ))
           )
         ) : (
           <Selected element={element}>
