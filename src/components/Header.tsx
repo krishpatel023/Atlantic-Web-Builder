@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Github from "../assets/Github.svg";
+import Github from "@/assets/Github.svg";
 import Logo from "../assets/logo.png";
 
 const Header = () => {
@@ -19,7 +19,7 @@ const Header = () => {
           Components
         </Link>
         <Link
-          href="/website"
+          href="/web-builder"
           className="text-textSecondary hover:text-textPrimary"
         >
           Website Builder

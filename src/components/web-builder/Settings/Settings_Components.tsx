@@ -40,8 +40,6 @@ const Component = ({ componentName }: { componentName: string }) => {
     }
   }, [componentName]);
 
-  console.log(variantsData);
-
   return (
     <>
       <div className="w-full transition-all duration-500">
@@ -60,7 +58,12 @@ const Component = ({ componentName }: { componentName: string }) => {
           )}
         >
           {variantsData?.map((variant, i) => (
-            <Dragable className="w-[90%] flex flex-col items-end" key={i}>
+            <Dragable
+              className="w-[90%] flex flex-col items-end"
+              key={i}
+              componentData={variant.component}
+              componentType="component"
+            >
               <div
                 className="w-full bg-secondary min-h-8 rounded-lg px-4 py-2 flex items-center justify-between"
                 key={i}
