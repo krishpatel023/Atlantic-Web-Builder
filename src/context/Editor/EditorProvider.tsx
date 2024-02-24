@@ -67,7 +67,7 @@ const initialEditorState: EditorState["editor"] = {
       content: [],
       id: "__body",
       name: "Body",
-      styles: ["min-h-full"],
+      styles: [],
       type: "__body",
       special: [],
     },
@@ -128,6 +128,26 @@ const deleteAnElement = (
   });
 };
 
+const updateAnElement = (
+  editorArray: EditorElement[],
+  action: EditorAction
+): EditorElement[] => {
+  if (action.type !== "UPDATE_ELEMENT") {
+    throw Error("You sent the wrong action type to the update Element State");
+  }
+  return editorArray.map((item) => {
+    if (item.id === action.payload.elementDetails.id) {
+      return { ...item, ...action.payload.elementDetails };
+    } else if (item.content && Array.isArray(item.content)) {
+      return {
+        ...item,
+        content: updateAnElement(item.content, action),
+      };
+    }
+    return item;
+  });
+};
+
 const editorReducer = (
   state: EditorState = initialState,
   action: EditorAction
@@ -155,19 +175,46 @@ const editorReducer = (
       };
 
       return newEditorState;
-    // case "UPDATE_ELEMENT":
+    case "UPDATE_ELEMENT":
+      // Perform your logic to update the element in the state
+      const updatedElements = updateAnElement(state.editor.elements, action);
+
+      // const UpdatedElementIsSelected =
+      //   state.editor.selectedElement === action.payload.elementDetails.id;
+
+      const updatedEditorStateWithUpdate = {
+        ...state.editor,
+        elements: updatedElements,
+      };
+
+      const updatedHistoryWithUpdate = [
+        ...state.history.history.slice(0, state.history.currentIndex + 1),
+        { ...updatedEditorStateWithUpdate }, // Save a copy of the updated state
+      ];
+      const updatedEditor = {
+        ...state,
+        editor: updatedEditorStateWithUpdate,
+        history: {
+          ...state.history,
+          history: updatedHistoryWithUpdate,
+          currentIndex: updatedHistoryWithUpdate.length - 1,
+        },
+      };
+      return updatedEditor;
     case "DELETE_ELEMENT":
       const updatedElementsAfterDelete = deleteAnElement(
         state.editor.elements,
         action
       );
+      console.log("DELETE_ELEMENT", updatedElementsAfterDelete);
+
       const updatedEditorStateAfterDelete = {
         ...state.editor,
         elements: updatedElementsAfterDelete,
       };
       const updatedHistoryAfterDelete = [
         ...state.history.history.slice(0, state.history.currentIndex + 1),
-        { ...updatedEditorStateAfterDelete }, // Save a copy of the updated state
+        updatedEditorStateAfterDelete, // Save a copy of the updated state
       ];
 
       const deletedState = {
@@ -176,9 +223,11 @@ const editorReducer = (
         history: {
           ...state.history,
           history: updatedHistoryAfterDelete,
-          currentIndex: updatedHistoryAfterDelete.length - 1,
+          currentIndex: state.history.currentIndex + 1,
         },
       };
+      console.log("DELETED", deletedState);
+
       return deletedState;
     case "UPDATE_SELECTED_ELEMENT":
       return {

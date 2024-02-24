@@ -16,8 +16,10 @@ import {
   Barricade,
   CaretDown,
   CaretUp,
+  Check,
   Eye,
   Icon,
+  Plus,
   TextT,
   Trash,
   Video,
@@ -47,7 +49,7 @@ export default function Settings_Main() {
     } else {
       setComponentData(null);
     }
-    handleTypeSelection();
+    // handleTypeSelection();
   }, [state]);
 
   const handleTypeSelection = () => {
@@ -122,6 +124,26 @@ export default function Settings_Main() {
     }
   };
 
+  const handleStyleUpdate = (newVal: Array<string>) => {
+    console.log("RUNNNNNNNNNNNNNNNNNNNNNN");
+
+    if (componentData) {
+      console.log("NEWVAL", newVal);
+
+      const newElementVal: EditorElement = {
+        ...componentData,
+        styles: newVal,
+      };
+      console.log(newElementVal);
+      dispatch({
+        type: "UPDATE_ELEMENT",
+        payload: {
+          elementDetails: newElementVal,
+        },
+      });
+    }
+  };
+
   return (
     <>
       <div className="w-full h-full overflow-y-auto">
@@ -146,10 +168,10 @@ export default function Settings_Main() {
                   : null}
               </h1>
             </span>
-            <div className="w-full bg-primary min-h-[1px] mb-4"></div>
-            <div className="w-full flex justify-center items-center gap-4">
+            <div className="w-full border-slate-700 border-[1px] mt-4 mb-4"></div>
+            <div className="w-full flex justify-between items-center gap-4">
               <button
-                className="w-[40%] py-1 border-2 border-primary text-textPrimary hover:bg-primary hover:text-textComplementary  rounded-sm flex justify-center items-center gap-1 transition-all duration-200"
+                className="w-full py-1 border-2 border-primary text-textPrimary hover:bg-primary hover:text-textComplementary  rounded-sm flex justify-center items-center gap-1 transition-all duration-200"
                 onClick={() => {
                   handleDelete();
                 }}
@@ -158,7 +180,7 @@ export default function Settings_Main() {
                 <Trash size={20} />
               </button>
               <button
-                className="w-[40%] py-1 border-2 border-primary text-textPrimary hover:bg-primary hover:text-textComplementary rounded-sm flex justify-center items-center gap-1 transition-all duration-200"
+                className="w-full py-1 border-2 border-primary text-textPrimary hover:bg-primary hover:text-textComplementary rounded-sm flex justify-center items-center gap-1 transition-all duration-200"
                 onClick={() => {
                   handleUnselect();
                 }}
@@ -167,6 +189,27 @@ export default function Settings_Main() {
                 <X size={20} />
               </button>
             </div>
+            <div className="w-full border-slate-700 border-[1px] mt-4 mb-4"></div>
+
+            {Object.entries(
+              componentData.special ? componentData.special : {}
+            ).map(([key, value]) => {
+              // Perform operations on key-value pairs here
+              return (
+                <InputBlock
+                  name={key}
+                  type={typeof value}
+                  getInputData={() => {}}
+                  predefinedInputData={value}
+                  key={key}
+                  componentData={componentData}
+                />
+              );
+            })}
+            <StyleBlock
+              componentData={componentData}
+              handleStyleUpdate={handleStyleUpdate}
+            />
           </div>
         )}
       </div>
@@ -179,24 +222,164 @@ const InputBlock = ({
   type,
   getInputData,
   predefinedInputData,
+  componentData,
 }: {
   name: string;
   type: any;
   getInputData: Function;
   predefinedInputData: any;
+  componentData: EditorElement;
 }) => {
+  const [inputValue, setInputValue] = useState<string>(predefinedInputData);
+  const { dispatch } = useEditor();
+  const handleChange = () => {
+    const newElement: EditorElement = {
+      ...componentData,
+      special: {
+        ...componentData.special,
+        [name]: inputValue,
+      },
+    };
+    dispatch({
+      type: "UPDATE_ELEMENT",
+      payload: {
+        elementDetails: newElement,
+      },
+    });
+  };
+
+  useEffect(() => {
+    setInputValue(predefinedInputData);
+  }, [componentData]);
   return (
     <>
-      <div className="w-full flex flex-col gap-4">
-        <h1>{name}</h1>
-        <input
-          type={type}
-          className="w-full h-10 rounded px-3"
-          value={predefinedInputData ? predefinedInputData : null}
-          onChange={(e) => {
-            getInputData(e.target.value);
-          }}
-        />
+      <div className="w-full flex flex-col gap-2">
+        <h1>{name === "textData" ? "Text" : name}</h1>
+
+        <div className="w-full flex justify-between">
+          <input
+            type={type}
+            className="w-[calc(100%-2.5rem-0.5rem)] h-10 rounded px-3 border-2 border-primary"
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+          />
+          <button
+            className="w-10 h-10 bg-primary rounded text-textComplementary flex text-center justify-center items-center disabled:bg-gray-200 disabled:text-slate-400"
+            onClick={() => {
+              handleChange();
+            }}
+            disabled={predefinedInputData === inputValue ? true : false}
+          >
+            <Check size={20} weight="bold" />
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const StyleBlock = ({
+  handleStyleUpdate,
+  componentData,
+}: {
+  handleStyleUpdate: (val: Array<string>) => void;
+  componentData: EditorElement;
+}) => {
+  const [styleArray, setStyleArray] = useState<Array<string>>([]);
+  const [inputValue, setInputValue] = useState<string>("");
+
+  const [styling, setStyling] = useState<string>("");
+
+  const convertStringToArray = (styleVal: string) => {
+    var styleArrayTemp = styleVal.split(/\s+/);
+    setStyleArray(styleArrayTemp);
+  };
+
+  const addStyle = () => {
+    var styleArrayTemp = styleArray;
+    console.log("CALLED", inputValue);
+
+    if (inputValue) {
+      styleArrayTemp.push(inputValue);
+      setStyleArray(styleArrayTemp);
+      console.log("STLE", styleArrayTemp);
+      handleStyleUpdate(styleArrayTemp);
+      setInputValue("");
+    }
+  };
+
+  const deleteStyle = (deleteItemName: string) => {
+    var styleArrayTemp = styleArray;
+    console.log("CALLED", inputValue);
+
+    if (deleteItemName) {
+      styleArrayTemp = styleArray.filter((item) => item !== deleteItemName);
+      setStyleArray(styleArrayTemp);
+      console.log("STLE", styleArrayTemp);
+      handleStyleUpdate(styleArrayTemp);
+      setInputValue("");
+    }
+  };
+
+  const handleStyling = () => {
+    const tempStyle = componentData.styles.reduce((acc, style) => {
+      return acc + " " + style;
+    }, "");
+    setStyling(tempStyle);
+    return tempStyle;
+  };
+
+  useEffect(() => {
+    const styleVal = handleStyling();
+    convertStringToArray(styleVal);
+  }, [componentData]);
+
+  return (
+    <>
+      <div className="w-full flex flex-col gap-2">
+        <h1>Class / Style</h1>
+        <div className="w-full flex justify-between">
+          <input
+            type="text"
+            className="w-[calc(100%-2.5rem-0.5rem)] h-10 rounded px-3 border-2 border-primary"
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+            value={inputValue}
+          />
+          <button
+            className="w-10 h-10 bg-primary rounded text-textComplementary flex text-center justify-center items-center"
+            onClick={() => {
+              addStyle();
+            }}
+          >
+            <Plus size={20} weight="bold" />
+          </button>
+        </div>
+
+        <div className="flex w-full gap-2 flex-wrap">
+          {styleArray.map((style, i) => (
+            <>
+              {style && (
+                <div
+                  key={i}
+                  className="px-3 py-1 flex gap-4 justify-center items-center bg-primary rounded text-textComplementary text-sm"
+                >
+                  <p>{style}</p>
+                  <button
+                    onClick={() => {
+                      deleteStyle(style);
+                    }}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              )}
+            </>
+          ))}
+        </div>
       </div>
     </>
   );

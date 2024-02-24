@@ -4,6 +4,7 @@ import Selected from "../Selected";
 import React, { useEffect, useState } from "react";
 import Recursive from "./Recursive";
 import Default from "./Default";
+import { useSettings } from "@/context/Settings/SettingsProvider";
 
 export default function Components({ element }: { element: EditorElement }) {
   const { id, content, name, styles, type } = element;
@@ -14,6 +15,8 @@ export default function Components({ element }: { element: EditorElement }) {
   const selectedStyling: string = " border-2 border-accent";
 
   const { state, dispatch } = useEditor();
+  const { settingsState, dispatchSettings } = useSettings();
+
   const { className, textData, ...rest } = element.special as {
     className?: string;
     href?: string;
@@ -29,7 +32,7 @@ export default function Components({ element }: { element: EditorElement }) {
 
   const handleStyling = () => {
     const tempStyle = element.styles.reduce((acc, style) => {
-      return acc + style;
+      return acc + " " + style;
     }, "");
     setStyling(tempStyle);
   };
@@ -42,6 +45,7 @@ export default function Components({ element }: { element: EditorElement }) {
   };
 
   const handleHover = (value: boolean) => {
+    if (settingsState.previewMode === true) return;
     if (value) {
       dispatch({
         type: "UPDATE_HOVER",
@@ -60,6 +64,7 @@ export default function Components({ element }: { element: EditorElement }) {
   };
 
   const handleElementSelection = (e: React.MouseEvent) => {
+    if (settingsState.previewMode === true) return;
     e.stopPropagation();
     dispatch({
       type: "UPDATE_SELECTED_ELEMENT",
@@ -79,9 +84,15 @@ export default function Components({ element }: { element: EditorElement }) {
             <Selected element={element}>
               <element.tag
                 className={`${styling} ${
-                  state.editor.hoverElement === id ? hoverStyling : ""
+                  state.editor.hoverElement === id &&
+                  settingsState.previewMode === false
+                    ? hoverStyling
+                    : ""
                 } ${
-                  state.editor.selectedElement === id ? selectedStyling : ""
+                  state.editor.selectedElement === id &&
+                  settingsState.previewMode === false
+                    ? selectedStyling
+                    : ""
                 }`}
                 {...rest}
                 id={element.id}
@@ -110,9 +121,15 @@ export default function Components({ element }: { element: EditorElement }) {
             {element.tag !== undefined && element.tag !== "unknown" && (
               <element.tag
                 className={`${styling} ${
-                  state.editor.hoverElement === id ? hoverStyling : ""
+                  state.editor.hoverElement === id &&
+                  settingsState.previewMode === false
+                    ? hoverStyling
+                    : ""
                 } ${
-                  state.editor.selectedElement === id ? selectedStyling : ""
+                  state.editor.selectedElement === id &&
+                  settingsState.previewMode === false
+                    ? selectedStyling
+                    : ""
                 }`}
                 {...rest}
                 id={element.id}

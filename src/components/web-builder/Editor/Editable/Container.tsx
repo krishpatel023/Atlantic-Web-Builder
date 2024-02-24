@@ -85,7 +85,7 @@ const Container = ({ element }: Props) => {
   return (
     <Selected element={element}>
       <div
-        className="py-4"
+        className={`py-4 ${type === "__body" ? "min-h-full" : null}`}
         onDrop={(e) => handleOnDrop(e, id)}
         onDragOver={handleDragOver}
         draggable={type !== "__body"}

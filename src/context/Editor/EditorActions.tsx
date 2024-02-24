@@ -10,12 +10,12 @@ export type EditorAction =
         elementDetails: EditorElement;
       };
     }
-  // | {
-  //     type: "UPDATE_ELEMENT";
-  //     payload: {
-  //       elementDetails: EditorElement;
-  //     };
-  //   }
+  | {
+      type: "UPDATE_ELEMENT";
+      payload: {
+        elementDetails: EditorElement;
+      };
+    }
   | {
       type: "DELETE_ELEMENT";
       payload: {

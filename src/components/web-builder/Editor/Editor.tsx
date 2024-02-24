@@ -69,7 +69,7 @@ export default function Editor() {
                 handleTogglePreview();
               }}
             >
-              {settingsState.previewMode ? (
+              {settingsState.previewMode === false ? (
                 <EyeSlash size={20} />
               ) : (
                 <Eye size={20} />
