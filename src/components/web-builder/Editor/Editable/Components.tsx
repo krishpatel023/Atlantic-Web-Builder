@@ -1,5 +1,9 @@
 "use client";
-import { EditorElement, useEditor } from "@/context/Editor/EditorProvider";
+import {
+  ContainerQueryLabels,
+  EditorElement,
+  useEditor,
+} from "@/context/Editor/EditorProvider";
 import Selected from "../Selected";
 import React, { useEffect, useState } from "react";
 import Recursive from "./Recursive";
@@ -34,8 +38,58 @@ export default function Components({ element }: { element: EditorElement }) {
     const tempStyle = element.styles.reduce((acc, style) => {
       return acc + " " + style;
     }, "");
-    setStyling(tempStyle);
+    const queryList: Array<ContainerQueryLabels> = [
+      "sm",
+      "md",
+      "lg",
+      "xl",
+      "2xl",
+      "3xl",
+      "4xl",
+      "5xl",
+      "6xl",
+      "7xl",
+    ];
+    var modifiedTempStyle = tempStyle;
+
+    queryList.map((item) => {
+      modifiedTempStyle = transformToContainerQueries(modifiedTempStyle, item);
+      return modifiedTempStyle;
+    });
+    console.log(modifiedTempStyle);
+
+    setStyling(modifiedTempStyle);
   };
+
+  function transformToContainerQueries(
+    inputString: string,
+    queryFind: ContainerQueryLabels,
+  ) {
+    const regEx: Record<ContainerQueryLabels, RegExp> = {
+      sm: /sm:/g,
+      md: /md:/g,
+      lg: /lg:/g,
+      xl: /\bxl:/g,
+      "2xl": /\b2xl:/g,
+      "3xl": /\b3xl:/g,
+      "4xl": /\b4xl:/g,
+      "5xl": /\b5xl:/g,
+      "6xl": /\b6xl:/g,
+      "7xl": /\b7xl:/g,
+    };
+    if (inputString.includes(queryFind)) {
+      // If "@md:" is present in the string, replace it with "md:"
+
+      let reversedString = inputString.replace(
+        regEx[queryFind],
+        `@${queryFind}:`,
+      );
+      return reversedString;
+    } else {
+      // If "@md:" is not present, return the original string
+      return inputString;
+    }
+  }
 
   const handleTextData = () => {
     const { textData } = element.special as {
@@ -72,6 +126,12 @@ export default function Components({ element }: { element: EditorElement }) {
         elementId: id,
       },
     });
+    dispatchSettings({
+      type: "UPDATE_SETTINGS_STATE",
+      payload: {
+        Settings: "Settings",
+      },
+    });
   };
 
   return (
@@ -83,7 +143,7 @@ export default function Components({ element }: { element: EditorElement }) {
           element.type === "component_element" ? (
             <Selected element={element}>
               <element.tag
-                className={`${styling} ${
+                className={`${styling} py-2 ${
                   state.editor.hoverElement === id &&
                   settingsState.previewMode === false
                     ? hoverStyling

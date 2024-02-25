@@ -6,6 +6,8 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/package/**/*.{js,ts,jsx,tsx,mdx}",
+    // REMOVE THIS LATER
+    "./src/context/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -48,12 +50,12 @@ const config: Config = {
       sm: "400px",
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/container-queries")],
   safelist: [
     {
       pattern:
         /(bg|text|border|ring)-(aui_primary|aui_text|aui_text_secondary|aui_accent|aui_accent_hover|aui_text_accent|aui_accent_secondary|aui_border)/,
-      variants: ["hover", "focus", "aui_sm", "aui_md", "aui_lg"],
+      variants: ["hover", "focus", "@sm", "@lg", "@md"],
     },
   ],
 };

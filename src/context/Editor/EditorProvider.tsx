@@ -24,6 +24,17 @@ export type EditorBtns =
 
 export const defaultStyles: Array<string> = ["w-full"];
 
+export type ContainerQueryLabels =
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "6xl"
+  | "7xl";
 // export type OtherProperties = {
 //   name: string;
 //   value: any;
@@ -88,11 +99,11 @@ const initialState: EditorState = {
 
 const addAnElement = (
   editorArray: EditorElement[],
-  action: EditorAction
+  action: EditorAction,
 ): EditorElement[] => {
   if (action.type !== "ADD_ELEMENT")
     throw Error(
-      "You sent the wrong action type to the Add Element editor State"
+      "You sent the wrong action type to the Add Element editor State",
     );
   return editorArray.map((item) => {
     if (item.id === action.payload.containerId && Array.isArray(item.content)) {
@@ -112,11 +123,11 @@ const addAnElement = (
 
 const deleteAnElement = (
   editorArray: EditorElement[],
-  action: EditorAction
+  action: EditorAction,
 ): EditorElement[] => {
   if (action.type !== "DELETE_ELEMENT")
     throw Error(
-      "You sent the wrong action type to the Delete Element editor State"
+      "You sent the wrong action type to the Delete Element editor State",
     );
   return editorArray.filter((item) => {
     if (item.id === action.payload.elementId) {
@@ -130,7 +141,7 @@ const deleteAnElement = (
 
 const updateAnElement = (
   editorArray: EditorElement[],
-  action: EditorAction
+  action: EditorAction,
 ): EditorElement[] => {
   if (action.type !== "UPDATE_ELEMENT") {
     throw Error("You sent the wrong action type to the update Element State");
@@ -150,7 +161,7 @@ const updateAnElement = (
 
 const editorReducer = (
   state: EditorState = initialState,
-  action: EditorAction
+  action: EditorAction,
 ): EditorState => {
   switch (action.type) {
     case "ADD_ELEMENT":
@@ -204,7 +215,7 @@ const editorReducer = (
     case "DELETE_ELEMENT":
       const updatedElementsAfterDelete = deleteAnElement(
         state.editor.elements,
-        action
+        action,
       );
       console.log("DELETE_ELEMENT", updatedElementsAfterDelete);
 

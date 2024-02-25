@@ -57,13 +57,13 @@ export default function Editor() {
     <>
       <div
         className={clsx(
-          " bg-secondary flex flex-col items-center transition-all duration-500 justify-center",
+          " flex flex-col items-center justify-center bg-secondary transition-all duration-500",
           { "w-[calc(100vw-24rem)]": settingsState.sidebarActive === false },
-          { "w-[calc(100vw-38rem)]": settingsState.sidebarActive === true }
+          { "w-[calc(100vw-38rem)]": settingsState.sidebarActive === true },
         )}
       >
-        <div className="flex w-full justify-between items-center px-6 h-16">
-          <div className="w-20 bg-background rounded-xl h-10 flex justify-center items-center gap-2">
+        <div className="flex h-16 w-full items-center justify-between px-6">
+          <div className="flex h-10 w-20 items-center justify-center gap-2 rounded-xl bg-background">
             <button
               onClick={() => {
                 handleTogglePreview();
@@ -80,17 +80,17 @@ export default function Editor() {
               <ArrowsOut size={20} />
             </button>
           </div>
-          <div className="h-10 flex items-center gap-4 bg-background rounded-lg px-4 py-2">
+          <div className="flex h-10 items-center gap-4 rounded-lg bg-background px-4 py-2">
             <button
               onClick={() => {
                 handleChangeScreen("Mobile");
               }}
               className={clsx(
-                "h-8 w-8 flex justify-center items-center text-center rounded",
+                "flex h-8 w-8 items-center justify-center rounded text-center",
                 {
                   "bg-primary text-textComplementary":
                     settingsState.device === "Mobile",
-                }
+                },
               )}
             >
               <DeviceMobileCamera size={24} />
@@ -100,11 +100,11 @@ export default function Editor() {
                 handleChangeScreen("Tablet");
               }}
               className={clsx(
-                "h-8 w-8 flex justify-center items-center text-center rounded",
+                "flex h-8 w-8 items-center justify-center rounded text-center",
                 {
                   "bg-primary text-textComplementary":
                     settingsState.device === "Tablet",
-                }
+                },
               )}
             >
               <DeviceTablet size={24} />
@@ -114,22 +114,22 @@ export default function Editor() {
                 handleChangeScreen("Desktop");
               }}
               className={clsx(
-                "h-8 w-8 flex justify-center items-center text-center rounded",
+                "flex h-8 w-8 items-center justify-center rounded text-center",
                 {
                   "bg-primary text-textComplementary":
                     settingsState.device === "Desktop",
-                }
+                },
               )}
             >
               <Desktop size={24} />
             </button>
           </div>
 
-          <div className="w-20 bg-background rounded-xl h-10 flex justify-center items-center gap-2">
+          <div className="flex h-10 w-20 items-center justify-center gap-2 rounded-xl bg-background">
             <button
               onClick={handleUndo}
               disabled={state.history.currentIndex === 0}
-              className="disabled:text-textSecondary h-full"
+              className="h-full disabled:text-textSecondary"
             >
               <ArrowArcLeft size={20} />
             </button>
@@ -139,7 +139,7 @@ export default function Editor() {
               disabled={
                 state.history.currentIndex === state.history.history.length - 1
               }
-              className="disabled:text-textSecondary h-full"
+              className="h-full disabled:text-textSecondary"
             >
               <ArrowArcRight size={20} />
             </button>
@@ -149,11 +149,10 @@ export default function Editor() {
         {/* <Dropable className="w-full"> */}
         {/* EDITOR */}
         <div
-          className={`max-w-[98%] h-full  bg-background rounded-t-lg overflow-y-auto ${
-            settingsState.device === "Desktop" && "w-full"
-          } ${settingsState.device === "Tablet" && "w-[650px]"} ${
-            settingsState.device === "Mobile" && "w-[420px]"
-          }`}
+          className={` h-full max-w-[98%] overflow-y-auto  rounded-t-lg bg-background @container 
+          ${settingsState.device === "Desktop" && "w-full"}
+          ${settingsState.device === "Tablet" && "w-[650px]"} 
+          ${settingsState.device === "Mobile" && "w-[420px]"}`}
         >
           {Array.isArray(state.editor.elements) &&
             state.editor.elements.map((childElement) => (

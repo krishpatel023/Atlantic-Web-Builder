@@ -1,11 +1,10 @@
-import React, { ReactElement, ReactNode, useState } from "react";
+// "use client";
+import React, { ReactElement, useState } from "react";
+import { v4 } from "uuid";
+import { EditorBtns, EditorElement } from "../Editor/EditorProvider";
 import DragandDropContext, {
   DragAndDropContextProps,
 } from "./DragAndDropContext";
-import { EditorBtns, EditorElement } from "../Editor/EditorProvider";
-import Link from "next/link";
-import Image from "next/image";
-import { v4 } from "uuid";
 
 type ContextWrapperProps = {
   children: React.ReactNode;
@@ -17,32 +16,41 @@ type ContextWrapperProps = {
 //   id: string;
 // };
 const myComponent: ReactElement = (
-  <div className="w-full h-[40rem] bg-aui_primary flex items-center justify-center">
-    <div className="w-[60%] h-full flex flex-col justify-center items-start gap-6 px-16">
-      <h1 className="font-bold text-4xl text-aui_text">
+  <div className=" 4xl:bg-black flex min-h-[40rem] w-full flex-col items-center justify-center md:flex-row lg:bg-red-500">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-16 md:w-[60%] md:items-start">
+      <h1 className="text-4xl font-bold text-aui_text">
         Welcome to the world of Atlantic UI
       </h1>
-      <h2 className="font-medium text-lg text-aui_text_secondary">
+      {/* <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        fill="#000000"
+        viewBox="0 0 256 256"
+      >
+        <path d="M216,136a8,8,0,0,0-8,8,40,40,0,0,1-40,40,47.79,47.79,0,0,0-32,12.27V128h32a8,8,0,0,0,0-16H136V87a32,32,0,1,0-16,0v25H88a8,8,0,0,0,0,16h32v68.27A47.79,47.79,0,0,0,88,184a40,40,0,0,1-40-40,8,8,0,0,0-16,0,56.06,56.06,0,0,0,56,56,32,32,0,0,1,32,32,8,8,0,0,0,16,0,32,32,0,0,1,32-32,56.06,56.06,0,0,0,56-56A8,8,0,0,0,216,136ZM112,56a16,16,0,1,1,16,16A16,16,0,0,1,112,56Z"></path>
+      </svg> */}
+      <h2 className="text-lg font-medium text-aui_text_secondary">
         One stop destination to build Tailwind styled components instantly. A
         Developer first model that provides the root customizability to cater
         all your needs.
       </h2>
-      <button className="w-40 h-12 rounded bg-aui_accent text-aui_text_accent hover:scale-105">
+      <button className="h-12 w-40 rounded bg-aui_accent text-aui_text_accent hover:scale-105">
         Explore Now
       </button>
     </div>
-    <div className="w-[40%] h-full flex justify-center items-center">
+    <div className="flex h-full w-full items-center justify-center md:w-[40%]">
       <img
         src="https://s.cafebazaar.ir/images/upload/screenshot/com.izanaki.itachi.blackwallpapers-screenshots-2.jpg"
         alt="Demo"
-        className="w-[90%] h-[70%] object-contain rounded-3xl"
+        className="w-[16rem] rounded-3xl object-contain"
       />
     </div>
   </div>
 );
 
 function isIntrinsicElementType(
-  element: string | React.JSXElementConstructor<any>
+  element: string | React.JSXElementConstructor<any>,
 ): keyof JSX.IntrinsicElements | React.ComponentType<any> | "unknown" {
   if (typeof element === "string") {
     return element as keyof JSX.IntrinsicElements;
@@ -53,7 +61,7 @@ function isIntrinsicElementType(
 
 const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
   const [componentData, setComponentData] = useState<EditorElement | null>(
-    null
+    null,
   );
 
   const onDrag = (componentType: EditorBtns, e: React.DragEvent) => {
@@ -111,7 +119,7 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
           typeof children !== "string"
         ) {
           tree.content = React.Children.map(childrenDemo, (child) =>
-            JSXElementToTree({ component: child as ReactElement })
+            JSXElementToTree({ component: child as ReactElement }),
           );
         } else {
           tree.name = "Text";
@@ -150,7 +158,7 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
   const onComponentDrag = (
     componentType: EditorBtns,
     e: React.DragEvent,
-    component: React.FC
+    component: React.FC,
   ) => {
     const myval: EditorElement = JSXElementToTree({ component: myComponent });
     if (componentType === "component") setComponentData(myval);
