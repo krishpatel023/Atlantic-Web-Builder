@@ -1,25 +1,41 @@
-import { EditorBtns } from "@/context/Editor/EditorProvider";
+import { EditorBtns, EditorElement } from "@/context/Editor/EditorProvider";
 import DragAndDropContext from "@/context/dragAndDrop/DragAndDropContext";
+import { useDragAndDrop } from "@/context/dragAndDrop/DragAndDropWrapper";
 import React, { useContext } from "react";
 
 type DragableProps = React.PropsWithChildren<{
   className?: string;
   componentType?: EditorBtns;
-  componentData?: React.FC;
+  componentDataJsx?: React.FC;
+  componentDataEditorElement?: EditorElement;
 }>;
 
 export const Dragable: React.FC<DragableProps> = (props) => {
-  const { onDrag, onComponentDrag } = useContext(DragAndDropContext);
+  const { onDrag, onComponentDrag, setComponentData } = useDragAndDrop();
 
-  const { className, children, componentType, componentData, ...rest } = props;
+  const {
+    className,
+    children,
+    componentType,
+    componentDataJsx,
+    componentDataEditorElement,
+    ...rest
+  } = props;
 
   const handleDragStart = (e: React.DragEvent) => {
     if (componentType !== undefined) {
-      onDrag(componentType, e);
-      console.log(componentData);
+      // onDrag(componentType, e);
+      // console.log(componentData);
 
-      if (componentData !== undefined)
-        onComponentDrag(componentType, e, componentData);
+      if (componentDataJsx) {
+        onComponentDrag(componentType, e, componentDataJsx);
+      } else if (componentDataEditorElement) {
+        setComponentData({
+          elementType: componentDataEditorElement.type,
+          elementData: componentDataEditorElement,
+          elementStatus: "add",
+        });
+      } else return;
     }
   };
   return (

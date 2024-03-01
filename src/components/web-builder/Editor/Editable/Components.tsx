@@ -5,22 +5,29 @@ import {
   useEditor,
 } from "@/context/Editor/EditorProvider";
 import Selected from "../Selected";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Recursive from "./Recursive";
 import Default from "./Default";
 import { useSettings } from "@/context/Settings/SettingsProvider";
+import DragAndDropContext from "@/context/dragAndDrop/DragAndDropContext";
+import { v4 } from "uuid";
+import { containerElements } from "@/utils/constants";
+import { useDragAndDrop } from "@/context/dragAndDrop/DragAndDropWrapper";
 
 export default function Components({ element }: { element: EditorElement }) {
   const { id, content, name, styles, type } = element;
 
   const [textValue, setTextValue] = useState<string | null>(null);
   const [styling, setStyling] = useState<string | null>(null);
-  const hoverStyling: string = " hover:border-2 hover:border-accent";
-  const selectedStyling: string = " border-2 border-accent";
+  const hoverStyling: string = " hover:border-2 hover:border-accent py-2 ";
+  const selectedStyling: string = " border-2 border-accent py-2 ";
+  const previewStyling: string =
+    " border-[1px] border-gray-400 border-dashed py-2";
 
   const { state, dispatch } = useEditor();
   const { settingsState, dispatchSettings } = useSettings();
-
+  const { componentData, setComponentData, onDrop, handleDragOver } =
+    useDragAndDrop();
   const { className, textData, ...rest } = element.special as {
     className?: string;
     href?: string;
@@ -32,6 +39,8 @@ export default function Components({ element }: { element: EditorElement }) {
     console.log("------------  Default Element");
     handleTextData();
     handleStyling();
+
+    console.log("ERROR DEBUG", element.tag, element);
   }, [element]);
 
   const handleStyling = () => {
@@ -56,7 +65,7 @@ export default function Components({ element }: { element: EditorElement }) {
       modifiedTempStyle = transformToContainerQueries(modifiedTempStyle, item);
       return modifiedTempStyle;
     });
-    console.log(modifiedTempStyle);
+    // console.log(modifiedTempStyle);
 
     setStyling(modifiedTempStyle);
   };
@@ -123,7 +132,7 @@ export default function Components({ element }: { element: EditorElement }) {
     dispatch({
       type: "UPDATE_SELECTED_ELEMENT",
       payload: {
-        elementId: id,
+        elementId: element.id,
       },
     });
     dispatchSettings({
@@ -134,6 +143,16 @@ export default function Components({ element }: { element: EditorElement }) {
     });
   };
 
+  const handleElementReplacementDragStart = (e: React.DragEvent) => {
+    e.stopPropagation();
+    setComponentData({
+      elementStatus: "replace",
+      elementType: "component",
+      elementData: element,
+    });
+    console.log("DRAG START ", element.tag);
+  };
+
   return (
     <>
       {Array.isArray(content) &&
@@ -141,43 +160,59 @@ export default function Components({ element }: { element: EditorElement }) {
           element.tag !== undefined &&
           element.tag !== "unknown" &&
           element.type === "component_element" ? (
-            <Selected element={element}>
-              <element.tag
-                className={`${styling} py-2 ${
-                  state.editor.hoverElement === id &&
-                  settingsState.previewMode === false
-                    ? hoverStyling
-                    : ""
-                } ${
-                  state.editor.selectedElement === id &&
-                  settingsState.previewMode === false
-                    ? selectedStyling
-                    : ""
-                }`}
-                {...rest}
-                id={element.id}
-                onMouseEnter={() => {
-                  handleHover(true);
-                }}
-                onMouseLeave={() => {
-                  handleHover(false);
-                }}
-                onClick={(e: React.MouseEvent) => {
-                  handleElementSelection(e);
-                }}
-              >
-                {content.map((childElement, i) => (
-                  <Recursive element={childElement} key={i} />
-                ))}
-              </element.tag>
-            </Selected>
+            // <Selected element={element}>
+            <element.tag
+              className={`${styling}  ${
+                state.editor.hoverElement === id &&
+                settingsState.previewMode === false
+                  ? hoverStyling
+                  : ""
+              } ${
+                state.editor.selectedElement === id &&
+                settingsState.previewMode === false
+                  ? selectedStyling
+                  : ""
+              }
+                ${settingsState.previewMode === false && state.editor.selectedElement !== id && state.editor.hoverElement !== id ? previewStyling : null}`}
+              {...rest}
+              id={element.id}
+              onMouseEnter={() => {
+                handleHover(true);
+              }}
+              onMouseLeave={() => {
+                handleHover(false);
+              }}
+              onClick={(e: React.MouseEvent) => {
+                handleElementSelection(e);
+              }}
+              //ID OF PARENT
+
+              onDrop={(e: React.DragEvent) =>
+                onDrop(
+                  e,
+                  element.tag ? (element.tag as string) : null,
+                  element.id,
+                )
+              }
+              onDragOver={handleDragOver}
+              //Replace the component logic
+              draggable
+              onDragStart={(e: React.DragEvent) => {
+                handleElementReplacementDragStart(e);
+              }}
+            >
+              {content.map((childElement, i) => (
+                <Recursive element={childElement} key={i} />
+              ))}
+            </element.tag>
           ) : (
+            // </Selected>
             content.map((childElement, i) => (
               <Recursive element={childElement} key={i} />
             ))
           )
         ) : (
-          <Selected element={element}>
+          <>
             {element.tag !== undefined && element.tag !== "unknown" && (
               <element.tag
                 className={`${styling} ${
@@ -190,7 +225,7 @@ export default function Components({ element }: { element: EditorElement }) {
                   settingsState.previewMode === false
                     ? selectedStyling
                     : ""
-                }`}
+                } ${settingsState.previewMode === false && state.editor.selectedElement !== id && state.editor.hoverElement !== id ? previewStyling : null}`}
                 {...rest}
                 id={element.id}
                 onMouseEnter={() => {
@@ -202,12 +237,44 @@ export default function Components({ element }: { element: EditorElement }) {
                 onClick={(e: React.MouseEvent) => {
                   handleElementSelection(e);
                 }}
+                onDrop={(e: React.DragEvent) =>
+                  onDrop(
+                    e,
+                    element.tag ? (element.tag as string) : null,
+                    element.id,
+                  )
+                }
+                onDragOver={handleDragOver}
+                //Replace the component logic
+                draggable
+                onDragStart={(e: React.DragEvent) => {
+                  handleElementReplacementDragStart(e);
+                }}
               >
-                {textValue}
+                {textValue ? textValue : null}
               </element.tag>
             )}
-          </Selected>
+          </>
         ))}
     </>
   );
 }
+
+type ElementTag = {
+  elementTag:
+    | keyof JSX.IntrinsicElements
+    | React.ComponentType<any>
+    | "unknown"
+    | null;
+  children: any;
+};
+
+const ElementTag = ({ elementTag, children }: ElementTag) => {
+  return (
+    <>
+      {/* {elementTag !== undefined && elementTag !== "unknown" &&  <elementTag>
+      {children}
+    </elementTag>} */}
+    </>
+  );
+};

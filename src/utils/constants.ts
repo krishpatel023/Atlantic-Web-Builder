@@ -1,5 +1,9 @@
-export const containerElements = [
+import { EditorBtns, EditorElement } from "@/context/Editor/EditorProvider";
+
+export const containerElements: Array<string> = [
   // HTML elements
+  "body",
+  "__body",
   "div",
   "span",
   "ul",
@@ -16,8 +20,6 @@ export const containerElements = [
   "footer",
   "section",
   "article",
-  "p",
-  "blockquote",
   "pre",
   "code",
   "details",
@@ -53,7 +55,6 @@ export const containerElements = [
   "option",
   "textarea",
   "label",
-  "button",
   "object",
   "embed",
   "applet",
@@ -113,3 +114,9 @@ export const containerElements = [
   "Memo",
   "forwardRef",
 ];
+
+export type DragableElementType = {
+  elementType: EditorBtns;
+  elementData: EditorElement | null;
+  elementStatus: "add" | "replace";
+};

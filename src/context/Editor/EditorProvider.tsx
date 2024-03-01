@@ -80,7 +80,7 @@ const initialEditorState: EditorState["editor"] = {
       name: "Body",
       styles: [],
       type: "__body",
-      special: [],
+      special: {},
     },
   ],
   selectedElement: null,

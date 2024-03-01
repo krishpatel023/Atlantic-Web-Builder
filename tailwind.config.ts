@@ -49,6 +49,11 @@ const config: Config = {
       md: "800px",
       sm: "400px",
     },
+    containers: {
+      sm: "420px",
+      md: "650px",
+      lg: "800px",
+    },
   },
   plugins: [require("@tailwindcss/container-queries")],
   safelist: [

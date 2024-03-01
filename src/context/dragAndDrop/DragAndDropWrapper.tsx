@@ -1,10 +1,11 @@
 // "use client";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useContext, useState } from "react";
 import { v4 } from "uuid";
-import { EditorBtns, EditorElement } from "../Editor/EditorProvider";
+import { EditorBtns, EditorElement, useEditor } from "../Editor/EditorProvider";
 import DragandDropContext, {
   DragAndDropContextProps,
 } from "./DragAndDropContext";
+import { DragableElementType, containerElements } from "@/utils/constants";
 
 type ContextWrapperProps = {
   children: React.ReactNode;
@@ -16,7 +17,7 @@ type ContextWrapperProps = {
 //   id: string;
 // };
 const myComponent: ReactElement = (
-  <div className=" 4xl:bg-black flex min-h-[40rem] w-full flex-col items-center justify-center md:flex-row lg:bg-red-500">
+  <div className=" 4xl:bg-black sc flex min-h-[40rem] w-full flex-col items-center justify-center sm:bg-green-600 md:flex-row">
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-16 md:w-[60%] md:items-start">
       <h1 className="text-4xl font-bold text-aui_text">
         Welcome to the world of Atlantic UI
@@ -60,10 +61,10 @@ function isIntrinsicElementType(
 }
 
 const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
-  const [componentData, setComponentData] = useState<EditorElement | null>(
-    null,
-  );
+  const [componentData, setComponentData] =
+    useState<DragableElementType | null>(null);
 
+  const { dispatch } = useEditor();
   const onDrag = (componentType: EditorBtns, e: React.DragEvent) => {
     if (componentType) e.dataTransfer?.setData("componentType", componentType);
   };
@@ -161,12 +162,126 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     component: React.FC,
   ) => {
     const myval: EditorElement = JSXElementToTree({ component: myComponent });
-    if (componentType === "component") setComponentData(myval);
+    if (componentType === "component")
+      setComponentData({
+        elementType: "component",
+        elementData: myval,
+        elementStatus: "add",
+      });
 
     console.log("+++++++++++++++++++", myval);
   };
 
-  const onDrop = () => {};
+  // const onDrop = () => {};
+
+  const onDrop = (
+    e: React.DragEvent,
+    tag: string | "unknown" | null,
+    parentId: string,
+  ) => {
+    e.stopPropagation();
+    console.log("DRAG END ", tag, parentId, componentData);
+    if (componentData && componentData.elementStatus === "add") {
+      ElementAdditionAfterDrop(tag, parentId);
+    } else if (componentData && componentData.elementStatus === "replace") {
+      ElementReplacementAfterDrop(tag, parentId);
+    } else {
+      return;
+    }
+  };
+
+  const ElementAdditionAfterDrop = (
+    tag: string | "unknown" | null,
+    parentId: string,
+  ) => {
+    //Checking If the container is droppable
+    var isContainer: boolean = false;
+    if (tag !== undefined && tag !== null && tag !== "unknown") {
+      for (var i = 0; i < containerElements.length; i++) {
+        if (containerElements[i] === tag) {
+          isContainer = true;
+          break;
+        }
+      }
+    }
+    if (isContainer === false) return;
+
+    //Addition Logic
+    switch (componentData?.elementType) {
+      case "component":
+        if (componentData.elementData) {
+          dispatch({
+            type: "ADD_ELEMENT",
+            payload: {
+              containerId: parentId,
+              elementDetails: componentData.elementData,
+            },
+          });
+        }
+        break;
+      case "component_element":
+        if (componentData.elementData) {
+          dispatch({
+            type: "ADD_ELEMENT",
+            payload: {
+              containerId: parentId,
+              elementDetails: componentData.elementData,
+            },
+          });
+        }
+        break;
+      default:
+        null;
+    }
+    setComponentData(null);
+  };
+
+  const ElementReplacementAfterDrop = (
+    tag: string | "unknown" | null,
+    parentId: string,
+  ) => {
+    //Checking If the container is droppable
+    var isContainer: boolean = false;
+    if (tag !== undefined && tag !== null && tag !== "unknown") {
+      for (var i = 0; i < containerElements.length; i++) {
+        if (containerElements[i] === tag) {
+          isContainer = true;
+          break;
+        }
+      }
+    }
+    if (isContainer === false) return;
+
+    //Removal logic
+
+    if (!componentData?.elementData?.id) return;
+    dispatch({
+      type: "DELETE_ELEMENT",
+      payload: {
+        elementId: componentData?.elementData?.id,
+      },
+    });
+
+    //Addition Logic
+    switch (componentData?.elementType) {
+      case "component":
+        if (componentData.elementData) {
+          dispatch({
+            type: "ADD_ELEMENT",
+            payload: {
+              containerId: parentId,
+              elementDetails: componentData.elementData,
+            },
+          });
+        }
+        break;
+    }
+    setComponentData(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
 
   const value: DragAndDropContextProps = {
     componentData,
@@ -174,12 +289,23 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     onComponentDrag,
     onDrag,
     onDrop,
+    handleDragOver,
   };
   return (
     <DragandDropContext.Provider value={value}>
       {props.children}
     </DragandDropContext.Provider>
   );
+};
+
+export const useDragAndDrop = () => {
+  const context = useContext(DragandDropContext);
+  if (!context) {
+    throw new Error(
+      "useDragAndDrop Hook must be used within the DragAndDrop Provider",
+    );
+  }
+  return context;
 };
 
 export default DragAndDropWrapper;

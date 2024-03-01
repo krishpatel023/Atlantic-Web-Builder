@@ -9,17 +9,17 @@ import DragAndDropWrapper from "@/context/dragAndDrop/DragAndDropWrapper";
 export default function Page() {
   return (
     <>
-      <DragAndDropWrapper>
-        <SettingsProvider>
-          <EditorProvider>
-            <div className="w-full h-screen flex overflow-hidden">
+      <SettingsProvider>
+        <EditorProvider>
+          <DragAndDropWrapper>
+            <div className="flex h-screen w-full overflow-hidden">
               <SideBar />
               <Editor />
               <Settings />
             </div>
-          </EditorProvider>
-        </SettingsProvider>
-      </DragAndDropWrapper>
+          </DragAndDropWrapper>
+        </EditorProvider>
+      </SettingsProvider>
     </>
   );
 }

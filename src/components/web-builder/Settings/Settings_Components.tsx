@@ -15,8 +15,8 @@ export default function Settings_Components() {
   const AllComponents = components;
   return (
     <>
-      <div className="w-full h-full overflow-y-auto">
-        <div className="h-16 px-8 flex items-center border-b-2 border-border mb-6">
+      <div className="h-full w-full overflow-y-auto">
+        <div className="mb-6 flex h-16 items-center border-b-2 border-border px-8">
           <h1>Components</h1>
         </div>
         {components?.map((data, i) => (
@@ -44,7 +44,7 @@ const Component = ({ componentName }: { componentName: string }) => {
     <>
       <div className="w-full transition-all duration-500">
         <button
-          className="w-full h-10 flex justify-between px-4 items-center"
+          className="flex h-10 w-full items-center justify-between px-4"
           onClick={() => setIsOpen(!isOpen)}
         >
           {componentName}
@@ -52,20 +52,20 @@ const Component = ({ componentName }: { componentName: string }) => {
         </button>
         <div
           className={clsx(
-            "flex flex-col items-end pr-4 gap-4 mb-6",
+            "mb-6 flex flex-col items-end gap-4 pr-4",
             { hidden: isOpen === false },
-            { block: isOpen === true }
+            { block: isOpen === true },
           )}
         >
           {variantsData?.map((variant, i) => (
             <Dragable
-              className="w-[90%] flex flex-col items-end"
+              className="flex w-[90%] flex-col items-end"
               key={i}
-              componentData={variant.component}
+              componentDataJsx={variant.component}
               componentType="component"
             >
               <div
-                className="w-full bg-secondary min-h-8 rounded-lg px-4 py-2 flex items-center justify-between"
+                className="flex min-h-8 w-full items-center justify-between rounded-lg bg-secondary px-4 py-2"
                 key={i}
               >
                 <h1>{variant.name}</h1>
