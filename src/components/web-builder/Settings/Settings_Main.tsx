@@ -26,7 +26,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import clsx from "clsx";
-import { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 
 export default function Settings_Main() {
   const textData = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
@@ -38,7 +38,7 @@ export default function Settings_Main() {
     "text" | "link" | "image" | "container" | null
   >(null);
   const [componentData, setComponentData] = useState<EditorElement | null>(
-    null
+    null,
   );
 
   const { state, dispatch } = useEditor();
@@ -82,7 +82,7 @@ export default function Settings_Main() {
   const findStateData = (elemId: string) => {
     const ElementDetail: EditorElement = reccursiveFinder(
       elemId,
-      state.editor.elements[0].content
+      state.editor.elements[0].content,
     );
     setComponentData(ElementDetail);
   };
@@ -146,20 +146,20 @@ export default function Settings_Main() {
 
   return (
     <>
-      <div className="w-full h-full overflow-y-auto">
-        <div className="h-16 px-8 flex items-center border-b-2 border-border">
+      <div className="h-full w-full overflow-y-auto">
+        <div className="flex h-16 items-center border-b-2 border-border px-8">
           <h1>Settings</h1>
         </div>
         {componentData === null ? (
-          <div className="w-full h-[calc(100%-4rem)] flex flex-col text-center justify-center items-center px-6 gap-4">
+          <div className="flex h-[calc(100%-4rem)] w-full flex-col items-center justify-center gap-4 px-6 text-center">
             <Barricade size={80} />
             <h1 className="capitalize">
               Please select a component to view and modify its settings
             </h1>
           </div>
         ) : (
-          <div className="w-full py-4 flex flex-col px-6 gap-4">
-            <span className="capitalize flex gap-4">
+          <div className="flex w-full flex-col gap-4 px-6 py-4">
+            <span className="flex gap-4 capitalize">
               {"TAG : "}
               <h1 className="font-semibold">
                 {componentData?.tag !== undefined &&
@@ -168,10 +168,10 @@ export default function Settings_Main() {
                   : null}
               </h1>
             </span>
-            <div className="w-full border-slate-700 border-[1px] mt-4 mb-4"></div>
-            <div className="w-full flex justify-between items-center gap-4">
+            <div className="mb-4 mt-4 w-full border-[1px] border-slate-700"></div>
+            <div className="flex w-full items-center justify-between gap-4">
               <button
-                className="w-full py-1 border-2 border-primary text-textPrimary hover:bg-primary hover:text-textComplementary  rounded-sm flex justify-center items-center gap-1 transition-all duration-200"
+                className="flex w-full items-center justify-center gap-1 rounded-sm border-2  border-primary py-1 text-textPrimary transition-all duration-200 hover:bg-primary hover:text-textComplementary"
                 onClick={() => {
                   handleDelete();
                 }}
@@ -180,7 +180,7 @@ export default function Settings_Main() {
                 <Trash size={20} />
               </button>
               <button
-                className="w-full py-1 border-2 border-primary text-textPrimary hover:bg-primary hover:text-textComplementary rounded-sm flex justify-center items-center gap-1 transition-all duration-200"
+                className="flex w-full items-center justify-center gap-1 rounded-sm border-2 border-primary py-1 text-textPrimary transition-all duration-200 hover:bg-primary hover:text-textComplementary"
                 onClick={() => {
                   handleUnselect();
                 }}
@@ -189,10 +189,10 @@ export default function Settings_Main() {
                 <X size={20} />
               </button>
             </div>
-            <div className="w-full border-slate-700 border-[1px] mt-4 mb-4"></div>
+            <div className="mb-4 mt-4 w-full border-[1px] border-slate-700"></div>
 
             {Object.entries(
-              componentData.special ? componentData.special : {}
+              componentData.special ? componentData.special : {},
             ).map(([key, value]) => {
               // Perform operations on key-value pairs here
               return (
@@ -253,20 +253,20 @@ const InputBlock = ({
   }, [componentData]);
   return (
     <>
-      <div className="w-full flex flex-col gap-2">
+      <div className="flex w-full flex-col gap-2">
         <h1>{name === "textData" ? "Text" : name}</h1>
 
-        <div className="w-full flex justify-between">
+        <div className="flex w-full justify-between">
           <input
             type={type}
-            className="w-[calc(100%-2.5rem-0.5rem)] h-10 rounded px-3 border-2 border-primary"
+            className="h-10 w-[calc(100%-2.5rem-0.5rem)] rounded border-2 border-primary px-3"
             value={inputValue}
             onChange={(e) => {
               setInputValue(e.target.value);
             }}
           />
           <button
-            className="w-10 h-10 bg-primary rounded text-textComplementary flex text-center justify-center items-center disabled:bg-gray-200 disabled:text-slate-400"
+            className="flex h-10 w-10 items-center justify-center rounded bg-primary text-center text-textComplementary disabled:bg-gray-200 disabled:text-slate-400"
             onClick={() => {
               handleChange();
             }}
@@ -338,19 +338,19 @@ const StyleBlock = ({
 
   return (
     <>
-      <div className="w-full flex flex-col gap-2">
+      <div className="flex w-full flex-col gap-2">
         <h1>Class / Style</h1>
-        <div className="w-full flex justify-between">
+        <div className="flex w-full justify-between">
           <input
             type="text"
-            className="w-[calc(100%-2.5rem-0.5rem)] h-10 rounded px-3 border-2 border-primary"
+            className="h-10 w-[calc(100%-2.5rem-0.5rem)] rounded border-2 border-primary px-3"
             onChange={(e) => {
               setInputValue(e.target.value);
             }}
             value={inputValue}
           />
           <button
-            className="w-10 h-10 bg-primary rounded text-textComplementary flex text-center justify-center items-center"
+            className="flex h-10 w-10 items-center justify-center rounded bg-primary text-center text-textComplementary"
             onClick={() => {
               addStyle();
             }}
@@ -359,14 +359,11 @@ const StyleBlock = ({
           </button>
         </div>
 
-        <div className="flex w-full gap-2 flex-wrap">
+        <div className="flex w-full flex-wrap gap-2">
           {styleArray.map((style, i) => (
-            <>
+            <React.Fragment key={i}>
               {style && (
-                <div
-                  key={i}
-                  className="px-3 py-1 flex gap-4 justify-center items-center bg-primary rounded text-textComplementary text-sm"
-                >
+                <div className="flex items-center justify-center gap-4 rounded bg-primary px-3 py-1 text-sm text-textComplementary">
                   <p>{style}</p>
                   <button
                     onClick={() => {
@@ -377,7 +374,7 @@ const StyleBlock = ({
                   </button>
                 </div>
               )}
-            </>
+            </React.Fragment>
           ))}
         </div>
       </div>

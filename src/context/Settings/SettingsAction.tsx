@@ -8,22 +8,9 @@ export type SettingsAction =
         device: DeviceTypes;
       };
     }
-  // | {
-  //     type: "TOGGLE_PREVIEW_MODE";
-  //   }
-  // | {
-  //     type: "TOGGLE_LIVE_MODE";
-  //     payload?: {
-  //       value: boolean;
-  //     };
-  //   }
-  // | {
-  //     type: "LOAD_DATA";
-  //     payload: {
-  //       elements: EditorElement[];
-  //       withLive: boolean;
-  //     };
-  //   }
+  | {
+      type: "TOGGLE_DISPLAY_MODE";
+    }
   | { type: "TOGGLE_PREVIEW_MODE" }
   | { type: "TOGGLE_SIDEBAR" }
   | {

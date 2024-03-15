@@ -13,7 +13,7 @@ export type DragAndDropContextProps = {
   onComponentDrag: (
     componentType: EditorBtns,
     e: React.DragEvent,
-    component: React.FC,
+    component: ReactElement,
   ) => void;
   onDrop: (
     e: React.DragEvent,

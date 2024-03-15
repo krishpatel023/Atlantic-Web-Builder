@@ -1,44 +1,95 @@
-import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/assets/logo.png";
 import Github from "@/assets/Github.svg";
+import { ReactElement } from "react";
 export default function Header_2() {
   return (
-    <div className="w-full h-16 flex justify-between items-center border-b-[1px] border-aui_border px-12 bg-aui_primary">
-      <div className="h-full w-[10rem] flex justify-center items-center">
-        <Link href="" className="h-full flex justify-center items-center">
-          <Image src={Logo} alt="Logo" className="h-[50%] object-contain" />
-        </Link>
+    <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
+      <div className="flex h-full w-[10rem] items-center justify-center">
+        <a href="" className="flex h-full items-center justify-center">
+          <Image
+            src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
+            alt="Logo"
+            className="h-[50%] object-contain"
+          />
+        </a>
       </div>
-      <div className="h-full flex items-center gap-6">
-        <Link href="" className="text-aui_text_secondary hover:text-aui_text">
+      <div className="flex h-full items-center gap-6">
+        <a href="" className="text-aui_text_secondary hover:text-aui_text">
           Field 1
-        </Link>
-        <Link href="" className="text-aui_text_secondary hover:text-aui_text">
+        </a>
+        <a href="" className="text-aui_text_secondary hover:text-aui_text">
           Field 2
-        </Link>
-        <Link href="" className="text-aui_text_secondary hover:text-aui_text">
+        </a>
+        <a href="" className="text-aui_text_secondary hover:text-aui_text">
           Field 3
-        </Link>
-        <div>
-          <a href="#" target="_blank">
-            <Image src={Github} alt="Github Image" />
-          </a>
-        </div>
-        <Link
+        </a>
+        <a
           href=""
-          className="w-20 h-8 rounded-md bg-aui_accent hover:bg-aui_accent_hover text-aui_text_accent text-center flex justify-center items-center"
+          className="flex h-8 w-20 items-center justify-center rounded-md bg-aui_accent text-center text-aui_text_accent hover:bg-aui_accent_hover"
         >
           Login
-        </Link>
+        </a>
       </div>
     </div>
   );
 }
 
-export const HeaderCode_2 = `<div className="bg-aui_primary text-aui_text h-12 w-full flex justify-between items-center px-4">
-    Header
-    <button className="w-20 h-8 bg-aui_accent text-md font-semibold text-aui_text_accent flex justify-center items-center text-center rounded-sm">
-      Login
-    </button>
-  </div>`;
+export const HeaderElement_2: ReactElement = (
+  <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
+    <div className="flex h-full w-[10rem] items-center justify-center">
+      <a href="" className="flex h-full items-center justify-center">
+        <Image
+          src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
+          alt="Logo"
+          className="h-[50%] object-contain"
+        />
+      </a>
+    </div>
+    <div className="flex h-full items-center gap-6">
+      <a href="" className="text-aui_text_secondary hover:text-aui_text">
+        Field 1
+      </a>
+      <a href="" className="text-aui_text_secondary hover:text-aui_text">
+        Field 2
+      </a>
+      <a href="" className="text-aui_text_secondary hover:text-aui_text">
+        Field 3
+      </a>
+      <a
+        href=""
+        className="flex h-8 w-20 items-center justify-center rounded-md bg-aui_accent text-center text-aui_text_accent hover:bg-aui_accent_hover"
+      >
+        Login
+      </a>
+    </div>
+  </div>
+);
+export const HeaderCode_2 = `<div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
+<div className="flex h-full w-[10rem] items-center justify-center">
+  <a href="" className="flex h-full items-center justify-center">
+    <img
+      src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
+      alt="Logo"
+      className="h-[50%] object-contain"
+    />
+  </a>
+</div>
+<div className="flex h-full items-center gap-6">
+  <a href="" className="text-aui_text_secondary hover:text-aui_text">
+    Field 1
+  </a>
+  <a href="" className="text-aui_text_secondary hover:text-aui_text">
+    Field 2
+  </a>
+  <a href="" className="text-aui_text_secondary hover:text-aui_text">
+    Field 3
+  </a>
+  <a
+    href=""
+    className="flex h-8 w-20 items-center justify-center rounded-md bg-aui_accent text-center text-aui_text_accent hover:bg-aui_accent_hover"
+  >
+    Login
+  </a>
+</div>
+</div>`;

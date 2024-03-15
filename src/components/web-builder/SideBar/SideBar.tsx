@@ -10,6 +10,7 @@ import {
   PuzzlePiece,
 } from "@phosphor-icons/react/dist/ssr";
 import clsx from "clsx";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function SideBar() {
@@ -30,20 +31,20 @@ export default function SideBar() {
     <>
       <div
         className={clsx(
-          "transition-all duration-500 h-full flex flex-col items-center gap-6",
+          "flex h-full flex-col items-center gap-6 transition-all duration-500",
           { "w-20 ": settingsState.sidebarActive === false },
-          { "w-72 ": settingsState.sidebarActive === true }
+          { "w-72 ": settingsState.sidebarActive === true },
         )}
       >
         <span
           className={clsx(
-            "w-[95%] h-10 mt-6 flex items-center px-4",
+            "mt-6 flex h-10 w-[95%] items-center px-4",
             { "justify-center": settingsState.sidebarActive === false },
-            { "justify-between": settingsState.sidebarActive === true }
+            { "justify-between": settingsState.sidebarActive === true },
           )}
         >
           <h1
-            className={clsx("font-semibold text-lg", {
+            className={clsx("text-lg font-semibold", {
               hidden: settingsState.sidebarActive === false,
             })}
           >
@@ -63,11 +64,12 @@ export default function SideBar() {
         </span>
         <div className="min-h-[1px] w-[85%] bg-border"></div>
 
-        <button
+        <Link
+          href="/dashboard"
           className={clsx(
-            "w-[80%] h-8 flex items-center gap-6",
+            "flex h-8 w-[80%] items-center gap-6",
             { "justify-center": settingsState.sidebarActive === false },
-            { "justify-start": settingsState.sidebarActive === true }
+            { "justify-start": settingsState.sidebarActive === true },
           )}
         >
           <BoundingBox size={20} />
@@ -76,13 +78,13 @@ export default function SideBar() {
           >
             Dashboard
           </h1>
-        </button>
+        </Link>
 
         <button
           className={clsx(
-            "w-[80%] h-8 flex items-center gap-6",
+            "flex h-8 w-[80%] items-center gap-6",
             { "justify-center": settingsState.sidebarActive === false },
-            { "justify-start": settingsState.sidebarActive === true }
+            { "justify-start": settingsState.sidebarActive === true },
           )}
           onClick={() => {
             handleChangeSettings("Settings");
@@ -97,9 +99,9 @@ export default function SideBar() {
         </button>
         <button
           className={clsx(
-            "w-[80%] h-8 flex items-center gap-6",
+            "flex h-8 w-[80%] items-center gap-6",
             { "justify-center": settingsState.sidebarActive === false },
-            { "justify-start": settingsState.sidebarActive === true }
+            { "justify-start": settingsState.sidebarActive === true },
           )}
           onClick={() => {
             handleChangeSettings("Components");
@@ -114,9 +116,9 @@ export default function SideBar() {
         </button>
         <button
           className={clsx(
-            "w-[80%] h-8 flex items-center gap-6",
+            "flex h-8 w-[80%] items-center gap-6",
             { "justify-center": settingsState.sidebarActive === false },
-            { "justify-start": settingsState.sidebarActive === true }
+            { "justify-start": settingsState.sidebarActive === true },
           )}
           onClick={() => {
             handleChangeSettings("Defaults");

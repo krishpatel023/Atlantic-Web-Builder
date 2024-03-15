@@ -25,6 +25,7 @@ export type Settings = {
   previewMode: boolean;
   settingsState: SettingsType;
   sidebarActive: boolean;
+  displayType: "Editor" | "Code";
 };
 
 const initialSettingsState: Settings = {
@@ -32,11 +33,12 @@ const initialSettingsState: Settings = {
   previewMode: false,
   settingsState: "Defaults",
   sidebarActive: true,
+  displayType: "Editor",
 };
 
 const settingsReducer = (
   settingsState: Settings = initialSettingsState,
-  action: SettingsAction
+  action: SettingsAction,
 ): Settings => {
   switch (action.type) {
     // case "TOGGLE_PREVIEW_MODE":
@@ -62,6 +64,11 @@ const settingsReducer = (
       return {
         ...settingsState,
         sidebarActive: !settingsState.sidebarActive,
+      };
+    case "TOGGLE_DISPLAY_MODE":
+      return {
+        ...settingsState,
+        displayType: settingsState.displayType === "Editor" ? "Code" : "Editor",
       };
     default:
       return settingsState;
@@ -90,7 +97,7 @@ type SettingsProps = {
 const SettingsProvider = (props: SettingsProps) => {
   const [settingsState, dispatchSettings] = useReducer(
     settingsReducer,
-    initialSettingsState
+    initialSettingsState,
   );
 
   useEffect(() => {

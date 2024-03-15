@@ -3,9 +3,14 @@
 import Image from "next/image";
 import Github from "@/assets/Github.svg";
 import Google from "@/assets/Google.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
+import { useUser } from "@/context/UserData/UserProvider";
+import { v4 } from "uuid";
+import axios from "axios";
+import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [username, setUsername] = useState<string | null>();
@@ -14,9 +19,13 @@ export default function SignIn() {
   const [password, setPassword] = useState<string | null>();
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  const [processMessage, setProcessMessage] = useState<string | null>(null);
+
   //EMAIL VALIDATION ALONG WITH STORING
   const handleUsernameChange = (val: string) => {
     setUsernameError(null);
+    setProcessMessage(null);
+
     if (val === "" || val === undefined) {
       setUsernameError("Please enter a valid Email");
     } else setUsername(val);
@@ -27,7 +36,7 @@ export default function SignIn() {
 
   const validateEmail = (email: string) => {
     var validRegex: RegExp = new RegExp(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
     );
 
     if (email.match(validRegex)) {
@@ -40,6 +49,7 @@ export default function SignIn() {
   //PASSWORD VALIDATION ALONG WITH STORING
   const handlePasswordChange = (val: string) => {
     setPasswordError(null);
+    setProcessMessage(null);
     setPassword(val);
     validatePassword(val);
   };
@@ -72,7 +82,7 @@ export default function SignIn() {
       if (email.length < 8) {
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "be atleat 8 characters"
+          "be atleat 8 characters",
         );
         console.log(passwordErrorMsg);
 
@@ -92,7 +102,7 @@ export default function SignIn() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain an uppercase character"
+          "contain an uppercase character",
         );
         errCount++;
       }
@@ -102,7 +112,7 @@ export default function SignIn() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain a lowercase character"
+          "contain a lowercase character",
         );
         errCount++;
       }
@@ -112,7 +122,7 @@ export default function SignIn() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain a numeric character"
+          "contain a numeric character",
         );
         errCount++;
       }
@@ -122,7 +132,7 @@ export default function SignIn() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain a special character like (@,%,$,etc.)."
+          "contain a special character like (@,%,$,etc.).",
         );
         errCount++;
       }
@@ -135,7 +145,7 @@ export default function SignIn() {
   const handleSignIn = () => {
     if (!usernameError && !passwordError && username && password) {
       //Remove this
-      alert("Signed In");
+      handleLoginLogic();
     } else {
       if (!password) {
         setPasswordError("Please enter a valid Password");
@@ -145,10 +155,47 @@ export default function SignIn() {
       }
     }
   };
+  const { userState, dispatchUserState } = useUser();
+  const router = useRouter();
+  //SIGNIN LOGIC
+  const handleLoginLogic = async () => {
+    const resp = await axios.put(
+      `${BACKEND_URL}/users/login`,
+      {
+        email: username,
+        password: password,
+      },
+      HEADER_CONFIG,
+    );
+
+    if (resp.data.status === true) {
+      dispatchUserState({
+        type: "LOGIN",
+        payload: {
+          data: resp.data.data,
+        },
+      });
+      router.push("/dashboard");
+    } else {
+      if (resp.data.msg === "INVALID_PASSWORD") {
+        setProcessMessage("Invalid Password");
+      } else if (resp.data.msg === "INVALID_EMAIL") {
+        setProcessMessage(
+          "Invalid Email. Please check correct email or create an account.",
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (userState.loginStatus) {
+      router.push("/");
+    }
+  }, []);
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <div className="w-[40%] h-full flex flex-col justify-center items-center bg-[url('../assets/Background.svg')] bg-center bg-no-repeat bg-contain">
-        <div className="w-3/4 flex flex-col gap-4">
+    <div className="flex h-screen w-full items-center justify-center">
+      <div className="flex h-full w-[40%] flex-col items-center justify-center bg-[url('../assets/Background.svg')] bg-contain bg-center bg-no-repeat">
+        <div className="flex w-3/4 flex-col gap-4">
           <h1 className="text-5xl font-bold text-textPrimary">Welcome Back</h1>
           <span className="text-2xl font-normal text-textPrimary">
             Sign in to start creating your dream website. A low code kickstart
@@ -156,9 +203,9 @@ export default function SignIn() {
           </span>
         </div>
       </div>
-      <div className="w-[60%] h-full flex justify-center items-center">
+      <div className="flex h-full w-[60%] items-center justify-center">
         <div className="w-[50%]">
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex w-full flex-col gap-2">
             <label htmlFor="username" className="text-lg text-textPrimary">
               Email
             </label>
@@ -166,25 +213,25 @@ export default function SignIn() {
               type="text"
               placeholder="you@email.com"
               className={clsx(
-                "block w-full h-12 rounded-md border-2 shadow-sm px-4",
+                "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
                 {
                   "border-red-600 focus:border-red-600 focus:ring focus:ring-red-600 focus:ring-opacity-50":
                     usernameError !== null,
-                  "focus:ring focus:ring-primary-200 focus:ring-opacity-50":
+                  "focus:ring-primary-200 focus:ring focus:ring-opacity-50":
                     usernameError === null,
-                }
+                },
               )}
               onChange={(e) => {
                 handleUsernameChange(e.target.value);
               }}
             />
             {usernameError !== null ? (
-              <span className="text-red-600 text-sm font-normal">
+              <span className="text-sm font-normal text-red-600">
                 {usernameError}
               </span>
             ) : null}
           </div>
-          <div className="flex flex-col gap-2 w-full mt-6">
+          <div className="mt-6 flex w-full flex-col gap-2">
             <label htmlFor="password" className="text-lg text-textPrimary">
               Password
             </label>
@@ -192,20 +239,20 @@ export default function SignIn() {
               type="Password"
               placeholder="Password"
               className={clsx(
-                "block w-full h-12 rounded-md border-2 shadow-sm px-4",
+                "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
                 {
                   "border-red-600 focus:border-red-600 focus:ring focus:ring-red-600 focus:ring-opacity-50":
                     passwordError !== null,
-                  "focus:ring focus:ring-primary-200 focus:ring-opacity-50":
+                  "focus:ring-primary-200 focus:ring focus:ring-opacity-50":
                     passwordError === null,
-                }
+                },
               )}
               onChange={(e) => {
                 handlePasswordChange(e.target.value);
               }}
             />
             {passwordError !== null ? (
-              <span className="text-red-600 text-sm font-normal">
+              <span className="text-sm font-normal text-red-600">
                 {passwordError}
               </span>
             ) : null}
@@ -214,9 +261,14 @@ export default function SignIn() {
             <input type="checkbox" name="" id="" />
             <span>Remember me</span>
           </div>
+          {processMessage ? (
+            <span className="mt-2 text-sm font-normal text-red-600">
+              {processMessage}
+            </span>
+          ) : null}
           <div className="mt-6 flex flex-col gap-4">
             <button
-              className="w-full h-12 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center "
+              className="flex h-12 w-full items-center justify-center rounded-md bg-primary text-center text-textComplementary hover:bg-primaryHover "
               onClick={handleSignIn}
             >
               Sign In
@@ -231,18 +283,18 @@ export default function SignIn() {
             </p>
           </div>
 
-          <div className="flex justify-between items-center width-full mt-10">
-            <div className="min-h-[1px] bg-gray-200 w-[43%]"></div>
+          <div className="width-full mt-10 flex items-center justify-between">
+            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
             <span className="text-sm font-medium text-textSecondary">OR</span>
-            <div className="min-h-[1px] bg-gray-200 w-[43%]"></div>
+            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
           </div>
 
-          <div className="flex justify-center items-center width-full mt-10 gap-6">
-            <button className="border-[1px] rounded-sm border-border p-2">
-              <Image className="w-8 h-8" src={Google} alt="" />
+          <div className="width-full mt-10 flex items-center justify-center gap-6">
+            <button className="rounded-sm border-[1px] border-border p-2">
+              <Image className="h-8 w-8" src={Google} alt="" />
             </button>
-            <button className="border-[1px] rounded-sm border-border p-2">
-              <Image className="w-8 h-8" src={Github} alt="" />
+            <button className="rounded-sm border-[1px] border-border p-2">
+              <Image className="h-8 w-8" src={Github} alt="" />
             </button>
           </div>
         </div>

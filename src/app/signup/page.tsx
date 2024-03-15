@@ -3,11 +3,19 @@
 import Image from "next/image";
 import Github from "@/assets/Github.svg";
 import Google from "@/assets/Google.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
+import axios from "axios";
+import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { v4 } from "uuid";
+import { useUser } from "@/context/UserData/UserProvider";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const { userState, dispatchUserState } = useUser();
+  const router = useRouter();
+
   const [username, setUsername] = useState<string | null>();
   const [usernameError, setUsernameError] = useState<string | null>(null);
 
@@ -17,6 +25,11 @@ export default function SignUp() {
   const [name, setName] = useState<string | null>();
   const [nameError, setNameError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (userState.loginStatus) {
+      router.push("/");
+    }
+  }, []);
   const handleNameChange = (name: string) => {
     setNameError(null);
 
@@ -45,7 +58,7 @@ export default function SignUp() {
 
   const validateEmail = (email: string) => {
     var validRegex: RegExp = new RegExp(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
     );
 
     if (email.match(validRegex)) {
@@ -90,7 +103,7 @@ export default function SignUp() {
       if (email.length < 8) {
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "be atleat 8 characters"
+          "be atleat 8 characters",
         );
         console.log(passwordErrorMsg);
 
@@ -110,7 +123,7 @@ export default function SignUp() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain an uppercase character"
+          "contain an uppercase character",
         );
         errCount++;
       }
@@ -120,7 +133,7 @@ export default function SignUp() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain a lowercase character"
+          "contain a lowercase character",
         );
         errCount++;
       }
@@ -130,7 +143,7 @@ export default function SignUp() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain a numeric character"
+          "contain a numeric character",
         );
         errCount++;
       }
@@ -140,7 +153,7 @@ export default function SignUp() {
         }
         passwordErrorMsg = passwordErrorMsg.concat(
           " ",
-          "contain a special character like (@,%,$,etc.)."
+          "contain a special character like (@,%,$,etc.).",
         );
         errCount++;
       }
@@ -159,8 +172,7 @@ export default function SignUp() {
       username &&
       password
     ) {
-      //Remove this
-      alert("Signed Up Successfully");
+      handleSignUpLogic();
     } else {
       if (!password) {
         setPasswordError("Please enter a valid Password");
@@ -173,10 +185,35 @@ export default function SignUp() {
       }
     }
   };
+
+  //SIGNUP LOGIC
+  const handleSignUpLogic = async () => {
+    const response = await axios.post(
+      `${BACKEND_URL}/users/register`,
+      {
+        userID: v4(),
+        name: name,
+        email: username,
+        password: password,
+        projects: [],
+      },
+      HEADER_CONFIG,
+    );
+
+    if (response.data.status === true) {
+      const resp = dispatchUserState({
+        type: "LOGIN",
+        payload: { data: response.data.data },
+      });
+      console.log(resp);
+
+      router.push("/dashboard");
+    }
+  };
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <div className="w-[40%] h-full flex flex-col justify-center items-center bg-[url('../assets/Background.svg')] bg-center bg-no-repeat bg-contain">
-        <div className="w-3/4 flex flex-col gap-4">
+    <div className="flex h-screen w-full items-center justify-center">
+      <div className="flex h-full w-[40%] flex-col items-center justify-center bg-[url('../assets/Background.svg')] bg-contain bg-center bg-no-repeat">
+        <div className="flex w-3/4 flex-col gap-4">
           <h1 className="text-5xl font-bold text-textPrimary">Welcome</h1>
           <span className="text-2xl font-normal text-textPrimary">
             Sign up to start creating your dream website. A low code kickstart
@@ -184,9 +221,9 @@ export default function SignUp() {
           </span>
         </div>
       </div>
-      <div className="w-[60%] h-full flex justify-center items-center">
+      <div className="flex h-full w-[60%] items-center justify-center">
         <div className="w-[50%]">
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex w-full flex-col gap-2">
             <label htmlFor="name" className="text-lg text-textPrimary">
               Name
             </label>
@@ -194,25 +231,25 @@ export default function SignUp() {
               type="text"
               placeholder="Your Name"
               className={clsx(
-                "block w-full h-12 rounded-md border-2 shadow-sm px-4",
+                "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
                 {
                   "border-red-600 focus:border-red-600 focus:ring focus:ring-red-600 focus:ring-opacity-50":
                     nameError !== null,
-                  "focus:ring focus:ring-primary-200 focus:ring-opacity-50":
+                  "focus:ring-primary-200 focus:ring focus:ring-opacity-50":
                     nameError === null,
-                }
+                },
               )}
               onChange={(e) => {
                 handleNameChange(e.target.value);
               }}
             />
             {nameError !== null ? (
-              <span className="text-red-600 text-sm font-normal">
+              <span className="text-sm font-normal text-red-600">
                 {nameError}
               </span>
             ) : null}
           </div>
-          <div className="flex flex-col gap-2 w-full mt-6">
+          <div className="mt-6 flex w-full flex-col gap-2">
             <label htmlFor="username" className="text-lg text-textPrimary">
               Email
             </label>
@@ -220,25 +257,25 @@ export default function SignUp() {
               type="text"
               placeholder="you@email.com"
               className={clsx(
-                "block w-full h-12 rounded-md border-2 shadow-sm px-4",
+                "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
                 {
                   "border-red-600 focus:border-red-600 focus:ring focus:ring-red-600 focus:ring-opacity-50":
                     usernameError !== null,
-                  "focus:ring focus:ring-primary-200 focus:ring-opacity-50":
+                  "focus:ring-primary-200 focus:ring focus:ring-opacity-50":
                     usernameError === null,
-                }
+                },
               )}
               onChange={(e) => {
                 handleUsernameChange(e.target.value);
               }}
             />
             {usernameError !== null ? (
-              <span className="text-red-600 text-sm font-normal">
+              <span className="text-sm font-normal text-red-600">
                 {usernameError}
               </span>
             ) : null}
           </div>
-          <div className="flex flex-col gap-2 w-full mt-6">
+          <div className="mt-6 flex w-full flex-col gap-2">
             <label htmlFor="password" className="text-lg text-textPrimary">
               Password
             </label>
@@ -246,20 +283,20 @@ export default function SignUp() {
               type="Password"
               placeholder="Password"
               className={clsx(
-                "block w-full h-12 rounded-md border-2 shadow-sm px-4",
+                "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
                 {
                   "border-red-600 focus:border-red-600 focus:ring focus:ring-red-600 focus:ring-opacity-50":
                     passwordError !== null,
-                  "focus:ring focus:ring-primary-200 focus:ring-opacity-50":
+                  "focus:ring-primary-200 focus:ring focus:ring-opacity-50":
                     passwordError === null,
-                }
+                },
               )}
               onChange={(e) => {
                 handlePasswordChange(e.target.value);
               }}
             />
             {passwordError !== null ? (
-              <span className="text-red-600 text-sm font-normal">
+              <span className="text-sm font-normal text-red-600">
                 {passwordError}
               </span>
             ) : null}
@@ -270,7 +307,7 @@ export default function SignUp() {
           </div> */}
           <div className="mt-6 flex flex-col gap-4">
             <button
-              className="w-full h-12 rounded-md bg-primary hover:bg-primaryHover text-textComplementary text-center flex justify-center items-center "
+              className="flex h-12 w-full items-center justify-center rounded-md bg-primary text-center text-textComplementary hover:bg-primaryHover "
               onClick={handleSignUp}
             >
               Sign Up
@@ -283,18 +320,18 @@ export default function SignUp() {
             </p>
           </div>
 
-          <div className="flex justify-between items-center width-full mt-10">
-            <div className="min-h-[1px] bg-gray-200 w-[43%]"></div>
+          <div className="width-full mt-10 flex items-center justify-between">
+            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
             <span className="text-sm font-medium text-textSecondary">OR</span>
-            <div className="min-h-[1px] bg-gray-200 w-[43%]"></div>
+            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
           </div>
 
-          <div className="flex justify-center items-center width-full mt-10 gap-6">
-            <button className="border-[1px] rounded-sm border-border p-2">
-              <Image className="w-8 h-8" src={Google} alt="" />
+          <div className="width-full mt-10 flex items-center justify-center gap-6">
+            <button className="rounded-sm border-[1px] border-border p-2">
+              <Image className="h-8 w-8" src={Google} alt="" />
             </button>
-            <button className="border-[1px] rounded-sm border-border p-2">
-              <Image className="w-8 h-8" src={Github} alt="" />
+            <button className="rounded-sm border-[1px] border-border p-2">
+              <Image className="h-8 w-8" src={Github} alt="" />
             </button>
           </div>
         </div>

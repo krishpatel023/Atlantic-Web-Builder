@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const plugin = require("tailwindcss/plugin");
 
 const config: Config = {
   content: [
@@ -55,7 +56,33 @@ const config: Config = {
       lg: "800px",
     },
   },
-  plugins: [require("@tailwindcss/container-queries")],
+  plugins: [
+    require("@tailwindcss/container-queries"),
+    plugin(
+      ({
+        addUtilities,
+      }: {
+        addUtilities: (
+          utilities: Record<string, Record<string, Record<string, string>>>,
+        ) => void;
+      }): void => {
+        addUtilities({
+          ".scrollbar": {
+            "&::-webkit-scrollbar": {
+              width: "10px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "transparent",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "transparent",
+            },
+          },
+        });
+      },
+    ),
+  ],
   safelist: [
     {
       pattern:

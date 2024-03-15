@@ -4,6 +4,12 @@ import { DeviceTypes, SettingsType } from "../Settings/SettingsProvider";
 
 export type EditorAction =
   | {
+      type: "UPDATE_EDITOR_STATE";
+      payload: {
+        newEeditorState: EditorElement[];
+      };
+    }
+  | {
       type: "ADD_ELEMENT";
       payload: {
         containerId: string;
@@ -56,6 +62,12 @@ export type EditorAction =
       type: "UPDATE_HOVER";
       payload: {
         elementId: string | null;
+      };
+    }
+  | {
+      type: "ADD_REF";
+      payload: {
+        element: EditorElement;
       };
     }
   | { type: "TOGGLE_PREVIEW_MODE" }

@@ -5,7 +5,7 @@ import {
   useEditor,
 } from "@/context/Editor/EditorProvider";
 import Selected from "../Selected";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Recursive from "./Recursive";
 import Default from "./Default";
 import { useSettings } from "@/context/Settings/SettingsProvider";
@@ -28,18 +28,46 @@ export default function Components({ element }: { element: EditorElement }) {
   const { settingsState, dispatchSettings } = useSettings();
   const { componentData, setComponentData, onDrop, handleDragOver } =
     useDragAndDrop();
-  const { className, textData, ...rest } = element.special as {
+  // const { textData , ...rest } = element.special as {
+  //   // className?: string;
+  //   href?: string;
+  //   src?: string;
+  //   textData?: string;
+  // };
+
+  const [rest, setRest] = useState({});
+  function hasTextData(obj: {
     className?: string;
     href?: string;
     src?: string;
     textData?: string;
+  }): obj is {
+    className?: string;
+    href?: string;
+    src?: string;
+    textData: string;
+  } {
+    return obj.textData !== undefined;
+  }
+
+  const handleRst = () => {
+    if (element.special && hasTextData(element.special)) {
+      const { textData, ...restObj } = element.special;
+      setRest(restObj);
+      handleTextData();
+      // Use textData and rest
+    } else {
+      const { ...restObj } = element.special || {};
+      setRest(restObj);
+      // Use rest
+    }
   };
 
   useEffect(() => {
     console.log("------------  Default Element");
-    handleTextData();
     handleStyling();
-
+    handleRst();
+    detectSingleTag(element.tag);
     console.log("ERROR DEBUG", element.tag, element);
   }, [element]);
 
@@ -144,6 +172,7 @@ export default function Components({ element }: { element: EditorElement }) {
   };
 
   const handleElementReplacementDragStart = (e: React.DragEvent) => {
+    if (settingsState.previewMode === true) return;
     e.stopPropagation();
     setComponentData({
       elementStatus: "replace",
@@ -151,6 +180,24 @@ export default function Components({ element }: { element: EditorElement }) {
       elementData: element,
     });
     console.log("DRAG START ", element.tag);
+  };
+
+  const [isSingleTag, setIsSingleTag] = useState<boolean | null>(null);
+
+  const detectSingleTag = (
+    tag:
+      | keyof JSX.IntrinsicElements
+      | React.ComponentType<any>
+      | "unknown"
+      | undefined,
+  ) => {
+    const singleTag = ["img"];
+    if (tag === undefined || tag === null || tag === "unknown") return;
+    if (singleTag.includes(tag as string)) {
+      setIsSingleTag(true);
+    } else {
+      setIsSingleTag(false);
+    }
   };
 
   return (
@@ -162,6 +209,7 @@ export default function Components({ element }: { element: EditorElement }) {
           element.type === "component_element" ? (
             // <Selected element={element}>
             <element.tag
+              ref={element.elementRef}
               className={`${styling}  ${
                 state.editor.hoverElement === id &&
                 settingsState.previewMode === false
@@ -196,7 +244,7 @@ export default function Components({ element }: { element: EditorElement }) {
               }
               onDragOver={handleDragOver}
               //Replace the component logic
-              draggable
+              draggable={settingsState.previewMode === true ? false : true}
               onDragStart={(e: React.DragEvent) => {
                 handleElementReplacementDragStart(e);
               }}
@@ -214,45 +262,93 @@ export default function Components({ element }: { element: EditorElement }) {
         ) : (
           <>
             {element.tag !== undefined && element.tag !== "unknown" && (
-              <element.tag
-                className={`${styling} ${
-                  state.editor.hoverElement === id &&
-                  settingsState.previewMode === false
-                    ? hoverStyling
-                    : ""
-                } ${
-                  state.editor.selectedElement === id &&
-                  settingsState.previewMode === false
-                    ? selectedStyling
-                    : ""
-                } ${settingsState.previewMode === false && state.editor.selectedElement !== id && state.editor.hoverElement !== id ? previewStyling : null}`}
-                {...rest}
-                id={element.id}
-                onMouseEnter={() => {
-                  handleHover(true);
-                }}
-                onMouseLeave={() => {
-                  handleHover(false);
-                }}
-                onClick={(e: React.MouseEvent) => {
-                  handleElementSelection(e);
-                }}
-                onDrop={(e: React.DragEvent) =>
-                  onDrop(
-                    e,
-                    element.tag ? (element.tag as string) : null,
-                    element.id,
-                  )
-                }
-                onDragOver={handleDragOver}
-                //Replace the component logic
-                draggable
-                onDragStart={(e: React.DragEvent) => {
-                  handleElementReplacementDragStart(e);
-                }}
-              >
-                {textValue ? textValue : null}
-              </element.tag>
+              <>
+                {isSingleTag ? (
+                  <element.tag
+                    ref={element.elementRef}
+                    className={`${styling} ${
+                      state.editor.hoverElement === id &&
+                      settingsState.previewMode === false
+                        ? hoverStyling
+                        : ""
+                    } ${
+                      state.editor.selectedElement === id &&
+                      settingsState.previewMode === false
+                        ? selectedStyling
+                        : ""
+                    } ${settingsState.previewMode === false && state.editor.selectedElement !== id && state.editor.hoverElement !== id ? previewStyling : null}`}
+                    {...rest}
+                    id={element.id}
+                    onMouseEnter={() => {
+                      handleHover(true);
+                    }}
+                    onMouseLeave={() => {
+                      handleHover(false);
+                    }}
+                    onClick={(e: React.MouseEvent) => {
+                      handleElementSelection(e);
+                    }}
+                    onDrop={(e: React.DragEvent) =>
+                      onDrop(
+                        e,
+                        element.tag ? (element.tag as string) : null,
+                        element.id,
+                      )
+                    }
+                    onDragOver={handleDragOver}
+                    //Replace the component logic
+                    draggable={
+                      settingsState.previewMode === true ? false : true
+                    }
+                    onDragStart={(e: React.DragEvent) => {
+                      handleElementReplacementDragStart(e);
+                    }}
+                  />
+                ) : (
+                  <element.tag
+                    ref={element.elementRef}
+                    className={`${styling} ${
+                      state.editor.hoverElement === id &&
+                      settingsState.previewMode === false
+                        ? hoverStyling
+                        : ""
+                    } ${
+                      state.editor.selectedElement === id &&
+                      settingsState.previewMode === false
+                        ? selectedStyling
+                        : ""
+                    } ${settingsState.previewMode === false && state.editor.selectedElement !== id && state.editor.hoverElement !== id ? previewStyling : null}`}
+                    {...rest}
+                    id={element.id}
+                    onMouseEnter={() => {
+                      handleHover(true);
+                    }}
+                    onMouseLeave={() => {
+                      handleHover(false);
+                    }}
+                    onClick={(e: React.MouseEvent) => {
+                      handleElementSelection(e);
+                    }}
+                    onDrop={(e: React.DragEvent) =>
+                      onDrop(
+                        e,
+                        element.tag ? (element.tag as string) : null,
+                        element.id,
+                      )
+                    }
+                    onDragOver={handleDragOver}
+                    //Replace the component logic
+                    draggable={
+                      settingsState.previewMode === true ? false : true
+                    }
+                    onDragStart={(e: React.DragEvent) => {
+                      handleElementReplacementDragStart(e);
+                    }}
+                  >
+                    {textValue ? textValue : null}
+                  </element.tag>
+                )}
+              </>
             )}
           </>
         ))}

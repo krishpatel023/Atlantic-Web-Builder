@@ -5,12 +5,18 @@ import {
   ReactComponentElement,
   ReactElement,
   createContext,
+  createRef,
   useContext,
   useEffect,
   useReducer,
+  useRef,
+  useState,
 } from "react";
 import { EditorAction } from "./EditorActions";
 import { V4Options } from "uuid";
+import axios from "axios";
+import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { useUser } from "../UserData/UserProvider";
 export type EditorBtns =
   | "text"
   | "container"
@@ -54,6 +60,7 @@ export type EditorElement = {
   //     components?: string;
   //   };
   special?: {};
+  elementRef?: React.RefObject<HTMLElement>; // Add the ref property to EditorElement and remove this before adding to db
 };
 
 export type Editor = {
@@ -97,6 +104,23 @@ const initialState: EditorState = {
   history: initialHistoryState,
 };
 
+const addRefToElements = (editorElem: EditorElement): EditorElement => {
+  editorElem.content.map((item) => {
+    item = addRefToElements(item);
+    item = { ...item, elementRef: { current: null } };
+    return item;
+  });
+  return editorElem;
+};
+
+const removeRefToElements = (editorArray: EditorElement[]) => {
+  return editorArray.map((item) => {
+    removeRefToElements(item.content);
+    const { elementRef, ...rest } = item;
+    return { ...rest };
+  });
+};
+
 const addAnElement = (
   editorArray: EditorElement[],
   action: EditorAction,
@@ -109,7 +133,11 @@ const addAnElement = (
     if (item.id === action.payload.containerId && Array.isArray(item.content)) {
       return {
         ...item,
-        content: [...item.content, action.payload.elementDetails],
+        content: [
+          ...item.content,
+          // { ...action.payload.elementDetails, elementRef: { current: null } },
+          { ...action.payload.elementDetails },
+        ],
       };
     } else if (item.content && Array.isArray(item.content)) {
       return {
@@ -135,7 +163,7 @@ const deleteAnElement = (
     } else if (item.content && Array.isArray(item.content)) {
       item.content = deleteAnElement(item.content, action);
     }
-    return true;
+    return item;
   });
 };
 
@@ -288,6 +316,26 @@ const editorReducer = (
           hoverElement: action.payload.elementId,
         },
       };
+    case "ADD_REF":
+      console.log("MY CALL");
+
+      const updatedElementAfterRef = addRefToElements(action.payload.element);
+      return {
+        ...state,
+        editor: {
+          ...state.editor,
+          elements: [updatedElementAfterRef],
+        },
+      };
+    case "UPDATE_EDITOR_STATE":
+      const updatedElementsDirect = action.payload.newEeditorState;
+      return {
+        ...state,
+        editor: {
+          ...state.editor,
+          elements: updatedElementsDirect,
+        },
+      };
 
     default:
       return state;
@@ -297,9 +345,38 @@ const editorReducer = (
 export const EditorContext = createContext<{
   state: EditorState;
   dispatch: Dispatch<EditorAction>;
+  handleInitialFetchRequest: ({
+    userId,
+    projectId,
+  }: {
+    userId: string;
+    projectId: string;
+  }) => any;
+
+  handleCodeUpdateToBackend: ({
+    userId,
+    projectId,
+  }: {
+    userId: string;
+    projectId: string;
+  }) => void;
 }>({
   state: initialState,
   dispatch: () => undefined,
+  handleInitialFetchRequest: ({
+    userId,
+    projectId,
+  }: {
+    userId: string;
+    projectId: string;
+  }) => {},
+  handleCodeUpdateToBackend: ({
+    userId,
+    projectId,
+  }: {
+    userId: string;
+    projectId: string;
+  }) => {},
 });
 
 type EditorProps = {
@@ -313,11 +390,70 @@ const EditorProvider = (props: EditorProps) => {
     console.log(state);
   }, [state]);
 
+  // useEffect(() => {
+  //   dispatch({
+  //     type: "ADD_REF",
+  //     payload: {
+  //       element: state.editor.elements[0],
+  //     },
+  //   });
+  // }, []);
+
+  const { userState } = useUser();
+  const handleInitialFetchRequest = async ({
+    userId,
+    projectId,
+  }: {
+    userId: string;
+    projectId: string;
+  }) => {
+    if (!userId || !projectId)
+      return { status: false, message: "Ops! Something went wrong" };
+
+    const response = await axios.get(
+      `${BACKEND_URL}/projects/get/${userId}/${projectId}`,
+      HEADER_CONFIG,
+    );
+
+    if (response.data.status === true) {
+      dispatch({
+        type: "UPDATE_EDITOR_STATE",
+        payload: {
+          newEeditorState: [response.data.data.code],
+        },
+      });
+      return { status: true, message: "Project Loaded Successfully" };
+    }
+    return {
+      status: false,
+      message: "Project Not Found. The project you are looking for is deleted.",
+    };
+  };
+
+  const handleCodeUpdateToBackend = async ({
+    userId,
+    projectId,
+  }: {
+    userId: string;
+    projectId: string;
+  }) => {
+    if (!userId || !projectId) return;
+    await axios.put(
+      `${BACKEND_URL}/projects/update/${userId}/${projectId}`,
+      {
+        code: state.editor.elements[0],
+      },
+      HEADER_CONFIG,
+    );
+  };
+
   return (
     <EditorContext.Provider
       value={{
         state,
         dispatch,
+        handleInitialFetchRequest,
+        handleCodeUpdateToBackend,
       }}
     >
       {props.children}

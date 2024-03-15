@@ -13,6 +13,9 @@ import {
   ArrowArcLeft,
   ArrowArcRight,
   ArrowsOut,
+  Code,
+  CursorText,
+  ExcludeSquare,
   Eye,
   EyeClosed,
   EyeSlash,
@@ -20,8 +23,9 @@ import {
 import { useEditor } from "@/context/Editor/EditorProvider";
 import Recursive from "./Editable/Recursive";
 import { DeviceTypes, useSettings } from "@/context/Settings/SettingsProvider";
+import CodeBlock from "@/components/preview/CodeBlock";
 
-export default function Editor() {
+export default function Editor({ projectId }: { projectId: string }) {
   const [active, setActive] = useState<DeviceTypes>("Desktop");
 
   const { state, dispatch } = useEditor();
@@ -53,18 +57,24 @@ export default function Editor() {
       type: "REDO",
     });
   };
+  const handleEditorType = () => {
+    dispatchSettings({
+      type: "TOGGLE_DISPLAY_MODE",
+    });
+  };
   return (
     <>
       <div
         className={clsx(
-          " flex flex-col items-center justify-center bg-secondary transition-all duration-500",
+          " flex flex-col items-center justify-start bg-secondary transition-all duration-500",
           { "w-[calc(100vw-24rem)]": settingsState.sidebarActive === false },
           { "w-[calc(100vw-38rem)]": settingsState.sidebarActive === true },
         )}
       >
         <div className="flex h-16 w-full items-center justify-between px-6">
-          <div className="flex h-10 w-20 items-center justify-center gap-2 rounded-xl bg-background">
+          <div className="flex h-10  items-center justify-center rounded-xl bg-background">
             <button
+              className="flex w-10 items-center justify-center text-center"
               onClick={() => {
                 handleTogglePreview();
               }}
@@ -76,8 +86,30 @@ export default function Editor() {
               )}
             </button>
             <div className="h-full min-w-[1px] bg-slate-200"></div>
-            <button>
+            <a
+              href={`/preview/projects/${projectId}`}
+              target="_blank"
+              className="flex w-10 items-center justify-center text-center"
+            >
               <ArrowsOut size={20} />
+            </a>
+            <div className="h-full min-w-[1px] bg-slate-200"></div>
+
+            <button
+              className="flex w-32 items-center justify-center gap-2 text-center"
+              onClick={() => {
+                handleEditorType();
+              }}
+            >
+              {settingsState.displayType === "Editor" ? (
+                <>
+                  <Code size={20} /> Code
+                </>
+              ) : (
+                <>
+                  <ExcludeSquare size={20} /> Editor
+                </>
+              )}
             </button>
           </div>
           <div className="flex h-10 items-center gap-4 rounded-lg bg-background px-4 py-2">
@@ -146,19 +178,23 @@ export default function Editor() {
           </div>
         </div>
 
-        {/* <Dropable className="w-full"> */}
         {/* EDITOR */}
-        <div
-          className={` h-full max-w-[98%] overflow-y-auto  rounded-t-lg bg-background @container 
-          ${settingsState.device === "Desktop" && "w-full"}
-          ${settingsState.device === "Tablet" && "w-[650px]"} 
-          ${settingsState.device === "Mobile" && "w-[420px]"}`}
-        >
-          {Array.isArray(state.editor.elements) &&
-            state.editor.elements.map((childElement) => (
-              <Recursive key={childElement.id} element={childElement} />
-            ))}
-        </div>
+        {settingsState.displayType === "Editor" ? (
+          <div
+            className={` h-full max-w-[98%] overflow-y-auto  rounded-t-lg bg-background @container 
+    ${settingsState.device === "Desktop" && "w-full"}
+    ${settingsState.device === "Tablet" && "w-[650px]"} 
+    ${settingsState.device === "Mobile" && "w-[420px]"}`}
+          >
+            {Array.isArray(state.editor.elements) &&
+              state.editor.elements.map((childElement) => (
+                <Recursive key={childElement.id} element={childElement} />
+              ))}
+          </div>
+        ) : (
+          <CodeBlock element={state.editor.elements[0]} />
+        )}
+
         {/* </Dropable> */}
       </div>
     </>

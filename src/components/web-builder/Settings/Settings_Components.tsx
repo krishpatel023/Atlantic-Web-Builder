@@ -61,7 +61,7 @@ const Component = ({ componentName }: { componentName: string }) => {
             <Dragable
               className="flex w-[90%] flex-col items-end"
               key={i}
-              componentDataJsx={variant.component}
+              componentDataJsx={variant.element}
               componentType="component"
             >
               <div

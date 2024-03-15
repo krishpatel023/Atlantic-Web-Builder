@@ -6,6 +6,7 @@ import DragandDropContext, {
   DragAndDropContextProps,
 } from "./DragAndDropContext";
 import { DragableElementType, containerElements } from "@/utils/constants";
+import { useSettings } from "../Settings/SettingsProvider";
 
 type ContextWrapperProps = {
   children: React.ReactNode;
@@ -22,15 +23,6 @@ const myComponent: ReactElement = (
       <h1 className="text-4xl font-bold text-aui_text">
         Welcome to the world of Atlantic UI
       </h1>
-      {/* <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        fill="#000000"
-        viewBox="0 0 256 256"
-      >
-        <path d="M216,136a8,8,0,0,0-8,8,40,40,0,0,1-40,40,47.79,47.79,0,0,0-32,12.27V128h32a8,8,0,0,0,0-16H136V87a32,32,0,1,0-16,0v25H88a8,8,0,0,0,0,16h32v68.27A47.79,47.79,0,0,0,88,184a40,40,0,0,1-40-40,8,8,0,0,0-16,0,56.06,56.06,0,0,0,56,56,32,32,0,0,1,32,32,8,8,0,0,0,16,0,32,32,0,0,1,32-32,56.06,56.06,0,0,0,56-56A8,8,0,0,0,216,136ZM112,56a16,16,0,1,1,16,16A16,16,0,0,1,112,56Z"></path>
-      </svg> */}
       <h2 className="text-lg font-medium text-aui_text_secondary">
         One stop destination to build Tailwind styled components instantly. A
         Developer first model that provides the root customizability to cater
@@ -64,7 +56,9 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
   const [componentData, setComponentData] =
     useState<DragableElementType | null>(null);
 
-  const { dispatch } = useEditor();
+  const { state, dispatch } = useEditor();
+  const { settingsState } = useSettings();
+
   const onDrag = (componentType: EditorBtns, e: React.DragEvent) => {
     if (componentType) e.dataTransfer?.setData("componentType", componentType);
   };
@@ -80,7 +74,7 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     };
 
     if (React.isValidElement(component)) {
-      console.log(component);
+      console.log(JSON.stringify(component));
 
       // WE WON't NEED THIS AFTER WE REMOVE THE NAME REQUIREMENT
       tree.name =
@@ -159,9 +153,11 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
   const onComponentDrag = (
     componentType: EditorBtns,
     e: React.DragEvent,
-    component: React.FC,
+    component: ReactElement,
   ) => {
-    const myval: EditorElement = JSXElementToTree({ component: myComponent });
+    console.log("onComponentData ::::::: ", componentType, component);
+
+    const myval: EditorElement = JSXElementToTree({ component: component });
     if (componentType === "component")
       setComponentData({
         elementType: "component",
@@ -179,8 +175,10 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     tag: string | "unknown" | null,
     parentId: string,
   ) => {
+    if (settingsState.previewMode === true) return;
     e.stopPropagation();
     console.log("DRAG END ", tag, parentId, componentData);
+    const insertIndex = handlePositionDetection(parentId, e);
     if (componentData && componentData.elementStatus === "add") {
       ElementAdditionAfterDrop(tag, parentId);
     } else if (componentData && componentData.elementStatus === "replace") {
@@ -279,6 +277,47 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     setComponentData(null);
   };
 
+  const handlePositionDetection = (
+    parentId: string,
+    e: React.DragEvent,
+  ): number => {
+    const ParentElem: EditorElement = reccursiveFinder(
+      parentId,
+      state.editor.elements,
+    );
+
+    // var positionIndex = -1
+    // var aboveWhichElem = Infinity
+    // var belowWhichElem = -1
+
+    // for(var i = 0; i < ParentElem.content.length; i++){
+    //   const { bottom, top } = ParentElem.content[i].elementRef?.current?.getBoundingClientRect();
+
+    //   if(e.clientY  top)
+
+    // }
+    return -1;
+  };
+
+  const reccursiveFinder = (
+    elemId: string,
+    content: Array<EditorElement>,
+  ): any => {
+    for (const item of content) {
+      if (item.id === elemId) {
+        return item;
+      }
+
+      if (item.content && Array.isArray(item.content)) {
+        const nestedResult = reccursiveFinder(elemId, item.content);
+        if (nestedResult) {
+          return nestedResult;
+        }
+      }
+    }
+
+    return null;
+  };
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };

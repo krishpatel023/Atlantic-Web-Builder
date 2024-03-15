@@ -1,16 +1,18 @@
-import Footer_1, { FooterCode_1 } from "./Footer/Footer_1";
-import Footer_2, { FooterCode_2 } from "./Footer/Footer_2";
+import { ReactElement } from "react";
+import Footer_1, { FooterCode_1, FooterElement_1 } from "./Footer/Footer_1";
+import Footer_2, { FooterCode_2, FooterElement_2 } from "./Footer/Footer_2";
 
-import Header_1, { HeaderCode_1 } from "./Header/Header_1";
-import Header_2, { HeaderCode_2 } from "./Header/Header_2";
-import Header_3, { HeaderCode_3 } from "./Header/Header_3";
-import Hero_1, { HeroCode_1 } from "./Hero/Hero_1";
+import Header_1, { HeaderCode_1, HeaderElement_1 } from "./Header/Header_1";
+import Header_2, { HeaderCode_2, HeaderElement_2 } from "./Header/Header_2";
+import Header_3, { HeaderCode_3, HeaderElement_3 } from "./Header/Header_3";
+import Hero_1, { HeroCode_1, HeroElement_1 } from "./Hero/Hero_1";
 
 export interface Variants {
   name: string;
   id: number;
   component: React.FC;
   code: string;
+  element: ReactElement;
 }
 
 export interface Components {
@@ -39,36 +41,42 @@ export const variants: Variants[] = [
     id: 1,
     component: Header_1,
     code: HeaderCode_1,
+    element: HeaderElement_1,
   },
   {
     name: "Header with Fields (On This Site)",
     id: 2,
     component: Header_2,
     code: HeaderCode_2,
+    element: HeaderElement_2,
   },
   {
     name: "Header with Search",
     id: 3,
     component: Header_3,
     code: HeaderCode_3,
+    element: HeaderElement_3,
   },
   {
     name: "Footer Default",
     id: 4,
     component: Footer_1,
     code: FooterCode_1,
+    element: FooterElement_1,
   },
   {
     name: "Footer Flexed",
     id: 5,
     component: Footer_2,
     code: FooterCode_2,
+    element: FooterElement_2,
   },
   {
     name: "Hero Default",
     id: 6,
     component: Hero_1,
     code: HeroCode_1,
+    element: HeroElement_1,
   },
 ];
 
