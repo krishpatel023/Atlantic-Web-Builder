@@ -4,10 +4,10 @@ import Github from "@/assets/Github.svg";
 import { ReactElement } from "react";
 export default function Header_2() {
   return (
-    <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
-      <div className="flex h-full w-[10rem] items-center justify-center">
-        <a href="" className="flex h-full items-center justify-center">
-          <Image
+    <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-6">
+      <div className="flex h-full w-[10rem] items-center justify-start">
+        <a href="" className="flex h-full items-center justify-start">
+          <img
             src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
             alt="Logo"
             className="h-[50%] object-contain"
@@ -36,10 +36,10 @@ export default function Header_2() {
 }
 
 export const HeaderElement_2: ReactElement = (
-  <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
-    <div className="flex h-full w-[10rem] items-center justify-center">
-      <a href="" className="flex h-full items-center justify-center">
-        <Image
+  <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-6">
+    <div className="flex h-full w-[10rem] items-center justify-start">
+      <a href="" className="flex h-full items-center justify-start">
+        <img
           src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
           alt="Logo"
           className="h-[50%] object-contain"
@@ -65,9 +65,9 @@ export const HeaderElement_2: ReactElement = (
     </div>
   </div>
 );
-export const HeaderCode_2 = `<div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
-<div className="flex h-full w-[10rem] items-center justify-center">
-  <a href="" className="flex h-full items-center justify-center">
+export const HeaderCode_2 = `    <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-6">
+<div className="flex h-full w-[10rem] items-center justify-start">
+  <a href="" className="flex h-full items-center justify-start">
     <img
       src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
       alt="Logo"

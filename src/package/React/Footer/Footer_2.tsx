@@ -12,30 +12,27 @@ export default function Footer_2() {
   return (
     <>
       <div className="flex w-full flex-col items-center justify-center bg-aui_primary">
-        <div className="flex h-24  w-full items-center justify-between px-8">
+        <div className="flex w-full  items-center justify-between px-8 py-6">
           <div className="flex w-40 items-center justify-center">
-            <Image src={Logo} alt="Logo" className="h-10 object-contain" />
+            <img
+              src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
+              alt="Logo"
+              className="h-10 object-contain"
+            />
           </div>
-          <div className="flex w-40 items-center justify-center gap-6">
-            <InstagramLogo
-              size={28}
-              weight="fill"
-              className="hover:scale-110 hover:cursor-pointer"
-            />
-            <TwitterLogo
-              size={28}
-              weight="fill"
-              className="hover:scale-110 hover:cursor-pointer"
-            />
-            <FacebookLogo
-              size={28}
-              weight="fill"
-              className="hover:scale-110 hover:cursor-pointer"
-            />
+          <div className="flex w-40 flex-col items-start justify-center gap-2">
+            <span className="hover:cursor-pointer hover:text-aui_text_secondary">
+              About Us
+            </span>
+            <span className="hover:cursor-pointer hover:text-aui_text_secondary">
+              Contact
+            </span>{" "}
+            <span className="hover:cursor-pointer hover:text-aui_text_secondary">
+              Career
+            </span>
           </div>
         </div>
         <div className="flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
-          <Copyright size={20} />
           <span>2023 Atlantic UI</span>
         </div>
       </div>
@@ -45,30 +42,27 @@ export default function Footer_2() {
 
 export const FooterElement_2: ReactElement = (
   <div className="flex w-full flex-col items-center justify-center bg-aui_primary">
-    <div className="flex h-24  w-full items-center justify-between px-8">
+    <div className="flex w-full  items-center justify-between px-8 py-6">
       <div className="flex w-40 items-center justify-center">
-        <Image src={Logo} alt="Logo" className="h-10 object-contain" />
+        <img
+          src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
+          alt="Logo"
+          className="h-10 object-contain"
+        />
       </div>
-      <div className="flex w-40 items-center justify-center gap-6">
-        <InstagramLogo
-          size={28}
-          weight="fill"
-          className="hover:scale-110 hover:cursor-pointer"
-        />
-        <TwitterLogo
-          size={28}
-          weight="fill"
-          className="hover:scale-110 hover:cursor-pointer"
-        />
-        <FacebookLogo
-          size={28}
-          weight="fill"
-          className="hover:scale-110 hover:cursor-pointer"
-        />
+      <div className="flex w-40 flex-col items-start justify-center gap-2">
+        <span className="hover:cursor-pointer hover:text-aui_text_secondary">
+          About Us
+        </span>
+        <span className="hover:cursor-pointer hover:text-aui_text_secondary">
+          Contact
+        </span>{" "}
+        <span className="hover:cursor-pointer hover:text-aui_text_secondary">
+          Career
+        </span>
       </div>
     </div>
     <div className="flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
-      <Copyright size={20} />
       <span>2023 Atlantic UI</span>
     </div>
   </div>

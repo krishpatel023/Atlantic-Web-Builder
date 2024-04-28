@@ -6,6 +6,8 @@ import Header_1, { HeaderCode_1, HeaderElement_1 } from "./Header/Header_1";
 import Header_2, { HeaderCode_2, HeaderElement_2 } from "./Header/Header_2";
 import Header_3, { HeaderCode_3, HeaderElement_3 } from "./Header/Header_3";
 import Hero_1, { HeroCode_1, HeroElement_1 } from "./Hero/Hero_1";
+import SignIn_1, { SignInCode_1, SignInElement_1 } from "./SignIn/SignIn_1";
+import SignIn_2, { SignInCode_2, SignInElement_2 } from "./SignIn/SignIn_2";
 
 export interface Variants {
   name: string;
@@ -32,6 +34,10 @@ export const components: Components[] = [
   {
     name: "Hero",
     variants: [6],
+  },
+  {
+    name: "SignIn",
+    variants: [8, 7],
   },
 ];
 
@@ -77,6 +83,20 @@ export const variants: Variants[] = [
     component: Hero_1,
     code: HeroCode_1,
     element: HeroElement_1,
+  },
+  {
+    name: "Sign In Flexed",
+    id: 7,
+    component: SignIn_1,
+    code: SignInCode_1,
+    element: SignInElement_1,
+  },
+  {
+    name: "Sign In Default",
+    id: 8,
+    component: SignIn_2,
+    code: SignInCode_2,
+    element: SignInElement_2,
   },
 ];
 

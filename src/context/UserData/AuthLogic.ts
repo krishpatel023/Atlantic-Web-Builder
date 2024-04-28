@@ -6,7 +6,7 @@ import { CURRENT_ENV, SECRET_KEY_FOR_ENCRYPTION } from "@/utils/utils";
 const secret = SECRET_KEY_FOR_ENCRYPTION;
 const key = new TextEncoder().encode(secret);
 //IF IN PRODUCTION TRUE
-const httpOnlyStatus = true;
+const httpOnlyStatus = false;
 // In Seconds
 const sessionLimit = 60 * 60 * 24;
 
