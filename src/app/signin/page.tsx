@@ -11,6 +11,7 @@ import { v4 } from "uuid";
 import axios from "axios";
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import { useRouter } from "next/navigation";
+import { UserLoginFields } from "../api/users/route";
 
 export default function SignIn() {
   const [username, setUsername] = useState<string | null>();
@@ -50,6 +51,8 @@ export default function SignIn() {
   const handlePasswordChange = (val: string) => {
     setPasswordError(null);
     setProcessMessage(null);
+    console.log(val);
+
     setPassword(val);
     validatePassword(val);
   };
@@ -159,12 +162,14 @@ export default function SignIn() {
   const router = useRouter();
   //SIGNIN LOGIC
   const handleLoginLogic = async () => {
+    if (!username || !password) return;
+    const Payload: UserLoginFields = {
+      email: username,
+      password: password,
+    };
     const resp = await axios.put(
-      `${BACKEND_URL}/users/login`,
-      {
-        email: username,
-        password: password,
-      },
+      `${BACKEND_URL}/users/`,
+      Payload,
       HEADER_CONFIG,
     );
 
@@ -194,6 +199,10 @@ export default function SignIn() {
   }, []);
   return (
     <div className="flex h-screen w-full items-center justify-center">
+      <Password_Helper
+        setUsername={handleUsernameChange}
+        setPassword={handlePasswordChange}
+      />
       <div className="flex h-full w-[40%] flex-col items-center justify-center bg-[url('../assets/Background.svg')] bg-contain bg-center bg-no-repeat">
         <div className="flex w-3/4 flex-col gap-4">
           <h1 className="text-5xl font-bold text-textPrimary">Welcome Back</h1>
@@ -224,6 +233,7 @@ export default function SignIn() {
               onChange={(e) => {
                 handleUsernameChange(e.target.value);
               }}
+              value={username ? username : ""}
             />
             {usernameError !== null ? (
               <span className="text-sm font-normal text-red-600">
@@ -250,6 +260,7 @@ export default function SignIn() {
               onChange={(e) => {
                 handlePasswordChange(e.target.value);
               }}
+              value={password ? password : ""}
             />
             {passwordError !== null ? (
               <span className="text-sm font-normal text-red-600">
@@ -302,3 +313,44 @@ export default function SignIn() {
     </div>
   );
 }
+
+const Password_Helper = ({
+  setPassword,
+  setUsername,
+}: {
+  setPassword: (value: string) => void;
+  setUsername: (value: string) => void;
+}) => {
+  const [modalStatus, setModalStatus] = useState<boolean>(true);
+
+  const setDefaultCredentials = () => {
+    console.log("set default credentials");
+
+    setPassword("Admin@123");
+    setUsername("admin@admin.com");
+    // setModalStatus(false);
+  };
+  return (
+    <>
+      {modalStatus && (
+        <div className="absolute bottom-6 right-6 flex min-h-20 flex-col gap-4 rounded-md border-[2px] border-neutral-300 bg-white px-4 py-4">
+          <span className="text-lg font-medium">
+            Add the default login credentials.
+          </span>
+          <button
+            className="rounded-md border border-neutral-700 bg-neutral-900 px-4 py-2 text-textComplementary"
+            onClick={setDefaultCredentials}
+          >
+            Add Credentials
+          </button>
+          <button
+            className="rounded-md border border-neutral-900 px-4 py-2"
+            onClick={() => setModalStatus(false)}
+          >
+            Close
+          </button>
+        </div>
+      )}
+    </>
+  );
+};

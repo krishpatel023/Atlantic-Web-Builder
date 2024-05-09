@@ -1,5 +1,5 @@
-// export const BACKEND_URL = "https://atlantic-ui-backend.vercel.app";
-export const BACKEND_URL = "http://localhost:8000";
+export const BACKEND_URL = "https://atlantic-ui-test.vercel.app/api/";
+// export const BACKEND_URL = "http://localhost:3000/api/";
 
 //CONFIG FOR AXIOS
 export const HEADER_CONFIG = {

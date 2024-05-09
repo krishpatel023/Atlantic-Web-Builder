@@ -46,10 +46,10 @@ const handleDataFetching = async (userId: { userId: string }) => {
 
 const UserDataFetch = async (userId: { userId: string }) => {
   if (!userId) return;
-  console.log(userId);
+  console.log("USER FETCH", userId);
 
   const resp = await axios.get(
-    `${BACKEND_URL}/users/get/${userId.userId}`,
+    `${BACKEND_URL}/users?userId=${userId.userId}`,
     HEADER_CONFIG,
   );
   console.log(resp.data);
@@ -81,50 +81,7 @@ const userReducer = (
       return action.payload.state;
     case "UPDATE_USER_DATA":
       return action.payload.updatedState;
-    // return {
 
-    // }
-    // case "REFREASH_DASHBOARD_DATA":
-    //   const userId = userState?.userData?.userID;
-    //   if (userId) {
-    //     const updatedUserData = await handleDataFetching({userId});
-    //     if (updatedUserData) {
-    //       return {
-    //         ...userState,
-    //         userData: updatedUserData,
-    //       };
-    //     }
-    // //   }
-    // case "REFRESH_DASHBOARD_DATA":
-    //   try {
-    //     const userId = userState?.userData?.userID;
-    //     if (userId) {
-    //       const updatedUserData = new Promise(() =>
-    //         handleDataFetching({ userId }),
-    //       );
-    //       if (updatedUserData) {
-    //         const { userID, name, email, projects } = updatedUserData as {
-    //           userID?: string;
-    //           name?: string;
-    //           email?: string;
-    //           projects?: Array<string>;
-    //         };
-    //         if (!userID || !name || !email || !projects) return userState;
-    //         return {
-    //           ...userState,
-    //           userData: {
-    //             userID: userID,
-    //             name: name,
-    //             email: email,
-    //             projects: projects,
-    //           },
-    //         };
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error("Error during dashboard data refresh:", error);
-    //     return userState;
-    //   }
     default:
       return userState;
   }
@@ -156,7 +113,6 @@ const UserProvider = (props: SettingsProps) => {
         const userId = userState?.userData?.userID;
         if (userId) {
           const updatedUserData = await UserDataFetch({ userId });
-          console.log(updatedUserData);
 
           if (updatedUserData) {
             const { userID, name, email, projects } = updatedUserData as {
@@ -166,7 +122,6 @@ const UserProvider = (props: SettingsProps) => {
               projects?: Array<string>;
             };
             if (!userID || !name || !email || !projects) return userState;
-            console.log("PASSES");
 
             dispatchUserState({
               type: "UPDATE_USER_DATA",
@@ -196,7 +151,6 @@ const UserProvider = (props: SettingsProps) => {
 
   const checkIfCookieExists = async () => {
     const resp = await getSession();
-    console.log(resp);
 
     if (resp) {
       dispatchUserState({

@@ -411,7 +411,7 @@ const EditorProvider = (props: EditorProps) => {
       return { status: false, message: "Ops! Something went wrong" };
 
     const response = await axios.get(
-      `${BACKEND_URL}/projects/get/${userId}/${projectId}`,
+      `${BACKEND_URL}/projects?authorId=${userId}&projectId=${projectId}`,
       HEADER_CONFIG,
     );
 
@@ -439,7 +439,7 @@ const EditorProvider = (props: EditorProps) => {
   }) => {
     if (!userId || !projectId) return;
     await axios.put(
-      `${BACKEND_URL}/projects/update/${userId}/${projectId}`,
+      `${BACKEND_URL}/projects?authorId=${userId}&projectId=${projectId}`,
       {
         code: state.editor.elements[0],
       },

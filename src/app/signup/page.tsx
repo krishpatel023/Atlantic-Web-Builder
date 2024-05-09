@@ -11,6 +11,7 @@ import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import { v4 } from "uuid";
 import { useUser } from "@/context/UserData/UserProvider";
 import { useRouter } from "next/navigation";
+import { UserRegisterFields } from "../api/users/route";
 
 export default function SignUp() {
   const { userState, dispatchUserState } = useUser();
@@ -188,26 +189,39 @@ export default function SignUp() {
 
   //SIGNUP LOGIC
   const handleSignUpLogic = async () => {
-    const response = await axios.post(
-      `${BACKEND_URL}/users/register`,
-      {
+    if (name && username && password) {
+      const Payload: UserRegisterFields = {
         userID: v4(),
         name: name,
         email: username,
         password: password,
         projects: [],
-      },
-      HEADER_CONFIG,
-    );
+      };
+      const response = await axios.post(
+        `${BACKEND_URL}/users`,
+        Payload,
+        HEADER_CONFIG,
+      );
 
-    if (response.data.status === true) {
-      const resp = dispatchUserState({
-        type: "LOGIN",
-        payload: { data: response.data.data },
-      });
-      console.log(resp);
+      if (response.data.status === true) {
+        const resp = dispatchUserState({
+          type: "LOGIN",
+          payload: { data: response.data.data },
+        });
+        console.log(resp);
 
-      router.push("/dashboard");
+        router.push("/dashboard");
+      }
+    } else {
+      if (!password) {
+        setPasswordError("Please enter a valid Password");
+      }
+      if (!username) {
+        setUsernameError("Please enter a valid Email");
+      }
+      if (!name) {
+        setNameError("Please enter a valid Name");
+      }
     }
   };
   return (

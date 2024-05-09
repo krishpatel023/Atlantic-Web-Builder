@@ -7,6 +7,7 @@ import { Plus, SquarePen, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
+import { ProjectProps } from "../api/projects/route";
 
 export default function Dashboard() {
   const { userState, dispatchUserState } = useUser();
@@ -39,10 +40,9 @@ export default function Dashboard() {
     if (!userId) return;
 
     const resp = await axios.get(
-      `${BACKEND_URL}/projects/getProjectsForDashboard/${userId}`,
+      `${BACKEND_URL}/projects/allProjects?userId=${userId}`,
       HEADER_CONFIG,
     );
-    console.log(resp.data);
 
     if (resp.data.status === true) {
       setProjectData(resp.data.data);
@@ -156,23 +156,27 @@ const CreateModal = ({
   const { userState, dispatchUserState, handleUserUpdate } = useUser();
 
   const handleProjectCreation = async () => {
+    console.log("Called", inputState, userState?.userData?.userID);
+
     if (inputState && userState?.userData?.userID) {
-      const resp = await axios.post(
-        `${BACKEND_URL}/projects/create`,
-        {
-          projectID: v4(),
-          name: inputState,
-          status: "public",
-          creatorID: userState?.userData?.userID,
-          code: {
-            content: [],
-            id: "__body",
-            name: "Body",
-            styles: [],
-            type: "__body",
-            special: {},
-          },
+      console.log(inputState, userState?.userData?.userID);
+      const Payload: ProjectProps = {
+        projectID: v4(),
+        name: inputState,
+        status: "public",
+        creatorID: userState?.userData?.userID,
+        code: {
+          content: [],
+          id: "__body",
+          name: "Body",
+          styles: [],
+          type: "__body",
+          special: {},
         },
+      };
+      const resp = await axios.post(
+        `${BACKEND_URL}/projects/`,
+        Payload,
         HEADER_CONFIG,
       );
       console.log(resp.data);
@@ -244,7 +248,7 @@ const DeleteModal = ({
   const handleProjectDeletion = async () => {
     if (userState?.userData?.userID && projectId !== "") {
       const resp = await axios.delete(
-        `${BACKEND_URL}/projects/delete/${userState?.userData?.userID}/${projectId}`,
+        `${BACKEND_URL}/projects?authorId=${userState?.userData?.userID}&projectId=${projectId}`,
         HEADER_CONFIG,
       );
       console.log(resp.data);
