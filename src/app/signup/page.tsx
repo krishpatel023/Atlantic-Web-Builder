@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import axios from "axios";
-import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import { v4 } from "uuid";
 import { useUser } from "@/context/UserData/UserProvider";
 import { useRouter } from "next/navigation";
@@ -204,6 +204,7 @@ export default function SignUp() {
       );
 
       if (response.data.status === true) {
+        handleAnalyticsUpdate();
         const resp = dispatchUserState({
           type: "LOGIN",
           payload: { data: response.data.data },
@@ -222,6 +223,17 @@ export default function SignUp() {
       if (!name) {
         setNameError("Please enter a valid Name");
       }
+    }
+  };
+
+  const handleAnalyticsUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `${BACKEND_URL}/analytics?analyticsId=${ANALYTICS_KEY}`,
+        HEADER_CONFIG,
+      );
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

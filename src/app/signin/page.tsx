@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useUser } from "@/context/UserData/UserProvider";
 import { v4 } from "uuid";
 import axios from "axios";
-import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import { useRouter } from "next/navigation";
 import { UserLoginFields } from "../api/users/route";
 
@@ -174,6 +174,7 @@ export default function SignIn() {
     );
 
     if (resp.data.status === true) {
+      handleAnalyticsUpdate();
       dispatchUserState({
         type: "LOGIN",
         payload: {
@@ -192,6 +193,16 @@ export default function SignIn() {
     }
   };
 
+  const handleAnalyticsUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `${BACKEND_URL}/analytics?analyticsId=${ANALYTICS_KEY}`,
+        HEADER_CONFIG,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (userState.loginStatus) {
       router.push("/");

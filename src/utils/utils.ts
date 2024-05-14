@@ -14,3 +14,4 @@ export const HEADER_CONFIG = {
 export const SECRET_KEY_FOR_ENCRYPTION = "jdtwpwmcnfhdkdnviwixcldj";
 export const BACKEND_ENV = "production";
 export const CURRENT_ENV = "development";
+export const ANALYTICS_KEY = "bd0dc4ae-a164-40ad-8d5d-fd601b190bdd";
