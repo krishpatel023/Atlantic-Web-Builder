@@ -1,19 +1,18 @@
 "use client";
 
-import Image from "next/image";
-import Github from "@/assets/Github.svg";
-import Google from "@/assets/Google.svg";
-import { useEffect, useState } from "react";
+import { useUser } from "@/context/UserData/UserProvider";
+import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import axios from "axios";
 import clsx from "clsx";
 import Link from "next/link";
-import axios from "axios";
-import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
-import { v4 } from "uuid";
-import { useUser } from "@/context/UserData/UserProvider";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { v4 } from "uuid";
 import { UserRegisterFields } from "../api/users/route";
 
 export default function SignUp() {
+  const [passType, setPassType] = useState<"password" | "text">("password");
+
   const { userState, dispatchUserState } = useUser();
   const router = useRouter();
 
@@ -106,7 +105,6 @@ export default function SignUp() {
           " ",
           "be atleat 8 characters",
         );
-        console.log(passwordErrorMsg);
 
         errCount++;
       }
@@ -209,7 +207,6 @@ export default function SignUp() {
           type: "LOGIN",
           payload: { data: response.data.data },
         });
-        console.log(resp);
 
         router.push("/dashboard");
       }
@@ -233,7 +230,7 @@ export default function SignUp() {
         HEADER_CONFIG,
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (
@@ -306,7 +303,7 @@ export default function SignUp() {
               Password
             </label>
             <input
-              type="Password"
+              type={passType}
               placeholder="Password"
               className={clsx(
                 "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
@@ -327,10 +324,17 @@ export default function SignUp() {
               </span>
             ) : null}
           </div>
-          {/* <div className="mt-4 flex gap-2">
-            <input type="checkbox" name="" id="" />
-            <span>Remember me</span>
-          </div> */}
+          <div className="mt-4 flex gap-2">
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              onChange={(e) => {
+                setPassType(e.target.checked ? "text" : "password");
+              }}
+            />
+            <span>Show Password</span>
+          </div>
           <div className="mt-6 flex flex-col gap-4">
             <button
               className="flex h-12 w-full items-center justify-center rounded-md bg-primary text-center text-textComplementary hover:bg-primaryHover "
@@ -344,21 +348,6 @@ export default function SignUp() {
                 Sign In
               </Link>
             </p>
-          </div>
-
-          <div className="width-full mt-10 flex items-center justify-between">
-            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
-            <span className="text-sm font-medium text-textSecondary">OR</span>
-            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
-          </div>
-
-          <div className="width-full mt-10 flex items-center justify-center gap-6">
-            <button className="rounded-sm border-[1px] border-border p-2">
-              <Image className="h-8 w-8" src={Google} alt="" />
-            </button>
-            <button className="rounded-sm border-[1px] border-border p-2">
-              <Image className="h-8 w-8" src={Github} alt="" />
-            </button>
           </div>
         </div>
       </div>

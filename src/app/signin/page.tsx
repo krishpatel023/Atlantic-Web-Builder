@@ -1,19 +1,16 @@
 "use client";
 
-import Image from "next/image";
-import Github from "@/assets/Github.svg";
-import Google from "@/assets/Google.svg";
-import { useEffect, useState } from "react";
+import { useUser } from "@/context/UserData/UserProvider";
+import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import axios from "axios";
 import clsx from "clsx";
 import Link from "next/link";
-import { useUser } from "@/context/UserData/UserProvider";
-import { v4 } from "uuid";
-import axios from "axios";
-import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { UserLoginFields } from "../api/users/route";
 
 export default function SignIn() {
+  const [passType, setPassType] = useState<"password" | "text">("password");
   const [username, setUsername] = useState<string | null>();
   const [usernameError, setUsernameError] = useState<string | null>(null);
 
@@ -51,7 +48,6 @@ export default function SignIn() {
   const handlePasswordChange = (val: string) => {
     setPasswordError(null);
     setProcessMessage(null);
-    console.log(val);
 
     setPassword(val);
     validatePassword(val);
@@ -87,8 +83,6 @@ export default function SignIn() {
           " ",
           "be atleat 8 characters",
         );
-        console.log(passwordErrorMsg);
-
         errCount++;
       }
       if (email.match(validRegex_space)) {
@@ -200,7 +194,7 @@ export default function SignIn() {
         HEADER_CONFIG,
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -257,7 +251,7 @@ export default function SignIn() {
               Password
             </label>
             <input
-              type="Password"
+              type={passType}
               placeholder="Password"
               className={clsx(
                 "block h-12 w-full rounded-md border-2 px-4 shadow-sm",
@@ -280,8 +274,15 @@ export default function SignIn() {
             ) : null}
           </div>
           <div className="mt-4 flex gap-2">
-            <input type="checkbox" name="" id="" />
-            <span>Remember me</span>
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              onChange={(e) => {
+                setPassType(e.target.checked ? "text" : "password");
+              }}
+            />
+            <span>Show Password</span>
           </div>
           {processMessage ? (
             <span className="mt-2 text-sm font-normal text-red-600">
@@ -296,28 +297,12 @@ export default function SignIn() {
               Sign In
             </button>
 
-            <span className="text-accent underline">Forget Password?</span>
             <p>
               {"Don't have an account?"}
               <Link href={"/signup"} className="text-accent underline">
                 Sign Up
               </Link>
             </p>
-          </div>
-
-          <div className="width-full mt-10 flex items-center justify-between">
-            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
-            <span className="text-sm font-medium text-textSecondary">OR</span>
-            <div className="min-h-[1px] w-[43%] bg-gray-200"></div>
-          </div>
-
-          <div className="width-full mt-10 flex items-center justify-center gap-6">
-            <button className="rounded-sm border-[1px] border-border p-2">
-              <Image className="h-8 w-8" src={Google} alt="" />
-            </button>
-            <button className="rounded-sm border-[1px] border-border p-2">
-              <Image className="h-8 w-8" src={Github} alt="" />
-            </button>
           </div>
         </div>
       </div>
@@ -335,11 +320,8 @@ const Password_Helper = ({
   const [modalStatus, setModalStatus] = useState<boolean>(true);
 
   const setDefaultCredentials = () => {
-    console.log("set default credentials");
-
     setPassword("Admin@123");
     setUsername("admin@admin.com");
-    // setModalStatus(false);
   };
   return (
     <>
