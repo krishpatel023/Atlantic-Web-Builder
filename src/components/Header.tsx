@@ -1,10 +1,9 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import Github from "@/assets/Github.svg";
-import Logo from "../assets/logo.png";
 import { useUser } from "@/context/UserData/UserProvider";
 import { LINKS } from "@/utils/utils";
+import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
   const { userState, dispatchUserState } = useUser();
@@ -17,11 +16,13 @@ const Header = () => {
 
   return (
     <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-border bg-background px-6 md:px-12">
-      <div className="flex h-full w-[10rem] items-center justify-center">
-        <Link href="/" className="flex h-full items-center justify-center">
-          <Image src={Logo} alt="Logo" className="h-[50%] object-contain" />
-        </Link>
-      </div>
+      <Link
+        href="/"
+        className="flex h-full items-center justify-center font-mono text-lg font-bold sm:text-xl"
+      >
+        Atlantic Web Builder
+      </Link>
+
       <div className="flex h-full items-center gap-8">
         <div className="hidden sm:block">
           <Link href={LINKS.github_url} target="_blank">
