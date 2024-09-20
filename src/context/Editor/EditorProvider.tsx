@@ -1,22 +1,9 @@
 "use client";
 // import { EditorAction } from './editor-actions'
-import {
-  Dispatch,
-  ReactComponentElement,
-  ReactElement,
-  createContext,
-  createRef,
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { EditorAction } from "./EditorActions";
-import { V4Options } from "uuid";
-import axios from "axios";
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
-import { useUser } from "../UserData/UserProvider";
+import axios from "axios";
+import { Dispatch, createContext, useContext, useReducer } from "react";
+import { EditorAction } from "./EditorActions";
 export type EditorBtns =
   | "text"
   | "container"
@@ -41,10 +28,6 @@ export type ContainerQueryLabels =
   | "5xl"
   | "6xl"
   | "7xl";
-// export type OtherProperties = {
-//   name: string;
-//   value: any;
-// };
 
 export type EditorElement = {
   id: string;
@@ -53,14 +36,8 @@ export type EditorElement = {
   type: EditorBtns;
   tag?: keyof JSX.IntrinsicElements | React.ComponentType<any> | "unknown";
   content: EditorElement[];
-  // | {
-  //     href?: string;
-  //     innerText?: string;
-  //     src?: string;
-  //     components?: string;
-  //   };
   special?: {};
-  elementRef?: React.RefObject<HTMLElement>; // Add the ref property to EditorElement and remove this before adding to db
+  elementRef?: React.RefObject<HTMLElement>;
 };
 
 export type Editor = {
@@ -380,20 +357,6 @@ type EditorProps = {
 const EditorProvider = (props: EditorProps) => {
   const [state, dispatch] = useReducer(editorReducer, initialState);
 
-  // useEffect(() => {
-  //   console.log(state);
-  // }, [state]);
-
-  // useEffect(() => {
-  //   dispatch({
-  //     type: "ADD_REF",
-  //     payload: {
-  //       element: state.editor.elements[0],
-  //     },
-  //   });
-  // }, []);
-
-  const { userState } = useUser();
   const handleInitialFetchRequest = async ({
     userId,
     projectId,

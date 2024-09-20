@@ -1,15 +1,6 @@
 "use client";
-import OnThisPage from "@/components/OnThisPage";
-import Preview from "@/components/Preview";
+import { FindVariantFromId, Variants } from "@/package/React/data";
 import { useEffect, useState } from "react";
-import {
-  Components,
-  FindComponentData,
-  FindVariantFromId,
-  FindVariantsOfAComponent,
-  Variants,
-} from "@/package/React/data";
-import SidebarForComponentsList from "@/components/SidebarForComponentsList";
 
 export default function PreviewFullscreen({
   params,
@@ -33,7 +24,7 @@ export default function PreviewFullscreen({
   return (
     <>
       {variantsData ? (
-        <div className="w-full min-h-screen">
+        <div className="min-h-screen w-full">
           <Background />
           <variantsData.component />
         </div>

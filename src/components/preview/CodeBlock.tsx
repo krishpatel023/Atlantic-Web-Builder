@@ -1,25 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import clsx from "clsx";
-import {
-  Components,
-  FindComponentData,
-  FindVariantsOfAComponent,
-  Variants,
-} from "@/package/React/data";
+import { useEffect, useState } from "react";
 
+import { Checks } from "@phosphor-icons/react/dist/ssr";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import js from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
 import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
-import prism from "react-syntax-highlighter/dist/esm/styles/prism/prism";
-import { ArrowsOut, Checks, Copy } from "@phosphor-icons/react/dist/ssr";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-import renderer from "react-test-renderer";
-import { plugins, format as prettyFormat } from "pretty-format";
 import { EditorElement } from "@/context/Editor/EditorProvider";
-import Recursive from "./Recursive";
 import { CopySimple } from "@phosphor-icons/react";
+import { plugins, format as prettyFormat } from "pretty-format";
+import renderer from "react-test-renderer";
+import Recursive from "./Recursive";
 
 const { ReactElement, ReactTestComponent } = plugins;
 
@@ -59,7 +50,7 @@ export default function CodeBlock({ element }: { element: EditorElement }) {
 
   return (
     <>
-      <div className="scrollbar relative h-full w-[95%] max-w-[calc((100vw*0.85)*0.90)] overflow-y-auto">
+      <div className="relative h-full w-[95%] max-w-[calc((100vw*0.85)*0.90)] overflow-y-auto scrollbar">
         <SyntaxHighlighter
           language="jsx"
           style={atomDark}

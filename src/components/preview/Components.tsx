@@ -2,36 +2,15 @@
 import {
   ContainerQueryLabels,
   EditorElement,
-  useEditor,
 } from "@/context/Editor/EditorProvider";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Recursive from "./Recursive";
-import { useSettings } from "@/context/Settings/SettingsProvider";
-import DragAndDropContext from "@/context/dragAndDrop/DragAndDropContext";
-import { v4 } from "uuid";
-import { containerElements } from "@/utils/constants";
-import { useDragAndDrop } from "@/context/dragAndDrop/DragAndDropWrapper";
 
 export default function Components({ element }: { element: EditorElement }) {
-  const { id, content, name, styles, type } = element;
+  const { content } = element;
 
   const [textValue, setTextValue] = useState<string | null>(null);
   const [styling, setStyling] = useState<string | null>(null);
-  const hoverStyling: string = " hover:border-2 hover:border-accent py-2 ";
-  const selectedStyling: string = " border-2 border-accent py-2 ";
-  const previewStyling: string =
-    " border-[1px] border-gray-400 border-dashed py-2";
-
-  const { state, dispatch } = useEditor();
-  const { settingsState, dispatchSettings } = useSettings();
-  const { componentData, setComponentData, onDrop, handleDragOver } =
-    useDragAndDrop();
-  // const { textData , ...rest } = element.special as {
-  //   // className?: string;
-  //   href?: string;
-  //   src?: string;
-  //   textData?: string;
-  // };
 
   const [rest, setRest] = useState({});
   function hasTextData(obj: {
@@ -62,10 +41,8 @@ export default function Components({ element }: { element: EditorElement }) {
   };
 
   useEffect(() => {
-    console.log("------------  Default Element");
     handleStyling();
     handleRst();
-    console.log("ERROR DEBUG", element.tag, element);
   }, [element]);
 
   const handleStyling = () => {
@@ -90,7 +67,6 @@ export default function Components({ element }: { element: EditorElement }) {
       modifiedTempStyle = transformToContainerQueries(modifiedTempStyle, item);
       return modifiedTempStyle;
     });
-    // console.log(modifiedTempStyle);
 
     setStyling(modifiedTempStyle);
   };
@@ -161,22 +137,3 @@ export default function Components({ element }: { element: EditorElement }) {
     </>
   );
 }
-
-type ElementTag = {
-  elementTag:
-    | keyof JSX.IntrinsicElements
-    | React.ComponentType<any>
-    | "unknown"
-    | null;
-  children: any;
-};
-
-const ElementTag = ({ elementTag, children }: ElementTag) => {
-  return (
-    <>
-      {/* {elementTag !== undefined && elementTag !== "unknown" &&  <elementTag>
-      {children}
-    </elementTag>} */}
-    </>
-  );
-};

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { SettingsType, useSettings } from "@/context/Settings/SettingsProvider";
 import { useUser } from "@/context/UserData/UserProvider";
@@ -16,10 +16,9 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function SideBar({
-  projectId}: { projectId: string }) {
+export default function SideBar({ projectId }: { projectId: string }) {
   const { settingsState, dispatchSettings } = useSettings();
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
 
   const handleChangeSettings = (Value: SettingsType) => {
     dispatchSettings({
@@ -32,22 +31,24 @@ export default function SideBar({
     dispatchSettings({ type: "TOGGLE_SIDEBAR" });
   };
 
-  const {userState} =  useUser();
+  const { userState } = useUser();
   const getProjectName = async () => {
+    if (!userState.userData?.userID) return;
 
-    if(!userState.userData?.userID) return;
-    
-    const projectName = await axios.get(`${BACKEND_URL}/projects?authorId=${userState.userData.userID}&projectId=${projectId}`,
-      HEADER_CONFIG).then( (res) => {
-      console.log(res.data.data);
-      return res.data.data.name
-    })
-    setName(projectName)
-  }
+    const projectName = await axios
+      .get(
+        `${BACKEND_URL}/projects?authorId=${userState.userData.userID}&projectId=${projectId}`,
+        HEADER_CONFIG,
+      )
+      .then((res) => {
+        return res.data.data.name;
+      });
+    setName(projectName);
+  };
 
-  useEffect( () => { 
-    getProjectName()
-  }, [projectId])
+  useEffect(() => {
+    getProjectName();
+  }, [projectId]);
 
   return (
     <>
@@ -107,7 +108,8 @@ export default function SideBar({
             "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
-            settingsState.settingsState === "Settings" && "bg-primary text-textComplementary rounded",
+            settingsState.settingsState === "Settings" &&
+              "rounded bg-primary text-textComplementary",
           )}
           onClick={() => {
             handleChangeSettings("Settings");
@@ -125,8 +127,8 @@ export default function SideBar({
             "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
-            settingsState.settingsState === "Components" && "bg-primary text-textComplementary rounded",
-
+            settingsState.settingsState === "Components" &&
+              "rounded bg-primary text-textComplementary",
           )}
           onClick={() => {
             handleChangeSettings("Components");
@@ -144,8 +146,8 @@ export default function SideBar({
             "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
-            settingsState.settingsState === "Defaults" && "bg-primary text-textComplementary rounded",
-
+            settingsState.settingsState === "Defaults" &&
+              "rounded bg-primary text-textComplementary",
           )}
           onClick={() => {
             handleChangeSettings("Defaults");

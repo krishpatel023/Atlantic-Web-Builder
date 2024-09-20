@@ -1,6 +1,5 @@
-import { V4Options } from "uuid";
-import { EditorElement } from "./EditorProvider";
 import { DeviceTypes, SettingsType } from "../Settings/SettingsProvider";
+import { EditorElement } from "./EditorProvider";
 
 export type EditorAction =
   | {

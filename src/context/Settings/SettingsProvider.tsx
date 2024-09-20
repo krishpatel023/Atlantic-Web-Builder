@@ -2,14 +2,11 @@
 // import { EditorAction } from './editor-actions'
 import {
   Dispatch,
-  ReactComponentElement,
-  ReactElement,
   createContext,
   useContext,
   useEffect,
   useReducer,
 } from "react";
-import { V4Options } from "uuid";
 import { SettingsAction } from "./SettingsAction";
 
 export type DeviceTypes = "Desktop" | "Mobile" | "Tablet";
@@ -101,7 +98,7 @@ const SettingsProvider = (props: SettingsProps) => {
   );
 
   useEffect(() => {
-    console.log(settingsState);
+    // console.log(settingsState);
   }, [settingsState]);
 
   return (

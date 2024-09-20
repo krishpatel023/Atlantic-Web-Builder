@@ -4,18 +4,13 @@ import {
   EditorElement,
   useEditor,
 } from "@/context/Editor/EditorProvider";
-import Selected from "../Selected";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import Recursive from "./Recursive";
-import Default from "./Default";
 import { useSettings } from "@/context/Settings/SettingsProvider";
-import DragAndDropContext from "@/context/dragAndDrop/DragAndDropContext";
-import { v4 } from "uuid";
-import { containerElements } from "@/utils/constants";
 import { useDragAndDrop } from "@/context/dragAndDrop/DragAndDropWrapper";
+import React, { useEffect, useState } from "react";
+import Recursive from "./Recursive";
 
 export default function Components({ element }: { element: EditorElement }) {
-  const { id, content, name, styles, type } = element;
+  const { id, content } = element;
 
   const [textValue, setTextValue] = useState<string | null>(null);
   const [styling, setStyling] = useState<string | null>(null);
@@ -26,14 +21,7 @@ export default function Components({ element }: { element: EditorElement }) {
 
   const { state, dispatch } = useEditor();
   const { settingsState, dispatchSettings } = useSettings();
-  const { componentData, setComponentData, onDrop, handleDragOver } =
-    useDragAndDrop();
-  // const { textData , ...rest } = element.special as {
-  //   // className?: string;
-  //   href?: string;
-  //   src?: string;
-  //   textData?: string;
-  // };
+  const { setComponentData, onDrop, handleDragOver } = useDragAndDrop();
 
   const [rest, setRest] = useState({});
   function hasTextData(obj: {
@@ -64,11 +52,9 @@ export default function Components({ element }: { element: EditorElement }) {
   };
 
   useEffect(() => {
-    console.log("------------  Default Element");
     handleStyling();
     handleRst();
     detectSingleTag(element.tag);
-    console.log("ERROR DEBUG", element.tag, element);
   }, [element]);
 
   const handleStyling = () => {
@@ -93,7 +79,6 @@ export default function Components({ element }: { element: EditorElement }) {
       modifiedTempStyle = transformToContainerQueries(modifiedTempStyle, item);
       return modifiedTempStyle;
     });
-    // console.log(modifiedTempStyle);
 
     setStyling(modifiedTempStyle);
   };
@@ -179,7 +164,6 @@ export default function Components({ element }: { element: EditorElement }) {
       elementType: "component",
       elementData: element,
     });
-    console.log("DRAG START ", element.tag);
   };
 
   const [isSingleTag, setIsSingleTag] = useState<boolean | null>(null);
@@ -355,22 +339,3 @@ export default function Components({ element }: { element: EditorElement }) {
     </>
   );
 }
-
-type ElementTag = {
-  elementTag:
-    | keyof JSX.IntrinsicElements
-    | React.ComponentType<any>
-    | "unknown"
-    | null;
-  children: any;
-};
-
-const ElementTag = ({ elementTag, children }: ElementTag) => {
-  return (
-    <>
-      {/* {elementTag !== undefined && elementTag !== "unknown" &&  <elementTag>
-      {children}
-    </elementTag>} */}
-    </>
-  );
-};

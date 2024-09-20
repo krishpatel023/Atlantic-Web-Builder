@@ -1,42 +1,9 @@
 "use client";
-import { Dragable } from "@/components/DragAndDrop/Dragable";
-import {
-  EditorBtns,
-  EditorElement,
-  useEditor,
-} from "@/context/Editor/EditorProvider";
-import {
-  Components,
-  FindComponentData,
-  FindVariantsOfAComponent,
-  Variants,
-  components,
-} from "@/package/React/data";
-import {
-  Barricade,
-  CaretDown,
-  CaretUp,
-  Check,
-  Eye,
-  Icon,
-  Plus,
-  TextT,
-  Trash,
-  Video,
-  X,
-} from "@phosphor-icons/react";
-import clsx from "clsx";
-import React, { ReactElement, useEffect, useState } from "react";
+import { EditorElement, useEditor } from "@/context/Editor/EditorProvider";
+import { Barricade, Check, Plus, Trash, X } from "@phosphor-icons/react";
+import React, { useEffect, useState } from "react";
 
 export default function Settings_Main() {
-  const textData = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
-  const linkData = ["a", "link"];
-  const imageData = ["img"];
-  const containerData = ["div"];
-
-  const [componentType, setComponentType] = useState<
-    "text" | "link" | "image" | "container" | null
-  >(null);
   const [componentData, setComponentData] = useState<EditorElement | null>(
     null,
   );
@@ -49,35 +16,7 @@ export default function Settings_Main() {
     } else {
       setComponentData(null);
     }
-    // handleTypeSelection();
   }, [state]);
-
-  const handleTypeSelection = () => {
-    if (
-      componentData?.tag &&
-      componentData?.tag !== "unknown" &&
-      textData.includes(componentData?.tag as string)
-    )
-      setComponentType("text");
-    if (
-      componentData?.tag &&
-      componentData?.tag !== "unknown" &&
-      linkData.includes(componentData?.tag as string)
-    )
-      setComponentType("link");
-    if (
-      componentData?.tag &&
-      componentData?.tag !== "unknown" &&
-      imageData.includes(componentData?.tag as string)
-    )
-      setComponentType("image");
-    if (
-      componentData?.tag &&
-      componentData?.tag !== "unknown" &&
-      containerData.includes(componentData?.tag as string)
-    )
-      setComponentType("container");
-  };
 
   const findStateData = (elemId: string) => {
     const ElementDetail: EditorElement = reccursiveFinder(
@@ -125,16 +64,11 @@ export default function Settings_Main() {
   };
 
   const handleStyleUpdate = (newVal: Array<string>) => {
-    console.log("RUNNNNNNNNNNNNNNNNNNNNNN");
-
     if (componentData) {
-      console.log("NEWVAL", newVal);
-
       const newElementVal: EditorElement = {
         ...componentData,
         styles: newVal,
       };
-      console.log(newElementVal);
       dispatch({
         type: "UPDATE_ELEMENT",
         payload: {
@@ -299,12 +233,10 @@ const StyleBlock = ({
 
   const addStyle = () => {
     var styleArrayTemp = styleArray;
-    console.log("CALLED", inputValue);
 
     if (inputValue) {
       styleArrayTemp.push(inputValue);
       setStyleArray(styleArrayTemp);
-      console.log("STLE", styleArrayTemp);
       handleStyleUpdate(styleArrayTemp);
       setInputValue("");
     }
@@ -312,12 +244,10 @@ const StyleBlock = ({
 
   const deleteStyle = (deleteItemName: string) => {
     var styleArrayTemp = styleArray;
-    console.log("CALLED", inputValue);
 
     if (deleteItemName) {
       styleArrayTemp = styleArray.filter((item) => item !== deleteItemName);
       setStyleArray(styleArrayTemp);
-      console.log("STLE", styleArrayTemp);
       handleStyleUpdate(styleArrayTemp);
       setInputValue("");
     }

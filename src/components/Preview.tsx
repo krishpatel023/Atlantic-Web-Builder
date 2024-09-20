@@ -1,19 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { Variants } from "@/package/React/data";
 import clsx from "clsx";
-import {
-  Components,
-  FindComponentData,
-  FindVariantsOfAComponent,
-  Variants,
-} from "@/package/React/data";
+import { useState } from "react";
 
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import js from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
-import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
-import prism from "react-syntax-highlighter/dist/esm/styles/prism/prism";
 import { ArrowsOut, Checks, Copy } from "@phosphor-icons/react/dist/ssr";
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export default function Preview({ variant }: { variant: Variants }) {
   SyntaxHighlighter.registerLanguage("jsx", jsx);

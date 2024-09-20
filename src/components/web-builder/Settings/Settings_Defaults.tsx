@@ -1,30 +1,14 @@
 "use client";
 import { Dragable } from "@/components/DragAndDrop/Dragable";
+import { EditorBtns, EditorElement } from "@/context/Editor/EditorProvider";
 import {
-  EditorBtns,
-  EditorElement,
-  useEditor,
-} from "@/context/Editor/EditorProvider";
-import {
-  Components,
-  FindComponentData,
-  FindVariantsOfAComponent,
-  Variants,
-  components,
-} from "@/package/React/data";
-import {
-  CaretDown,
-  CaretUp,
-  Eye,
-  Icon,
   Images,
   Rectangle,
   TextT,
   Video,
   VideoCamera,
 } from "@phosphor-icons/react";
-import clsx from "clsx";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import { v4 } from "uuid";
 type SingleSetting = {
   name: string;

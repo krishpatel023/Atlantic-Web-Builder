@@ -15,17 +15,14 @@ export default function Default({ element }: { element: EditorElement }) {
   };
 
   useEffect(() => {
-    console.log("------------  Default Element");
     handleTextData();
     handleStyling();
   }, [element]);
 
   const handleStyling = () => {
     const tempStyle = element.styles.reduce((acc, style) => {
-      // console.log(style);
       return acc + style;
     }, "");
-    // console.log("STYLE", tempStyle);
     setStyling(tempStyle);
   };
 

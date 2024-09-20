@@ -1,4 +1,3 @@
-import { V4Options } from "uuid";
 import { DeviceTypes, SettingsType } from "./SettingsProvider";
 
 export type SettingsAction =

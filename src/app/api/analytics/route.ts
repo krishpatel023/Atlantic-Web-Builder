@@ -1,9 +1,5 @@
 import { connect } from "@/backend/helpers/connection";
 import analytics from "@/backend/models/analytics";
-import projects from "@/backend/models/projects";
-import users from "@/backend/models/users";
-import { EditorElement } from "@/context/Editor/EditorProvider";
-import { timeStamp } from "console";
 
 export interface AnalyticsProps {
   analyticsId: string;

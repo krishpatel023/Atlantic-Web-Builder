@@ -12,7 +12,6 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 
 export default function Settings_Components() {
-  const AllComponents = components;
   return (
     <>
       <div className="h-full w-full overflow-y-auto">

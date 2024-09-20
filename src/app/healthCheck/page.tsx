@@ -15,8 +15,6 @@ export default function HealthCheck() {
 
   const makeRequest = async () => {
     try {
-      console.log(process.env.NEXT_PUBLIC_ANALYTICS_KEY);
-
       const response = await axios.get(
         `${BACKEND_URL}/analytics?analyticsId=${process.env.NEXT_PUBLIC_ANALYTICS_KEY}`,
         HEADER_CONFIG,

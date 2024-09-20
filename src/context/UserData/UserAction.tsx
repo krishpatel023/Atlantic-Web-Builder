@@ -1,7 +1,3 @@
-import { V4Options } from "uuid";
-import { UserState } from "./UserProvider";
-// import { DeviceTypes, SettingsType } from "./SettingsProvider";
-
 export type UserAction =
   | {
       type: "INITIAL_FETCH_FROM_COOKIE";
