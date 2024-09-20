@@ -1,29 +1,19 @@
 "use client";
-import {
-  Desktop,
-  DeviceMobileCamera,
-  DeviceTablet,
-  Laptop,
-  Phone,
-} from "@phosphor-icons/react/dist/ssr";
-import clsx from "clsx";
-import { useState } from "react";
-import { Dropable } from "@/components/DragAndDrop/Dropable";
+import CodeBlock from "@/components/preview/CodeBlock";
+import { useEditor } from "@/context/Editor/EditorProvider";
+import { DeviceTypes, useSettings } from "@/context/Settings/SettingsProvider";
 import {
   ArrowArcLeft,
   ArrowArcRight,
   ArrowsOut,
   Code,
-  CursorText,
   ExcludeSquare,
   Eye,
-  EyeClosed,
   EyeSlash,
 } from "@phosphor-icons/react";
-import { useEditor } from "@/context/Editor/EditorProvider";
+import clsx from "clsx";
+import { useState } from "react";
 import Recursive from "./Editable/Recursive";
-import { DeviceTypes, useSettings } from "@/context/Settings/SettingsProvider";
-import CodeBlock from "@/components/preview/CodeBlock";
 
 export default function Editor({ projectId }: { projectId: string }) {
   const [active, setActive] = useState<DeviceTypes>("Desktop");
@@ -110,50 +100,6 @@ export default function Editor({ projectId }: { projectId: string }) {
                   <ExcludeSquare size={20} /> Editor
                 </>
               )}
-            </button>
-          </div>
-          <div className="flex h-10 items-center gap-4 rounded-lg bg-background px-4 py-2">
-            <button
-              onClick={() => {
-                handleChangeScreen("Mobile");
-              }}
-              className={clsx(
-                "flex h-8 w-8 items-center justify-center rounded text-center",
-                {
-                  "bg-primary text-textComplementary":
-                    settingsState.device === "Mobile",
-                },
-              )}
-            >
-              <DeviceMobileCamera size={24} />
-            </button>
-            <button
-              onClick={() => {
-                handleChangeScreen("Tablet");
-              }}
-              className={clsx(
-                "flex h-8 w-8 items-center justify-center rounded text-center",
-                {
-                  "bg-primary text-textComplementary":
-                    settingsState.device === "Tablet",
-                },
-              )}
-            >
-              <DeviceTablet size={24} />
-            </button>
-            <button
-              onClick={() => {
-                handleChangeScreen("Desktop");
-              }}
-              className={clsx(
-                "flex h-8 w-8 items-center justify-center rounded text-center",
-                {
-                  "bg-primary text-textComplementary":
-                    settingsState.device === "Desktop",
-                },
-              )}
-            >
-              <Desktop size={24} />
             </button>
           </div>
 

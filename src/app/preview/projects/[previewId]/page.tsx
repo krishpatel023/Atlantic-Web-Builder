@@ -1,20 +1,11 @@
 "use client";
-import OnThisPage from "@/components/OnThisPage";
-import Preview from "@/components/Preview";
-import { useEffect, useState } from "react";
-import {
-  Components,
-  FindComponentData,
-  FindVariantFromId,
-  FindVariantsOfAComponent,
-  Variants,
-} from "@/package/React/data";
-import SidebarForComponentsList from "@/components/SidebarForComponentsList";
+import Recursive from "@/components/preview/Recursive";
+import { EditorElement } from "@/context/Editor/EditorProvider";
+import { getSession } from "@/context/UserData/AuthLogic";
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
-import { getSession } from "@/context/UserData/AuthLogic";
-import { EditorElement } from "@/context/Editor/EditorProvider";
-import Recursive from "@/components/preview/Recursive";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function PreviewFullscreen({
   params,
@@ -23,6 +14,8 @@ export default function PreviewFullscreen({
 }) {
   const [elements, setElements] = useState<EditorElement[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [projectName, setProjectName] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       const userCookie = await checkAuth();
@@ -41,10 +34,8 @@ export default function PreviewFullscreen({
   }, [params.previewId]);
 
   const checkAuth = async () => {
-    console.log("checkAuth called");
     const session = await getSession();
     const response = session.state;
-    console.log("getSession response:", response);
     if (response?.userData) {
       const { userID, name, email, projects } = response.userData as {
         userID?: string;
@@ -52,9 +43,7 @@ export default function PreviewFullscreen({
         email?: string;
         projects?: Array<string>;
       };
-      console.log("userData from response:", { userID, name, email, projects });
       if (!userID || !name || !email || !projects) {
-        console.log("userData is missing some info");
         return null;
       }
       const userData = {
@@ -63,13 +52,11 @@ export default function PreviewFullscreen({
         email: email,
         projects: projects,
       };
-      console.log("userData:", userData);
       return {
         ...response,
         userData: userData,
       };
     } else {
-      console.log("user is not logged in");
       setErrorMessage("Please Login to View This Project");
     }
   };
@@ -84,11 +71,12 @@ export default function PreviewFullscreen({
     if (!userId || !projectId) return null;
 
     const response = await axios.get(
-      `${BACKEND_URL}/projects/get/${userId}/${projectId}`,
+      `${BACKEND_URL}/projects?authorId=${userId}&projectId=${projectId}`,
       HEADER_CONFIG,
     );
 
     if (response.data.status === true) {
+      setProjectName(response.data.data.name);
       setElements([response.data.data.code]);
     } else {
       setElements(null);
@@ -101,6 +89,21 @@ export default function PreviewFullscreen({
     <>
       {elements ? (
         <div className="min-h-screen w-full">
+          <div className="w-full bg-primary px-6 py-4 text-sm text-textComplementary">
+            <span className="flex gap-2">
+              This is a preview of the project:{" "}
+              <span className="underline underline-offset-2">
+                {projectName}
+              </span>
+              . To edit the project
+              <Link
+                href={"/web-builder/" + params.previewId}
+                className="text-accent transition-all duration-300 hover:scale-105 hover:text-accentLight"
+              >
+                Click Here
+              </Link>
+            </span>
+          </div>
           {/* <Background /> */}
           {errorMessage ? null : <Recursive element={elements[0]} />}
         </div>

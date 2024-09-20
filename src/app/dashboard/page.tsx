@@ -3,7 +3,7 @@ import { getSession } from "@/context/UserData/AuthLogic";
 import { useUser } from "@/context/UserData/UserProvider";
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
-import { Plus, SquarePen, Trash, X } from "lucide-react";
+import { Eye, Plus, SquarePen, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
@@ -94,7 +94,7 @@ export default function Dashboard() {
               <table className="w-full table-fixed rounded-lg border-2 border-secondary">
                 <thead>
                   <tr className="border-b-2 border-secondary">
-                    <th className="w-2/3 px-4 py-4 text-start">Project Name</th>
+                    <th className=" px-4 py-4 text-start">Project Name</th>
                     <th className="px-4 py-4 text-start">Status</th>
                     <th className="px-4 py-4 text-start">Action</th>
                   </tr>
@@ -104,9 +104,17 @@ export default function Dashboard() {
                     <tr className="border-b-2 border-secondary" key={v4()}>
                       <td className="px-4 py-2">{data?.name}</td>
                       <td className="px-4 py-2">{data?.status}</td>
-                      <td className="flex gap-4 px-4 py-2">
+                      <td className="flex flex-col gap-2 px-4 py-2">
+                        <a
+                          className="flex items-center justify-start gap-2 hover:scale-[102%] transition-all duration-300 text-accent"
+                          href={`/preview/projects/${data?.projectID}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Eye size={16} /> Preview
+                        </a>
                         <button
-                          className="flex items-center justify-center gap-2 text-accent"
+                          className="flex items-center justify-start gap-2 hover:scale-[102%] transition-all duration-300 text-accent"
                           onClick={() => {
                             router.push(`/web-builder/${data?.projectID}`);
                           }}
@@ -114,7 +122,7 @@ export default function Dashboard() {
                           <SquarePen size={16} /> Edit
                         </button>
                         <button
-                          className="flex items-center justify-center gap-2 text-red-500"
+                          className="flex items-center justify-start gap-2 hover:scale-[102%] transition-all duration-300 text-red-500"
                           onClick={() => {
                             setDeleteModal(true);
                             setDeleteProjectId(data?.projectID);
@@ -156,10 +164,8 @@ const CreateModal = ({
   const { userState, dispatchUserState, handleUserUpdate } = useUser();
 
   const handleProjectCreation = async () => {
-    console.log("Called", inputState, userState?.userData?.userID);
 
     if (inputState && userState?.userData?.userID) {
-      console.log(inputState, userState?.userData?.userID);
       const Payload: ProjectProps = {
         projectID: v4(),
         name: inputState,
@@ -179,7 +185,6 @@ const CreateModal = ({
         Payload,
         HEADER_CONFIG,
       );
-      console.log(resp.data);
 
       if (resp.data.status === true) {
         // router.push("/editor");
@@ -251,7 +256,6 @@ const DeleteModal = ({
         `${BACKEND_URL}/projects?authorId=${userState?.userData?.userID}&projectId=${projectId}`,
         HEADER_CONFIG,
       );
-      console.log(resp.data);
 
       if (resp.data.status === true) {
         handleUserUpdate();
