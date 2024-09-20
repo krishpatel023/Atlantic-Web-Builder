@@ -245,8 +245,6 @@ const editorReducer = (
         state.editor.elements,
         action,
       );
-      console.log("DELETE_ELEMENT", updatedElementsAfterDelete);
-
       const updatedEditorStateAfterDelete = {
         ...state.editor,
         elements: updatedElementsAfterDelete,
@@ -265,8 +263,6 @@ const editorReducer = (
           currentIndex: state.history.currentIndex + 1,
         },
       };
-      console.log("DELETED", deletedState);
-
       return deletedState;
     case "UPDATE_SELECTED_ELEMENT":
       return {
@@ -317,8 +313,6 @@ const editorReducer = (
         },
       };
     case "ADD_REF":
-      console.log("MY CALL");
-
       const updatedElementAfterRef = addRefToElements(action.payload.element);
       return {
         ...state,
@@ -386,9 +380,9 @@ type EditorProps = {
 const EditorProvider = (props: EditorProps) => {
   const [state, dispatch] = useReducer(editorReducer, initialState);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  // useEffect(() => {
+  //   console.log(state);
+  // }, [state]);
 
   // useEffect(() => {
   //   dispatch({

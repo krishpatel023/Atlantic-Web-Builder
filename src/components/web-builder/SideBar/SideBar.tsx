@@ -1,7 +1,9 @@
-import { useEditor } from "@/context/Editor/EditorProvider";
+'use client'
+
 import { SettingsType, useSettings } from "@/context/Settings/SettingsProvider";
+import { useUser } from "@/context/UserData/UserProvider";
+import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import {
-  ArrowLeft,
   BoundingBox,
   CaretLeft,
   CaretRight,
@@ -9,13 +11,15 @@ import {
   Gear,
   PuzzlePiece,
 } from "@phosphor-icons/react/dist/ssr";
+import axios from "axios";
 import clsx from "clsx";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function SideBar() {
-  const { state, dispatch } = useEditor();
+export default function SideBar({
+  projectId}: { projectId: string }) {
   const { settingsState, dispatchSettings } = useSettings();
+  const [name, setName] = useState("")
 
   const handleChangeSettings = (Value: SettingsType) => {
     dispatchSettings({
@@ -27,6 +31,24 @@ export default function SideBar() {
   const handleToggleSidebar = () => {
     dispatchSettings({ type: "TOGGLE_SIDEBAR" });
   };
+
+  const {userState} =  useUser();
+  const getProjectName = async () => {
+
+    if(!userState.userData?.userID) return;
+    
+    const projectName = await axios.get(`${BACKEND_URL}/projects?authorId=${userState.userData.userID}&projectId=${projectId}`,
+      HEADER_CONFIG).then( (res) => {
+      console.log(res.data.data);
+      return res.data.data.name
+    })
+    setName(projectName)
+  }
+
+  useEffect( () => { 
+    getProjectName()
+  }, [projectId])
+
   return (
     <>
       <div
@@ -48,7 +70,7 @@ export default function SideBar() {
               hidden: settingsState.sidebarActive === false,
             })}
           >
-            Project Name
+            {name || "Project Name"}
           </h1>
           <button
             onClick={() => {
@@ -67,7 +89,7 @@ export default function SideBar() {
         <Link
           href="/dashboard"
           className={clsx(
-            "flex h-8 w-[80%] items-center gap-6",
+            "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
           )}
@@ -82,9 +104,10 @@ export default function SideBar() {
 
         <button
           className={clsx(
-            "flex h-8 w-[80%] items-center gap-6",
+            "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
+            settingsState.settingsState === "Settings" && "bg-primary text-textComplementary rounded",
           )}
           onClick={() => {
             handleChangeSettings("Settings");
@@ -99,9 +122,11 @@ export default function SideBar() {
         </button>
         <button
           className={clsx(
-            "flex h-8 w-[80%] items-center gap-6",
+            "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
+            settingsState.settingsState === "Components" && "bg-primary text-textComplementary rounded",
+
           )}
           onClick={() => {
             handleChangeSettings("Components");
@@ -116,9 +141,11 @@ export default function SideBar() {
         </button>
         <button
           className={clsx(
-            "flex h-8 w-[80%] items-center gap-6",
+            "flex w-[80%] items-center gap-6 px-2 py-2",
             { "justify-center": settingsState.sidebarActive === false },
             { "justify-start": settingsState.sidebarActive === true },
+            settingsState.settingsState === "Defaults" && "bg-primary text-textComplementary rounded",
+
           )}
           onClick={() => {
             handleChangeSettings("Defaults");

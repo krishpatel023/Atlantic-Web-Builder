@@ -2,11 +2,9 @@
 import Editor from "@/components/web-builder/Editor/Editor";
 import Settings from "@/components/web-builder/Settings/Settings";
 import SideBar from "@/components/web-builder/SideBar/SideBar";
-import EditorProvider, { useEditor } from "@/context/Editor/EditorProvider";
-import SettingsProvider from "@/context/Settings/SettingsProvider";
+import { useEditor } from "@/context/Editor/EditorProvider";
 import { getSession } from "@/context/UserData/AuthLogic";
 import { useUser } from "@/context/UserData/UserProvider";
-import DragAndDropWrapper from "@/context/dragAndDrop/DragAndDropWrapper";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -61,21 +59,29 @@ export default function EditorComponent(projectId: { projectId: string }) {
     updateFunc();
   }, [state.editor.elements]);
 
+  
+
   return (
     <>
       {status && projectId?.projectId ? (
         <div className="flex h-screen w-full overflow-hidden">
-          <SideBar />
+          <SideBar projectId={projectId?.projectId} />
           <Editor projectId={projectId?.projectId} />
           <Settings />
         </div>
       ) : (
         <div className="flex h-screen w-screen items-center justify-center">
-          <h1 className="text-2xl">
-            {statusMessage ? statusMessage : "Something went wrong!"}
+          <h1 className="text-2xl">            
+            {statusMessage ? statusMessage : <Loader className="size-8 animate-spin text-foreground"/>}
           </h1>
         </div>
       )}
     </>
   );
 }
+
+export const Loader = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg height="200" width="200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
+  </svg>
+  )
