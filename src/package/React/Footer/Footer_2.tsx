@@ -14,11 +14,7 @@ export default function Footer_2() {
       <div className="flex w-full flex-col items-center justify-center bg-aui_primary">
         <div className="flex w-full  items-center justify-between px-8 py-6">
           <div className="flex w-40 items-center justify-center">
-            <img
-              src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-              alt="Logo"
-              className="h-10 object-contain"
-            />
+            <h1 className="text-xl font-semibold">LOGO</h1>
           </div>
           <div className="flex w-40 flex-col items-start justify-center gap-2">
             <span className="hover:cursor-pointer hover:text-aui_text_secondary">
@@ -44,11 +40,7 @@ export const FooterElement_2: ReactElement = (
   <div className="flex w-full flex-col items-center justify-center bg-aui_primary">
     <div className="flex w-full  items-center justify-between px-8 py-6">
       <div className="flex w-40 items-center justify-center">
-        <img
-          src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-          alt="Logo"
-          className="h-10 object-contain"
-        />
+        <h1 className="text-xl font-semibold">LOGO</h1>
       </div>
       <div className="flex w-40 flex-col items-start justify-center gap-2">
         <span className="hover:cursor-pointer hover:text-aui_text_secondary">
@@ -72,7 +64,7 @@ export const FooterCode_2 = `<>
 <div className="w-full flex flex-col justify-center items-center bg-aui_primary">
   <div className="w-full h-24  flex items-center justify-between px-8">
     <div className="w-40 flex justify-center items-center">
-      <Image src={Logo} alt="Logo" className="h-10 object-contain" />
+        <h1 className="font-semibold text-xl">LOGO</h1>
     </div>
     <div className="w-40 flex justify-center items-center gap-6">
       <InstagramLogo

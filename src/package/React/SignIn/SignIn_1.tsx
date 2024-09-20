@@ -24,7 +24,7 @@ export const SignInElement_1: ReactElement = (
       </div>
     </div>
     <div className="flex h-full w-[60%] items-center justify-center">
-      <div className="w-[50%]">
+      <div className="min-w-[50%] max-w-[30rem]">
         <div className="flex w-full flex-col gap-2">
           <label htmlFor="username" className="text-lg text-textPrimary">
             Email

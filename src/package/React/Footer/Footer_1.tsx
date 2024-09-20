@@ -13,11 +13,7 @@ export default function Footer_1() {
     <>
       <div className="flex w-full flex-col items-center justify-center bg-aui_primary">
         <div className="flex h-24 w-full items-center justify-center">
-          <img
-            src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-            alt="Logo"
-            className="h-10 object-contain"
-          />
+          <h1 className="text-xl font-semibold">LOGO</h1>
         </div>
         <div className="mt-4 flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
           <Copyright size={20} />
@@ -31,11 +27,7 @@ export default function Footer_1() {
 export const FooterElement_1: ReactElement = (
   <div className="flex w-full flex-col items-center justify-center bg-aui_primary">
     <div className="flex h-24 w-full items-center justify-center">
-      <img
-        src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-        alt="Logo"
-        className="h-10 object-contain"
-      />
+      <h1 className="text-xl font-semibold">LOGO</h1>
     </div>
     <div className="mt-4 flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
       <Copyright size={20} />
@@ -46,11 +38,7 @@ export const FooterElement_1: ReactElement = (
 
 export const FooterCode_1 = `<div className="flex w-full flex-col items-center justify-center bg-aui_primary">
 <div className="flex h-24 w-full items-center justify-center">
-  <img
-    src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-    alt="Logo"
-    className="h-10 object-contain"
-  />
+  <h1 className="font-semibold text-xl">LOGO</h1>
 </div>
 <div className="mt-4 flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
   <Copyright size={20} />

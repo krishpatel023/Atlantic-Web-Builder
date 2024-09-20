@@ -1,19 +1,8 @@
-import Image from "next/image";
-import Logo from "@/assets/logo.png";
-import Github from "@/assets/Github.svg";
 import { ReactElement } from "react";
 export default function Header_3() {
   return (
     <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
-      <div className="flex h-full w-[10rem] items-center justify-center">
-        <a href="" className="flex h-full items-center justify-center">
-          <img
-            src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-            alt="Logo"
-            className="h-[50%] object-contain"
-          />
-        </a>
-      </div>
+      <h1 className="text-xl font-semibold">LOGO</h1>
       <div className="flex h-full items-center gap-6">
         <input
           type="text"
@@ -33,15 +22,7 @@ export default function Header_3() {
 
 export const HeaderElement_3: ReactElement = (
   <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-aui_border bg-aui_primary px-12">
-    <div className="flex h-full w-[10rem] items-center justify-center">
-      <a href="" className="flex h-full items-center justify-center">
-        <img
-          src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-          alt="Logo"
-          className="h-[50%] object-contain"
-        />{" "}
-      </a>
-    </div>
+    <h1 className="text-xl font-semibold">LOGO</h1>
     <div className="flex h-full items-center gap-6">
       <input
         type="text"
@@ -59,14 +40,7 @@ export const HeaderElement_3: ReactElement = (
 );
 
 export const HeaderCode_3 = `<div className="w-full h-16 flex justify-between items-center border-b-[1px] border-aui_border px-12 bg-aui_primary">
-  <div className="h-full w-[10rem] flex justify-center items-center">
-    <a href="" className="h-full flex justify-center items-center">
-    <img
-    src="https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png"
-    alt="Logo"
-    className="h-[50%] object-contain"
-  />    </a>
-  </div>
+  <h1 className="font-semibold text-xl">LOGO</h1>
   <div className="h-full flex items-center gap-6">
     <input
       type="text"

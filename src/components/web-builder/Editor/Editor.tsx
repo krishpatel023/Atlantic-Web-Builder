@@ -124,7 +124,7 @@ export default function Editor({ projectId }: { projectId: string }) {
         {/* EDITOR */}
         {settingsState.displayType === "Editor" ? (
           <div
-            className={`h-full max-w-[98%]  rounded-t-lg bg-background @container 
+            className={`h-full max-w-[98%] overflow-y-auto  rounded-t-lg bg-background @container 
     ${settingsState.device === "Desktop" && "w-full"}
     ${settingsState.device === "Tablet" && "w-[650px]"} 
     ${settingsState.device === "Mobile" && "w-[420px]"}`}

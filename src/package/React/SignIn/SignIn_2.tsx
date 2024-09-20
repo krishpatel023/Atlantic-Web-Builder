@@ -15,7 +15,7 @@ export default function SignIn_2() {
 export const SignInElement_2: ReactElement = (
   <div className="flex h-screen w-full items-center justify-center bg-aui_primary">
     <div className="flex h-full w-[60%] items-center justify-center">
-      <div className="w-[50%]">
+      <div className="w-3/4">
         <div className="flex w-full flex-col gap-2">
           <label htmlFor="username" className="text-lg text-textPrimary">
             Email
@@ -60,7 +60,7 @@ export const SignInElement_2: ReactElement = (
 
 export const SignInCode_2 = `  <div className="flex h-screen w-full items-center justify-center bg-aui_primary">
 <div className="flex h-full w-[60%] items-center justify-center">
-  <div className="w-[50%]">
+  <div className="w-3/4">
     <div className="flex w-full flex-col gap-2">
       <label htmlFor="username" className="text-lg text-textPrimary">
         Email
