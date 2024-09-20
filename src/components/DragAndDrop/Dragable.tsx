@@ -1,7 +1,6 @@
 import { EditorBtns, EditorElement } from "@/context/Editor/EditorProvider";
-import DragAndDropContext from "@/context/dragAndDrop/DragAndDropContext";
 import { useDragAndDrop } from "@/context/dragAndDrop/DragAndDropWrapper";
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement } from "react";
 
 type DragableProps = React.PropsWithChildren<{
   className?: string;
@@ -11,7 +10,7 @@ type DragableProps = React.PropsWithChildren<{
 }>;
 
 export const Dragable: React.FC<DragableProps> = (props) => {
-  const { onDrag, onComponentDrag, setComponentData } = useDragAndDrop();
+  const { onComponentDrag, setComponentData } = useDragAndDrop();
 
   const {
     className,
@@ -24,12 +23,7 @@ export const Dragable: React.FC<DragableProps> = (props) => {
 
   const handleDragStart = (e: React.DragEvent) => {
     if (componentType !== undefined) {
-      // onDrag(componentType, e);
-      // console.log(componentData);
-
       if (componentDataJsx) {
-        console.log("ELEM", componentDataJsx);
-
         onComponentDrag(componentType, e, componentDataJsx);
       } else if (componentDataEditorElement) {
         setComponentData({
@@ -42,12 +36,11 @@ export const Dragable: React.FC<DragableProps> = (props) => {
   };
   return (
     <div
-      className={`${props.className}`}
+      className={`${props.className} cursor-pointer`}
       draggable
       onDragStart={(e) => {
         handleDragStart(e);
       }}
-      // {...props.key}
       {...rest}
     >
       {props.children}

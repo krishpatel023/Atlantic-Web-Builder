@@ -35,8 +35,6 @@ export async function login(currentState: UserState) {
   const expires = new Date(Date.now() + sessionLimit * 1000);
   const session = await encrypt({ state, expires });
 
-  console.log(session);
-
   // Save the session in a cookie
   setCookie("session", session, {
     maxAge: sessionLimit,
@@ -67,7 +65,6 @@ export async function logout() {
 
 export async function getSession() {
   const session = getCookie("session");
-  console.log(session);
 
   if (!session) return null;
   return await decrypt(session);

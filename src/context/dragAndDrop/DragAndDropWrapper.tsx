@@ -12,36 +12,6 @@ type ContextWrapperProps = {
   children: React.ReactNode;
 };
 
-// type StackedComponent = {
-//   type: "Component" | "Default" | "Structure";
-//   code: ReactNode;
-//   id: string;
-// };
-const myComponent: ReactElement = (
-  <div className=" 4xl:bg-black sc flex min-h-[40rem] w-full flex-col items-center justify-center sm:bg-green-600 md:flex-row">
-    <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-16 md:w-[60%] md:items-start">
-      <h1 className="text-4xl font-bold text-aui_text">
-        Welcome to the world of Atlantic UI
-      </h1>
-      <h2 className="text-lg font-medium text-aui_text_secondary">
-        One stop destination to build Tailwind styled components instantly. A
-        Developer first model that provides the root customizability to cater
-        all your needs.
-      </h2>
-      <button className="h-12 w-40 rounded bg-aui_accent text-aui_text_accent hover:scale-105">
-        Explore Now
-      </button>
-    </div>
-    <div className="flex h-full w-full items-center justify-center md:w-[40%]">
-      <img
-        src="https://s.cafebazaar.ir/images/upload/screenshot/com.izanaki.itachi.blackwallpapers-screenshots-2.jpg"
-        alt="Demo"
-        className="w-[16rem] rounded-3xl object-contain"
-      />
-    </div>
-  </div>
-);
-
 function isIntrinsicElementType(
   element: string | React.JSXElementConstructor<any>,
 ): keyof JSX.IntrinsicElements | React.ComponentType<any> | "unknown" {
@@ -74,8 +44,6 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     };
 
     if (React.isValidElement(component)) {
-      console.log(JSON.stringify(component));
-
       // WE WON't NEED THIS AFTER WE REMOVE THE NAME REQUIREMENT
       tree.name =
         typeof component.type === "string" ? component.type : "Unknown";
@@ -97,18 +65,6 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
         //If className Exists it will push it to the styles
         className ? tree.styles.push(className) : null;
 
-        // console.log(
-        //   "ELEM:::::::",
-        //   "TYPEOF CHILDREN:",
-        //   typeof children,
-        //   "NAME",
-        //   tree.name,
-        //   "TYPEOF COMPONENT.TYPE",
-        //   typeof component.type,
-        //   "COMPONENT",
-        //   component
-        // );
-
         if (
           React.Children.count(children) > 0 &&
           typeof children !== "string"
@@ -119,31 +75,6 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
         } else {
           tree.name = "Text";
           tree.special = { ...tree.special, textData: children };
-          // Store the text content or non-React content
-
-          // FOR NEXT LINK
-          // const isRenderPresent = component.type
-          //   ? (component.type as Record<string, any>).render
-          //   : undefined;
-
-          // const isHref = component.props
-          //   ? (component.props as Record<string, any>).href
-          //   : undefined;
-
-          // console.log(
-          //   "ISRENDERED",
-          //   isRenderPresent ? true : false,
-          //   isHref,
-          //   isRenderPresent?.name
-          // );
-
-          // if (
-          //   isHref !== undefined &&
-          //   isRenderPresent &&
-          //   isRenderPresent?.name === "LinkComponent"
-          // ) {
-          //   tree.tag = "link";
-          // }
         }
       }
     }
@@ -155,8 +86,6 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
     e: React.DragEvent,
     component: ReactElement,
   ) => {
-    console.log("onComponentData ::::::: ", componentType, component);
-
     const myval: EditorElement = JSXElementToTree({ component: component });
     if (componentType === "component")
       setComponentData({
@@ -164,11 +93,7 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
         elementData: myval,
         elementStatus: "add",
       });
-
-    console.log("+++++++++++++++++++", myval);
   };
-
-  // const onDrop = () => {};
 
   const onDrop = (
     e: React.DragEvent,
@@ -177,7 +102,6 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
   ) => {
     if (settingsState.previewMode === true) return;
     e.stopPropagation();
-    console.log("DRAG END ", tag, parentId, componentData);
     const insertIndex = handlePositionDetection(parentId, e);
     if (componentData && componentData.elementStatus === "add") {
       ElementAdditionAfterDrop(tag, parentId);
@@ -285,17 +209,6 @@ const DragAndDropWrapper: React.FC<ContextWrapperProps> = (props) => {
       parentId,
       state.editor.elements,
     );
-
-    // var positionIndex = -1
-    // var aboveWhichElem = Infinity
-    // var belowWhichElem = -1
-
-    // for(var i = 0; i < ParentElem.content.length; i++){
-    //   const { bottom, top } = ParentElem.content[i].elementRef?.current?.getBoundingClientRect();
-
-    //   if(e.clientY  top)
-
-    // }
     return -1;
   };
 

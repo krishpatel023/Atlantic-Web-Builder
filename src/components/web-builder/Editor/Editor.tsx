@@ -12,12 +12,9 @@ import {
   EyeSlash,
 } from "@phosphor-icons/react";
 import clsx from "clsx";
-import { useState } from "react";
 import Recursive from "./Editable/Recursive";
 
 export default function Editor({ projectId }: { projectId: string }) {
-  const [active, setActive] = useState<DeviceTypes>("Desktop");
-
   const { state, dispatch } = useEditor();
   const { settingsState, dispatchSettings } = useSettings();
 
@@ -127,7 +124,7 @@ export default function Editor({ projectId }: { projectId: string }) {
         {/* EDITOR */}
         {settingsState.displayType === "Editor" ? (
           <div
-            className={` h-full max-w-[98%] overflow-y-auto  rounded-t-lg bg-background @container 
+            className={`h-full max-w-[98%]  rounded-t-lg bg-background @container 
     ${settingsState.device === "Desktop" && "w-full"}
     ${settingsState.device === "Tablet" && "w-[650px]"} 
     ${settingsState.device === "Mobile" && "w-[420px]"}`}
@@ -140,8 +137,6 @@ export default function Editor({ projectId }: { projectId: string }) {
         ) : (
           <CodeBlock element={state.editor.elements[0]} />
         )}
-
-        {/* </Dropable> */}
       </div>
     </>
   );

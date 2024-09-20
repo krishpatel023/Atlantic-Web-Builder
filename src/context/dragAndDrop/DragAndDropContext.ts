@@ -1,11 +1,7 @@
-import React, { ReactElement } from "react";
-import { EditorBtns, EditorElement } from "../Editor/EditorProvider";
 import { DragableElementType } from "@/utils/constants";
+import React, { ReactElement } from "react";
+import { EditorBtns } from "../Editor/EditorProvider";
 
-// export type DragAndDropContextProps = {
-//   onDrag: (element: { element: ReactElement }) => void;
-//   onDrop: () => void;
-// };
 export type DragAndDropContextProps = {
   componentData: DragableElementType | null;
   setComponentData: Function;
