@@ -8,7 +8,7 @@ export const HEADER_CONFIG = {
 };
 
 export const LINKS = {
-  github_url : "https://github.com/krishpatel023/Atlantic-UI",
+  github_url : "https://github.com/krishpatel023/Atlantic-Web-Builder",
   hosted_url : "https://atlantic-web-builder.vercel.app/api/",
 }
 
