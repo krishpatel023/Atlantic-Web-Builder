@@ -6,7 +6,7 @@ import ParentWrapper from "./ParentWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Atlantic UI",
+  title: "Atlantic Web Builder",
   description:
     "Generate an website instantly using Drag and Drop Tailwind CSS components",
 };

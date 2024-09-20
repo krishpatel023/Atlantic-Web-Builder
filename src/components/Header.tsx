@@ -4,6 +4,7 @@ import Link from "next/link";
 import Github from "@/assets/Github.svg";
 import Logo from "../assets/logo.png";
 import { useUser } from "@/context/UserData/UserProvider";
+import { LINKS } from "@/utils/utils";
 
 const Header = () => {
   const { userState, dispatchUserState } = useUser();
@@ -23,10 +24,7 @@ const Header = () => {
       </div>
       <div className="flex h-full items-center gap-8">
         <div className="hidden sm:block">
-          <Link
-            href="https://github.com/krishpatel023/Atlantic-UI"
-            target="_blank"
-          >
+          <Link href={LINKS.github_url} target="_blank">
             <Image src={Github} alt="Github Image" />
           </Link>
         </div>

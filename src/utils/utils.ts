@@ -1,7 +1,5 @@
 import { env } from "process";
 
-export const BACKEND_URL = env.NEXT_PUBLIC_ENV === "production" ? "https://atlantic-ui-test.vercel.app/api/" : "http://localhost:3000/api/";
-
 //CONFIG FOR AXIOS
 export const HEADER_CONFIG = {
   headers: {
@@ -10,3 +8,10 @@ export const HEADER_CONFIG = {
   withCredentials: true,
   credentials: "include",
 };
+
+export const LINKS = {
+  github_url : "https://github.com/krishpatel023/Atlantic-UI",
+  hosted_url : "https://atlantic-ui-test.vercel.app/api/",
+}
+
+export const BACKEND_URL = env.NEXT_PUBLIC_ENV === "production" ? LINKS.hosted_url : "http://localhost:3000/api/";

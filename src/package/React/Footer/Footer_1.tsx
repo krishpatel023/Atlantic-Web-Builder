@@ -17,7 +17,7 @@ export default function Footer_1() {
         </div>
         <div className="mt-4 flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
           <Copyright size={20} />
-          <span>2023 Atlantic UI</span>
+          <span>2023 Atlantic Web Builder</span>
         </div>
       </div>
     </>
@@ -31,7 +31,7 @@ export const FooterElement_1: ReactElement = (
     </div>
     <div className="mt-4 flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
       <Copyright size={20} />
-      <span>2023 Atlantic UI</span>
+      <span>2023 Atlantic Web Builder</span>
     </div>
   </div>
 );
@@ -42,6 +42,6 @@ export const FooterCode_1 = `<div className="flex w-full flex-col items-center j
 </div>
 <div className="mt-4 flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
   <Copyright size={20} />
-  <span>2023 Atlantic UI</span>
+  <span>2023 Atlantic Web Builder</span>
 </div>
 </div>`;

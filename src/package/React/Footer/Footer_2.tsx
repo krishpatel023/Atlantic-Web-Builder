@@ -1,11 +1,3 @@
-import Image from "next/image";
-import Logo from "@/assets/logo.png";
-import {
-  InstagramLogo,
-  FacebookLogo,
-  TwitterLogo,
-  Copyright,
-} from "@phosphor-icons/react/dist/ssr";
 import { ReactElement } from "react";
 
 export default function Footer_2() {
@@ -29,7 +21,7 @@ export default function Footer_2() {
           </div>
         </div>
         <div className="flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
-          <span>2023 Atlantic UI</span>
+          <span>2023 Atlantic Web Builder</span>
         </div>
       </div>
     </>
@@ -55,7 +47,7 @@ export const FooterElement_2: ReactElement = (
       </div>
     </div>
     <div className="flex h-16 w-full items-center justify-center gap-2 border-t-[1px] border-border text-center text-aui_text_secondary">
-      <span>2023 Atlantic UI</span>
+      <span>2023 Atlantic Web Builder</span>
     </div>
   </div>
 );
@@ -86,7 +78,7 @@ export const FooterCode_2 = `<>
   </div>
   <div className="w-full h-16 border-t-[1px] border-border flex justify-center items-center gap-2 text-aui_text_secondary text-center">
     <Copyright size={20} />
-    <span>2023 Atlantic UI</span>
+    <span>2023 Atlantic Web Builder</span>
   </div>
 </div>
 </>`;
