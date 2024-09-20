@@ -3,7 +3,7 @@ import { getSession } from "@/context/UserData/AuthLogic";
 import { useUser } from "@/context/UserData/UserProvider";
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
-import { Eye, Plus, SquarePen, Trash, X } from "lucide-react";
+import { Eye, Loader2, Plus, SquarePen, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
@@ -16,10 +16,7 @@ export default function Dashboard() {
   const [createModal, setCreateModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteProjectId, setDeleteProjectId] = useState(null);
-
-  // useEffect(() => {
-  //   checkSession();
-  // }, []);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     checkSession();
@@ -47,6 +44,7 @@ export default function Dashboard() {
     if (resp.data.status === true) {
       setProjectData(resp.data.data);
     }
+    setLoading(false);
   };
 
   return (
@@ -63,89 +61,85 @@ export default function Dashboard() {
         callReload={handleDataFetching}
       />
 
-      <div className="flex h-screen w-full">
-        {/* <div className="z-0 flex h-full w-60  flex-col gap-6 bg-slate-50 px-4">
-          <h1 className="mt-6 text-lg font-semibold">Dashboard</h1>
-          <div className="w-[90%] border-[1px] border-gray-300"></div>
-          <button className="w-full rounded bg-white py-2 shadow">Pages</button>
-          <div className="flex w-full justify-center">
-            <button className="w-full rounded bg-white py-2 shadow">
-              Settings
-            </button>
-          </div>
-        </div> */}
-        <div className="flex w-[calc(100%)] items-center justify-center py-10">
-          <div className=" flex h-full w-[80%] flex-col gap-4 overflow-x-auto">
-            <div className="flex w-full items-center justify-between">
-              <h1 className="text-lg font-semibold">
-                Projects ({projectData?.length})
-              </h1>
-              <button
-                className="flex items-center justify-center gap-2 rounded bg-primary px-4 py-2 text-sm text-textComplementary"
-                onClick={() => {
-                  setCreateModal(true);
-                }}
-              >
-                <Plus size={16} /> Add Project
-              </button>
-            </div>
-
-            {projectData?.length > 0 ? (
-              <table className="w-full table-fixed rounded-lg border-2 border-secondary">
-                <thead>
-                  <tr className="border-b-2 border-secondary">
-                    <th className=" px-4 py-4 text-start">Project Name</th>
-                    <th className="px-4 py-4 text-start">Status</th>
-                    <th className="px-4 py-4 text-start">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {projectData?.map((data: any) => (
-                    <tr className="border-b-2 border-secondary" key={v4()}>
-                      <td className="px-4 py-2">{data?.name}</td>
-                      <td className="px-4 py-2">{data?.status}</td>
-                      <td className="flex flex-col gap-2 px-4 py-2">
-                        <a
-                          className="flex items-center justify-start gap-2 hover:scale-[102%] transition-all duration-300 text-accent"
-                          href={`/preview/projects/${data?.projectID}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Eye size={16} /> Preview
-                        </a>
-                        <button
-                          className="flex items-center justify-start gap-2 hover:scale-[102%] transition-all duration-300 text-accent"
-                          onClick={() => {
-                            router.push(`/web-builder/${data?.projectID}`);
-                          }}
-                        >
-                          <SquarePen size={16} /> Edit
-                        </button>
-                        <button
-                          className="flex items-center justify-start gap-2 hover:scale-[102%] transition-all duration-300 text-red-500"
-                          onClick={() => {
-                            setDeleteModal(true);
-                            setDeleteProjectId(data?.projectID);
-                          }}
-                        >
-                          <Trash size={16} /> Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="mt-8 flex h-10 w-full flex-col items-center justify-center gap-1 text-center">
-                <h1 className="text-2xl font-bold"> No Projects Available</h1>
-                <h1 className="text-base font-semibold">
-                  Please Create a Project
+      {loading ? (
+        <div className="flex h-screen w-full items-center justify-center">
+          <Loader2 className="size-10 animate-spin" />
+        </div>
+      ) : (
+        <div className="flex h-screen w-full">
+          <div className="flex w-[calc(100%)] items-center justify-center py-10">
+            <div className=" flex h-full w-[80%] flex-col gap-4 overflow-x-auto">
+              <div className="flex w-full items-center justify-between">
+                <h1 className="text-lg font-semibold">
+                  Projects ({projectData?.length})
                 </h1>
+                <button
+                  className="flex items-center justify-center gap-2 rounded bg-primary px-4 py-2 text-sm text-textComplementary"
+                  onClick={() => {
+                    setCreateModal(true);
+                  }}
+                >
+                  <Plus size={16} /> Add Project
+                </button>
               </div>
-            )}
+
+              {projectData?.length > 0 ? (
+                <table className="w-full table-fixed rounded-lg border-2 border-secondary">
+                  <thead>
+                    <tr className="border-b-2 border-secondary">
+                      <th className=" px-4 py-4 text-start">Project Name</th>
+                      <th className="px-4 py-4 text-start">Status</th>
+                      <th className="px-4 py-4 text-start">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projectData?.map((data: any) => (
+                      <tr className="border-b-2 border-secondary" key={v4()}>
+                        <td className="px-4 py-2">{data?.name}</td>
+                        <td className="px-4 py-2">{data?.status}</td>
+                        <td className="flex flex-col gap-2 px-4 py-2">
+                          <a
+                            className="flex items-center justify-start gap-2 text-accent transition-all duration-300 hover:scale-[102%]"
+                            href={`/preview/projects/${data?.projectID}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Eye size={16} /> Preview
+                          </a>
+                          <button
+                            className="flex items-center justify-start gap-2 text-accent transition-all duration-300 hover:scale-[102%]"
+                            onClick={() => {
+                              router.push(`/web-builder/${data?.projectID}`);
+                            }}
+                          >
+                            <SquarePen size={16} /> Edit
+                          </button>
+                          <button
+                            className="flex items-center justify-start gap-2 text-red-500 transition-all duration-300 hover:scale-[102%]"
+                            onClick={() => {
+                              setDeleteModal(true);
+                              setDeleteProjectId(data?.projectID);
+                            }}
+                          >
+                            <Trash size={16} /> Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="mt-8 flex h-10 w-full flex-col items-center justify-center gap-1 text-center">
+                  <h1 className="text-2xl font-bold"> No Projects Available</h1>
+                  <h1 className="text-base font-semibold">
+                    Please Create a Project
+                  </h1>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
@@ -164,7 +158,6 @@ const CreateModal = ({
   const { userState, dispatchUserState, handleUserUpdate } = useUser();
 
   const handleProjectCreation = async () => {
-
     if (inputState && userState?.userData?.userID) {
       const Payload: ProjectProps = {
         projectID: v4(),

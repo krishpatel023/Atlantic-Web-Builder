@@ -26,7 +26,7 @@ export default function PreviewFullscreen({
           projectId: preview,
         });
       } else {
-        setErrorMessage("Ops! An Error Occured");
+        setErrorMessage("Ops! An Error Occurred");
       }
     };
 
@@ -105,7 +105,13 @@ export default function PreviewFullscreen({
             </span>
           </div>
           {/* <Background /> */}
-          {errorMessage ? null : <Recursive element={elements[0]} />}
+          {errorMessage ? (
+            <div className="flex h-full w-full items-center justify-center">
+              {errorMessage}
+            </div>
+          ) : (
+            <Recursive element={elements[0]} />
+          )}
         </div>
       ) : null}
     </>

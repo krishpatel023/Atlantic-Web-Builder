@@ -15,38 +15,20 @@ const Header = () => {
   };
 
   return (
-    <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-border bg-background px-12">
+    <div className="flex h-16 w-full items-center justify-between border-b-[1px] border-border bg-background px-6 md:px-12">
       <div className="flex h-full w-[10rem] items-center justify-center">
         <Link href="/" className="flex h-full items-center justify-center">
           <Image src={Logo} alt="Logo" className="h-[50%] object-contain" />
         </Link>
       </div>
       <div className="flex h-full items-center gap-8">
-        <Link
-          href="/components"
-          className="text-textSecondary hover:text-textPrimary"
-        >
-          Components
-        </Link>
-        <Link
-          href="/web-builder"
-          className="text-textSecondary hover:text-textPrimary"
-        >
-          Website Builder
-        </Link>
-        <Link
-          href="/docs"
-          className="text-textSecondary hover:text-textPrimary"
-        >
-          Docs
-        </Link>
-        <div>
-          <a
+        <div className="hidden sm:block">
+          <Link
             href="https://github.com/krishpatel023/Atlantic-UI"
             target="_blank"
           >
             <Image src={Github} alt="Github Image" />
-          </a>
+          </Link>
         </div>
         {userState?.loginStatus ? (
           <button
