@@ -1,10 +1,10 @@
 import { SignJWT, jwtVerify } from "jose";
 import { setCookie, deleteCookie, getCookie } from "cookies-next";
 import { UserState } from "./UserProvider";
-import { CURRENT_ENV, SECRET_KEY_FOR_ENCRYPTION } from "@/utils/utils";
+import process from "process";
 
-const secret = SECRET_KEY_FOR_ENCRYPTION;
-const key = new TextEncoder().encode(secret);
+const key = new TextEncoder().encode(process.env.NEXT_PUBLIC_ENCRYPTION);
+
 //IF IN PRODUCTION TRUE
 const httpOnlyStatus = false;
 // In Seconds

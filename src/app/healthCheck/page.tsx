@@ -1,11 +1,11 @@
 "use client";
 
-import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 
-export default function SignUp() {
+export default function HealthCheck() {
   const [analyticsData, setAnalyticsData] = useState<any>();
   const [error, setError] = useState<any>();
 
@@ -15,8 +15,10 @@ export default function SignUp() {
 
   const makeRequest = async () => {
     try {
+      console.log(process.env.NEXT_PUBLIC_ANALYTICS_KEY);
+
       const response = await axios.get(
-        `${BACKEND_URL}/analytics?analyticsId=${ANALYTICS_KEY}`,
+        `${BACKEND_URL}/analytics?analyticsId=${process.env.NEXT_PUBLIC_ANALYTICS_KEY}`,
         HEADER_CONFIG,
       );
       if (response.data) {

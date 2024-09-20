@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/context/UserData/UserProvider";
-import { ANALYTICS_KEY, BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
+import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
 import clsx from "clsx";
 import Link from "next/link";
@@ -226,7 +226,7 @@ export default function SignUp() {
   const handleAnalyticsUpdate = async () => {
     try {
       const response = await axios.put(
-        `${BACKEND_URL}/analytics?analyticsId=${ANALYTICS_KEY}`,
+        `${BACKEND_URL}/analytics?analyticsId=${process.env.NEXT_PUBLIC_ANALYTICS_KEY}`,
         HEADER_CONFIG,
       );
     } catch (error) {
