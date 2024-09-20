@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { UserRegisterFields } from "../api/users/route";
+import { Loader2 } from "lucide-react";
 
 export default function SignUp() {
   const [passType, setPassType] = useState<"password" | "text">("password");
@@ -24,6 +25,8 @@ export default function SignUp() {
 
   const [name, setName] = useState<string | null>();
   const [nameError, setNameError] = useState<string | null>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (userState.loginStatus) {
@@ -163,6 +166,7 @@ export default function SignUp() {
 
   //SignIn
   const handleSignUp = () => {
+    setIsLoading(true);
     if (
       !usernameError &&
       !passwordError &&
@@ -221,6 +225,8 @@ export default function SignUp() {
         setNameError("Please enter a valid Name");
       }
     }
+
+    setIsLoading(false);
   };
 
   const handleAnalyticsUpdate = async () => {
@@ -345,7 +351,11 @@ export default function SignUp() {
             <p>
               Have an account?{" "}
               <Link href={"/signin"} className="text-accent underline">
-                Sign In
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Sign Up"
+                )}
               </Link>
             </p>
           </div>

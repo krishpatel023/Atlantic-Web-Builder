@@ -8,11 +8,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { UserLoginFields } from "../api/users/route";
+import { Loader2 } from "lucide-react";
 
 export default function SignIn() {
   const [passType, setPassType] = useState<"password" | "text">("password");
   const [username, setUsername] = useState<string | null>();
   const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [password, setPassword] = useState<string | null>();
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -140,6 +142,7 @@ export default function SignIn() {
 
   //SignIn
   const handleSignIn = () => {
+    setIsLoading(true);
     if (!usernameError && !passwordError && username && password) {
       //Remove this
       handleLoginLogic();
@@ -185,6 +188,7 @@ export default function SignIn() {
         );
       }
     }
+    setIsLoading(false);
   };
 
   const handleAnalyticsUpdate = async () => {
@@ -294,7 +298,11 @@ export default function SignIn() {
               className="flex h-12 w-full items-center justify-center rounded-md bg-primary text-center text-textComplementary hover:bg-primaryHover "
               onClick={handleSignIn}
             >
-              Sign In
+              {isLoading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                "Sign In"
+              )}
             </button>
 
             <p>

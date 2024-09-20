@@ -8,17 +8,11 @@ export const connect = async () => {
   try {
     if (process.env.MONGODB_URI) {
       await mongoose.connect(process.env.MONGODB_URI);
-      console.log("CONNECTED --- MongoDB");
       return true;
     } else {
       throw Error("MongoDB URI not found");
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
-
-// mongoose.connection.on("disconnected", () => {
-//   console.log("DISCONNECTED --- MongoDB");
-//   connect();
-// });

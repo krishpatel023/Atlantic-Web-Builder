@@ -37,7 +37,6 @@ const handleDataFetching = async (userId: { userId: string }) => {
     `${BACKEND_URL}/projects/getProjectsForDashboard/${userId}`,
     HEADER_CONFIG,
   );
-  console.log(resp.data);
 
   if (resp.data.status === true) {
     return resp.data.data;
@@ -46,14 +45,11 @@ const handleDataFetching = async (userId: { userId: string }) => {
 
 const UserDataFetch = async (userId: { userId: string }) => {
   if (!userId) return;
-  console.log("USER FETCH", userId);
 
   const resp = await axios.get(
     `${BACKEND_URL}/users?userId=${userId.userId}`,
     HEADER_CONFIG,
   );
-  console.log(resp.data);
-
   if (resp.data.status === true) {
     return resp.data.data;
   }
@@ -145,9 +141,6 @@ const UserProvider = (props: SettingsProps) => {
       }
     }
   };
-  useEffect(() => {
-    console.log("USER STATE :::", userState);
-  }, [userState]);
 
   const checkIfCookieExists = async () => {
     const resp = await getSession();
