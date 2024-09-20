@@ -9,8 +9,7 @@ export const HEADER_CONFIG = {
 
 export const LINKS = {
   github_url : "https://github.com/krishpatel023/Atlantic-UI",
-  hosted_url : "https://atlantic-ui-test.vercel.app/api/",
+  hosted_url : "https://atlantic-web-builder.vercel.app/api/",
 }
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_NODE_ENV === "production" ? LINKS.hosted_url : "http://localhost:3000/api/";
-console.log(process.env.NEXT_PUBLIC_NODE_ENV);

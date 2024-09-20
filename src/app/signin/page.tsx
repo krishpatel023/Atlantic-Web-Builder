@@ -299,7 +299,7 @@ export default function SignIn() {
               onClick={handleSignIn}
             >
               {isLoading ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2 className="size-5 animate-spin" />
               ) : (
                 "Sign In"
               )}
