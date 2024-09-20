@@ -346,16 +346,16 @@ export default function SignUp() {
               className="flex h-12 w-full items-center justify-center rounded-md bg-primary text-center text-textComplementary hover:bg-primaryHover "
               onClick={handleSignUp}
             >
-              Sign Up
+              {isLoading ? (
+                <Loader2 className="size-6 animate-spin" />
+              ) : (
+                "Sign Up"
+              )}
             </button>
             <p>
               Have an account?{" "}
               <Link href={"/signin"} className="text-accent underline">
-                {isLoading ? (
-                  <Loader2 className="size-5 animate-spin" />
-                ) : (
-                  "Sign Up"
-                )}
+                Sign In
               </Link>
             </p>
           </div>

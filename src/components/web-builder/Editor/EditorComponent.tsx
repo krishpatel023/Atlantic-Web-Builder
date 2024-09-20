@@ -5,6 +5,7 @@ import SideBar from "@/components/web-builder/SideBar/SideBar";
 import { useEditor } from "@/context/Editor/EditorProvider";
 import { getSession } from "@/context/UserData/AuthLogic";
 import { useUser } from "@/context/UserData/UserProvider";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -52,14 +53,14 @@ export default function EditorComponent(projectId: { projectId: string }) {
       }
     }
   };
+
   useEffect(() => {
     checkSession();
   }, [userState.loginStatus]);
+
   useEffect(() => {
     updateFunc();
   }, [state.editor.elements]);
-
-  
 
   return (
     <>
@@ -71,17 +72,15 @@ export default function EditorComponent(projectId: { projectId: string }) {
         </div>
       ) : (
         <div className="flex h-screen w-screen items-center justify-center">
-          <h1 className="text-2xl">            
-            {statusMessage ? statusMessage : <Loader className="size-8 animate-spin text-foreground"/>}
+          <h1 className="text-2xl">
+            {statusMessage ? (
+              statusMessage
+            ) : (
+              <Loader2 className="size-8 animate-spin text-foreground" />
+            )}
           </h1>
         </div>
       )}
     </>
   );
 }
-
-export const Loader = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg height="200" width="200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
-  </svg>
-  )
