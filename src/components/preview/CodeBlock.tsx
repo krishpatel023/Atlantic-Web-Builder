@@ -12,7 +12,7 @@ import { plugins, format as prettyFormat } from "pretty-format";
 import renderer from "react-test-renderer";
 import Recursive from "./Recursive";
 
-const { ReactElement, ReactTestComponent } = plugins;
+const { ReactTestComponent } = plugins;
 
 export default function CodeBlock({ element }: { element: EditorElement }) {
   SyntaxHighlighter.registerLanguage("jsx", jsx);
