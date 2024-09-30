@@ -97,8 +97,8 @@ function perform_undo(state: EditorState) {
   const element = state.history.undo.pop();
 
   if(!element) return;
-  state.history.redo.push(element);
-  state.editor = state.history.undo.length > 0 ? state.history.undo[state.history.undo.length - 1] : initialEditorState;
+  state.history.redo.push({...element});
+  state.editor = state.history.undo.length > 0 ? {...state.history.undo[state.history.undo.length - 1]} : {...initialEditorState};
 }
 
 function perform_redo(state: EditorState) {
@@ -107,8 +107,8 @@ function perform_redo(state: EditorState) {
   // Remove the top item from redo
   const element = state.history.redo.pop();
   if(element){
-     state.history.undo.push(element);
-    state.editor = element;
+     state.history.undo.push({...element});
+    state.editor = {...element};
   }
 }
    
@@ -134,7 +134,7 @@ const removeRefToElements = (editorArray: EditorElement[]) => {
 const addAnElement = (
   editorArray: EditorElement[],
   action: EditorAction,
-): EditorElement[] => {
+): EditorElement[] => {  
   if (action.type !== "ADD_ELEMENT")
     throw Error(
       "You sent the wrong action type to the Add Element editor State",
@@ -167,14 +167,25 @@ const deleteAnElement = (
     throw Error(
       "You sent the wrong action type to the Delete Element editor State",
     );
-  return editorArray.filter((item) => {
-    if (item.id === action.payload.elementId) {
-      return false;
-    } else if (item.content && Array.isArray(item.content)) {
-      item.content = deleteAnElement(item.content, action);
+    const newArray = editorArray.slice();
+    return recursiveDelete(newArray, action.payload.elementId);  
+};
+
+const recursiveDelete = (editorArray: EditorElement[], elementId: string) => {
+  return editorArray.reduce((acc, item) => {
+    if (item.id === elementId) {
+      return acc; // Skip this item
     }
-    return item;
-  });
+    
+    const newItem = { ...item }; // Create a shallow copy of the item
+    
+    if (newItem.content && Array.isArray(newItem.content)) {
+      newItem.content = recursiveDelete(newItem.content, elementId);
+    }
+    
+    acc.push(newItem);
+    return acc;
+  }, [] as EditorElement[]);
 };
 
 const updateAnElement = (
@@ -211,12 +222,12 @@ const editorReducer = (
       perform_addition(updatedEditorState, state.history);
 
       const newEditorState = {
-        ...state,
+        history: state.history,
         editor: updatedEditorState,
       };
       
       return newEditorState;
-    case "UPDATE_ELEMENT":
+    case "UPDATE_ELEMENT":      
       const updatedElements = updateAnElement(state.editor.elements, action);
 
       const updatedEditorStateWithUpdate = {
@@ -231,21 +242,22 @@ const editorReducer = (
         editor: updatedEditorStateWithUpdate,
       };
     case "DELETE_ELEMENT":
-      const updatedElementsAfterDelete = deleteAnElement(
-        state.editor.elements,
-        action,
-      );
       const updatedEditorStateAfterDelete = {
         ...state.editor,
-        elements: updatedElementsAfterDelete,
+        elements: deleteAnElement(
+          state.editor.elements,
+          action,
+        ),
       };
 
-      perform_addition(updatedEditorStateAfterDelete, state.history);
+      const newElement: Editor = JSON.parse(JSON.stringify(updatedEditorStateAfterDelete));
+      perform_addition(newElement, state.history);
 
       return {
         ...state,
         editor: updatedEditorStateAfterDelete,
-      };;
+      };
+
     case "UPDATE_SELECTED_ELEMENT":
       return {
         ...state,
@@ -256,7 +268,6 @@ const editorReducer = (
       };
 
     case "REDO":
-      console.log(state.history);
       perform_redo(state);
       return {...state};
 
@@ -386,11 +397,6 @@ const EditorProvider = (props: EditorProps) => {
       HEADER_CONFIG,
     );
   };
-
-  useEffect(()=> {
-    console.log("Editor", state.editor);
-    console.log("History", state.history);
-  }, [state])
 
   return (
     <EditorContext.Provider
