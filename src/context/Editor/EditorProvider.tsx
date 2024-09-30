@@ -42,7 +42,7 @@ export type EditorElement = {
   type: EditorBtns;
   tag?: keyof JSX.IntrinsicElements | React.ComponentType<any> | "unknown";
   content: EditorElement[];
-  special?: {};
+  special?: Record<string, string>;
   elementRef?: React.RefObject<HTMLElement>;
 };
 
