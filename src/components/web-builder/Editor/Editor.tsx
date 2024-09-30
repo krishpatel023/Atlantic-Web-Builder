@@ -1,4 +1,5 @@
 "use client";
+
 import CodeBlock from "@/components/preview/CodeBlock";
 import { useEditor } from "@/context/Editor/EditorProvider";
 import { useSettings } from "@/context/Settings/SettingsProvider";
@@ -13,7 +14,6 @@ import {
 } from "@phosphor-icons/react";
 import clsx from "clsx";
 import Recursive from "./Editable/Recursive";
-import { useEffect } from "react";
 
 export default function Editor({ projectId }: { projectId: string }) {
   const { state, dispatch } = useEditor();
@@ -42,9 +42,6 @@ export default function Editor({ projectId }: { projectId: string }) {
     });
   };
 
-  useEffect(() => {
-    console.log("change");
-  }, [state.editor])
   return (
     <>
       <div
@@ -100,17 +97,15 @@ export default function Editor({ projectId }: { projectId: string }) {
             <button
               onClick={handleUndo}
               disabled={state.history.undo.length <= 0}
-              className="h-full disabled:text-textSecondary disabled:cursor-not-allowed"
+              className="h-full disabled:cursor-not-allowed disabled:text-textSecondary"
             >
               <ArrowArcLeft size={20} />
             </button>
             <div className="h-full min-w-[1px] bg-slate-200"></div>
             <button
               onClick={handleRedo}
-              disabled={
-                state.history.redo.length <= 0
-              }
-              className="h-full disabled:text-textSecondary disabled:cursor-not-allowed"
+              disabled={state.history.redo.length <= 0}
+              className="h-full disabled:cursor-not-allowed disabled:text-textSecondary"
             >
               <ArrowArcRight size={20} />
             </button>
@@ -131,7 +126,7 @@ export default function Editor({ projectId }: { projectId: string }) {
               ))}
           </div>
         ) : (
-          <CodeBlock element={state.editor.elements[0]} />
+          <CodeBlock />
         )}
       </div>
     </>

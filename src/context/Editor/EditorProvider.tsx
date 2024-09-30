@@ -2,7 +2,13 @@
 // import { EditorAction } from './editor-actions'
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
-import { Dispatch, createContext, useContext, useEffect, useReducer } from "react";
+import {
+  Dispatch,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import { EditorAction } from "./EditorActions";
 export type EditorBtns =
   | "text"
@@ -87,31 +93,34 @@ function perform_addition(data: Editor, history: HistoryState) {
   // Add the new to the undo
   history.undo.push(data);
   // Clear the redo - new action invalidates the redo history
-  history.redo = []
+  history.redo = [];
 }
 
 function perform_undo(state: EditorState) {
-  if(state.history.undo.length <= 0) return history;
+  if (state.history.undo.length <= 0) return history;
 
   // Remove the top item from undo
   const element = state.history.undo.pop();
 
-  if(!element) return;
-  state.history.redo.push({...element});
-  state.editor = state.history.undo.length > 0 ? {...state.history.undo[state.history.undo.length - 1]} : {...initialEditorState};
+  if (!element) return;
+  state.history.redo.push({ ...element });
+  state.editor =
+    state.history.undo.length > 0
+      ? { ...state.history.undo[state.history.undo.length - 1] }
+      : { ...initialEditorState };
 }
 
 function perform_redo(state: EditorState) {
-  if(state.history.redo.length <= 0) return;
+  if (state.history.redo.length <= 0) return;
 
   // Remove the top item from redo
   const element = state.history.redo.pop();
-  if(element){
-     state.history.undo.push({...element});
-    state.editor = {...element};
+  if (element) {
+    state.history.undo.push({ ...element });
+    state.editor = { ...element };
   }
 }
-   
+
 //  ------------------------------------------
 
 const addRefToElements = (editorElem: EditorElement): EditorElement => {
@@ -134,7 +143,7 @@ const removeRefToElements = (editorArray: EditorElement[]) => {
 const addAnElement = (
   editorArray: EditorElement[],
   action: EditorAction,
-): EditorElement[] => {  
+): EditorElement[] => {
   if (action.type !== "ADD_ELEMENT")
     throw Error(
       "You sent the wrong action type to the Add Element editor State",
@@ -167,8 +176,8 @@ const deleteAnElement = (
     throw Error(
       "You sent the wrong action type to the Delete Element editor State",
     );
-    const newArray = editorArray.slice();
-    return recursiveDelete(newArray, action.payload.elementId);  
+  const newArray = editorArray.slice();
+  return recursiveDelete(newArray, action.payload.elementId);
 };
 
 const recursiveDelete = (editorArray: EditorElement[], elementId: string) => {
@@ -176,13 +185,13 @@ const recursiveDelete = (editorArray: EditorElement[], elementId: string) => {
     if (item.id === elementId) {
       return acc; // Skip this item
     }
-    
+
     const newItem = { ...item }; // Create a shallow copy of the item
-    
+
     if (newItem.content && Array.isArray(newItem.content)) {
       newItem.content = recursiveDelete(newItem.content, elementId);
     }
-    
+
     acc.push(newItem);
     return acc;
   }, [] as EditorElement[]);
@@ -225,9 +234,9 @@ const editorReducer = (
         history: state.history,
         editor: updatedEditorState,
       };
-      
+
       return newEditorState;
-    case "UPDATE_ELEMENT":      
+    case "UPDATE_ELEMENT":
       const updatedElements = updateAnElement(state.editor.elements, action);
 
       const updatedEditorStateWithUpdate = {
@@ -244,13 +253,12 @@ const editorReducer = (
     case "DELETE_ELEMENT":
       const updatedEditorStateAfterDelete = {
         ...state.editor,
-        elements: deleteAnElement(
-          state.editor.elements,
-          action,
-        ),
+        elements: deleteAnElement(state.editor.elements, action),
       };
 
-      const newElement: Editor = JSON.parse(JSON.stringify(updatedEditorStateAfterDelete));
+      const newElement: Editor = JSON.parse(
+        JSON.stringify(updatedEditorStateAfterDelete),
+      );
       perform_addition(newElement, state.history);
 
       return {
@@ -269,11 +277,11 @@ const editorReducer = (
 
     case "REDO":
       perform_redo(state);
-      return {...state};
+      return { ...state };
 
     case "UNDO":
       perform_undo(state);
-      return {...state};
+      return { ...state };
 
     case "UPDATE_HOVER":
       return {
