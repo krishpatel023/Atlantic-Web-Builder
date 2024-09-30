@@ -1,7 +1,7 @@
 "use client";
 import CodeBlock from "@/components/preview/CodeBlock";
 import { useEditor } from "@/context/Editor/EditorProvider";
-import { DeviceTypes, useSettings } from "@/context/Settings/SettingsProvider";
+import { useSettings } from "@/context/Settings/SettingsProvider";
 import {
   ArrowArcLeft,
   ArrowArcRight,
@@ -13,19 +13,11 @@ import {
 } from "@phosphor-icons/react";
 import clsx from "clsx";
 import Recursive from "./Editable/Recursive";
+import { useEffect } from "react";
 
 export default function Editor({ projectId }: { projectId: string }) {
   const { state, dispatch } = useEditor();
   const { settingsState, dispatchSettings } = useSettings();
-
-  const handleChangeScreen = (screen: DeviceTypes) => {
-    dispatchSettings({
-      type: "CHANGE_DEVICE",
-      payload: {
-        device: screen,
-      },
-    });
-  };
 
   const handleTogglePreview = () => {
     dispatchSettings({
@@ -49,6 +41,10 @@ export default function Editor({ projectId }: { projectId: string }) {
       type: "TOGGLE_DISPLAY_MODE",
     });
   };
+
+  useEffect(() => {
+    console.log("change");
+  }, [state.editor])
   return (
     <>
       <div

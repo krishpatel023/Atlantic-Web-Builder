@@ -214,16 +214,10 @@ const editorReducer = (
         ...state,
         editor: updatedEditorState,
       };
-
-      console.log("add", state.history, newEditorState);
       
       return newEditorState;
     case "UPDATE_ELEMENT":
-      // Perform your logic to update the element in the state
       const updatedElements = updateAnElement(state.editor.elements, action);
-
-      // const UpdatedElementIsSelected =
-      //   state.editor.selectedElement === action.payload.elementDetails.id;
 
       const updatedEditorStateWithUpdate = {
         ...state.editor,
@@ -231,11 +225,11 @@ const editorReducer = (
       };
 
       perform_addition(updatedEditorStateWithUpdate, state.history);
-      const updatedEditor = {
+
+      return {
         ...state,
         editor: updatedEditorStateWithUpdate,
       };
-      return updatedEditor;
     case "DELETE_ELEMENT":
       const updatedElementsAfterDelete = deleteAnElement(
         state.editor.elements,
@@ -245,14 +239,13 @@ const editorReducer = (
         ...state.editor,
         elements: updatedElementsAfterDelete,
       };
-      perform_addition(updatedEditorStateAfterDelete, state.history);
-console.log(updatedEditorStateAfterDelete);
 
-      const deletedState = {
+      perform_addition(updatedEditorStateAfterDelete, state.history);
+
+      return {
         ...state,
         editor: updatedEditorStateAfterDelete,
-      };
-      return deletedState;
+      };;
     case "UPDATE_SELECTED_ELEMENT":
       return {
         ...state,
@@ -265,11 +258,12 @@ console.log(updatedEditorStateAfterDelete);
     case "REDO":
       console.log(state.history);
       perform_redo(state);
-      return state;
+      return {...state};
 
     case "UNDO":
       perform_undo(state);
-      return state;
+      return {...state};
+
     case "UPDATE_HOVER":
       return {
         ...state,
@@ -394,8 +388,9 @@ const EditorProvider = (props: EditorProps) => {
   };
 
   useEffect(()=> {
-    console.log(state.history);
-  }, [state.history])
+    console.log("Editor", state.editor);
+    console.log("History", state.history);
+  }, [state])
 
   return (
     <EditorContext.Provider
