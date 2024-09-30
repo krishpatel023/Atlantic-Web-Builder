@@ -2,7 +2,7 @@
 // import { EditorAction } from './editor-actions'
 import { BACKEND_URL, HEADER_CONFIG } from "@/utils/utils";
 import axios from "axios";
-import { Dispatch, createContext, useContext, useReducer } from "react";
+import { Dispatch, createContext, useContext, useEffect, useReducer } from "react";
 import { EditorAction } from "./EditorActions";
 export type EditorBtns =
   | "text"
@@ -46,11 +46,6 @@ export type Editor = {
   hoverElement: string | null;
 };
 
-export type HistoryState = {
-  history: Editor[];
-  currentIndex: number;
-};
-
 export type EditorState = {
   editor: Editor;
   history: HistoryState;
@@ -71,15 +66,53 @@ const initialEditorState: EditorState["editor"] = {
   hoverElement: null,
 };
 
+// Undo and Redo
+
+export type HistoryState = {
+  undo: Editor[];
+  redo: Editor[];
+};
+
 const initialHistoryState: HistoryState = {
-  history: [initialEditorState],
-  currentIndex: 0,
+  undo: [],
+  redo: [],
 };
 
 const initialState: EditorState = {
   editor: initialEditorState,
   history: initialHistoryState,
 };
+
+function perform_addition(data: Editor, history: HistoryState) {
+  // Add the new to the undo
+  history.undo.push(data);
+  // Clear the redo - new action invalidates the redo history
+  history.redo = []
+}
+
+function perform_undo(state: EditorState) {
+  if(state.history.undo.length <= 0) return history;
+
+  // Remove the top item from undo
+  const element = state.history.undo.pop();
+
+  if(!element) return;
+  state.history.redo.push(element);
+  state.editor = state.history.undo.length > 0 ? state.history.undo[state.history.undo.length - 1] : initialEditorState;
+}
+
+function perform_redo(state: EditorState) {
+  if(state.history.redo.length <= 0) return;
+
+  // Remove the top item from redo
+  const element = state.history.redo.pop();
+  if(element){
+     state.history.undo.push(element);
+    state.editor = element;
+  }
+}
+   
+//  ------------------------------------------
 
 const addRefToElements = (editorElem: EditorElement): EditorElement => {
   editorElem.content.map((item) => {
@@ -175,21 +208,15 @@ const editorReducer = (
         elements: addAnElement(state.editor.elements, action),
       };
       // Update the history to include the entire updated EditorState
-      const updatedHistory = [
-        ...state.history.history.slice(0, state.history.currentIndex + 1),
-        { ...updatedEditorState }, // Save a copy of the updated state
-      ];
+      perform_addition(updatedEditorState, state.history);
 
       const newEditorState = {
         ...state,
         editor: updatedEditorState,
-        history: {
-          ...state.history,
-          history: updatedHistory,
-          currentIndex: updatedHistory.length - 1,
-        },
       };
 
+      console.log("add", state.history, newEditorState);
+      
       return newEditorState;
     case "UPDATE_ELEMENT":
       // Perform your logic to update the element in the state
@@ -203,18 +230,10 @@ const editorReducer = (
         elements: updatedElements,
       };
 
-      const updatedHistoryWithUpdate = [
-        ...state.history.history.slice(0, state.history.currentIndex + 1),
-        { ...updatedEditorStateWithUpdate }, // Save a copy of the updated state
-      ];
+      perform_addition(updatedEditorStateWithUpdate, state.history);
       const updatedEditor = {
         ...state,
         editor: updatedEditorStateWithUpdate,
-        history: {
-          ...state.history,
-          history: updatedHistoryWithUpdate,
-          currentIndex: updatedHistoryWithUpdate.length - 1,
-        },
       };
       return updatedEditor;
     case "DELETE_ELEMENT":
@@ -226,19 +245,12 @@ const editorReducer = (
         ...state.editor,
         elements: updatedElementsAfterDelete,
       };
-      const updatedHistoryAfterDelete = [
-        ...state.history.history.slice(0, state.history.currentIndex + 1),
-        updatedEditorStateAfterDelete, // Save a copy of the updated state
-      ];
+      perform_addition(updatedEditorStateAfterDelete, state.history);
+console.log(updatedEditorStateAfterDelete);
 
       const deletedState = {
         ...state,
         editor: updatedEditorStateAfterDelete,
-        history: {
-          ...state.history,
-          history: updatedHistoryAfterDelete,
-          currentIndex: state.history.currentIndex + 1,
-        },
       };
       return deletedState;
     case "UPDATE_SELECTED_ELEMENT":
@@ -251,35 +263,12 @@ const editorReducer = (
       };
 
     case "REDO":
-      if (state.history.currentIndex < state.history.history.length - 1) {
-        const nextIndex = state.history.currentIndex + 1;
-        const nextEditorState = { ...state.history.history[nextIndex] };
-        const redoState = {
-          ...state,
-          editor: nextEditorState,
-          history: {
-            ...state.history,
-            currentIndex: nextIndex,
-          },
-        };
-        return redoState;
-      }
+      console.log(state.history);
+      perform_redo(state);
       return state;
 
     case "UNDO":
-      if (state.history.currentIndex > 0) {
-        const prevIndex = state.history.currentIndex - 1;
-        const prevEditorState = { ...state.history.history[prevIndex] };
-        const undoState = {
-          ...state,
-          editor: prevEditorState,
-          history: {
-            ...state.history,
-            currentIndex: prevIndex,
-          },
-        };
-        return undoState;
-      }
+      perform_undo(state);
       return state;
     case "UPDATE_HOVER":
       return {
@@ -403,6 +392,10 @@ const EditorProvider = (props: EditorProps) => {
       HEADER_CONFIG,
     );
   };
+
+  useEffect(()=> {
+    console.log(state.history);
+  }, [state.history])
 
   return (
     <EditorContext.Provider
