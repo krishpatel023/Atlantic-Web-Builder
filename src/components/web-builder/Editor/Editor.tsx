@@ -103,8 +103,8 @@ export default function Editor({ projectId }: { projectId: string }) {
           <div className="flex h-10 w-20 items-center justify-center gap-2 rounded-xl bg-background">
             <button
               onClick={handleUndo}
-              disabled={state.history.currentIndex === 0}
-              className="h-full disabled:text-textSecondary"
+              disabled={state.history.undo.length <= 0}
+              className="h-full disabled:text-textSecondary disabled:cursor-not-allowed"
             >
               <ArrowArcLeft size={20} />
             </button>
@@ -112,9 +112,9 @@ export default function Editor({ projectId }: { projectId: string }) {
             <button
               onClick={handleRedo}
               disabled={
-                state.history.currentIndex === state.history.history.length - 1
+                state.history.redo.length <= 0
               }
-              className="h-full disabled:text-textSecondary"
+              className="h-full disabled:text-textSecondary disabled:cursor-not-allowed"
             >
               <ArrowArcRight size={20} />
             </button>
