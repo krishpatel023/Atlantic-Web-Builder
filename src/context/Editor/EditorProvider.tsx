@@ -42,7 +42,7 @@ export type EditorElement = {
   type: EditorBtns;
   tag?: keyof JSX.IntrinsicElements | React.ComponentType<any> | "unknown";
   content: EditorElement[];
-  special?: {};
+  special?: Record<string, any>;
   elementRef?: React.RefObject<HTMLElement>;
 };
 
@@ -342,14 +342,14 @@ export const EditorContext = createContext<{
   }: {
     userId: string;
     projectId: string;
-  }) => {},
+  }) => { },
   handleCodeUpdateToBackend: ({
     userId,
     projectId,
   }: {
     userId: string;
     projectId: string;
-  }) => {},
+  }) => { },
 });
 
 type EditorProps = {
