@@ -1,38 +1,75 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { Checks } from "@phosphor-icons/react/dist/ssr";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-
-import { useEditor } from "@/context/Editor/EditorProvider";
+import { EditorElement, useEditor } from "@/context/Editor/EditorProvider";
 import { CopySimple } from "@phosphor-icons/react";
-import { plugins, format as prettyFormat } from "pretty-format";
-import renderer from "react-test-renderer";
-import Recursive from "./Recursive";
+import { html } from "js-beautify";
 
 export default function CodeBlock() {
   const { state } = useEditor();
   const [code, setCode] = useState<string | null>(null);
 
+  // ---
+  const generateCodeString = (element: EditorElement): string => {
+    let mainStr = "";
+    if (element.id === "__body") {
+      const str = element.content.map((el) => { return elementToStr(el); });
+      mainStr = mainStr + str.join("\n");
+    } else {
+      mainStr = "Something went wrong";
+    }
+    return mainStr;
+  };
+
+  const elementToStr = (element: EditorElement): string => {
+    if (element.content.length === 0) {
+      if (element.tag === undefined && element.tag === "unknown") return "";
+      const { textData, ...rest } = element.special as {
+        textData?: string;
+      };
+
+      const special = Object.keys(rest || {}).map((key) => {
+        return `${key}="${element.special ? element.special[key] : ""}"`
+      }).join(" ");
+      const openTag = `<${element.tag} className="${element.styles.join(" ")}" ${special}>`;
+      const closeTag = `</${element.tag}>`;
+
+      const str = openTag + (textData ? textData : "") + closeTag;
+      return str;
+    } else {
+      if (element.tag !== undefined &&
+        element.tag !== "unknown") {
+
+        const special = Object.keys(element.special || {}).map((key) => {
+          return `${key}="${element.special ? element.special[key] : ""}"`
+        }).join(" ");
+        const openTag = `<${element.tag} className="${element.styles.join(" ")}" ${special} >`;
+        const closeTag = `</${element.tag}>`;
+
+        const content = element.content.map((el) => { return elementToStr(el); }).join("\n");
+        const str = openTag + content + closeTag;
+        return str;
+      } else {
+        const content = element.content.map((el) => { return elementToStr(el); }).join("\n");
+        return content;
+      }
+
+    }
+  }
+
+  // ----
   SyntaxHighlighter.registerLanguage("jsx", jsx);
 
-  const { ReactTestComponent } = plugins;
-  const input = <Recursive element={state.editor.elements[0]} />;
-  const result = prettyFormat(renderer.create(input), {
-    plugins: [ReactTestComponent],
-    printFunctionName: true,
-    printBasicPrototype: true,
-  });
-
   useEffect(() => {
-    if (result) {
-      setCode(result);
-    } else {
-      setCode("Something went wrong!");
-    }
+    const stringElement = generateCodeString(state.editor.elements[0]);
+    const formattedCode = html(stringElement.replace(/\\"/g, '"'), {
+      indent_size: 2, wrap_attributes: "force-expand-multiline"
+    });
+    setCode(formattedCode);
   }, [state.editor.elements]);
 
   const [btnClick, setBtnClick] = useState(false);
@@ -49,27 +86,28 @@ export default function CodeBlock() {
 
   return (
     <>
-      <div className="relative h-full w-[95%] max-w-[calc((100vw*0.85)*0.90)] overflow-y-auto scrollbar">
-        {result && (
+      <div className="relative h-full w-[95%]">
+        {code && (
           <SyntaxHighlighter
             language="jsx"
             style={atomDark}
-            customStyle={{ width: "100", height: "100" }}
+            customStyle={{ width: "100%", height: "100", textWrap: "pretty", maxWidth: "100%" }}
             showLineNumbers
+            wrapLines
           >
-            {code ? code : ""}
+            {code}
           </SyntaxHighlighter>
         )}
         {btnClick ? (
-          <button className="absolute right-4 top-6 rounded-lg border-2 border-green-400  p-2 text-green-400">
-            <Checks size={20} />
+          <button className="size-8 p-1 flex justify-center items-center absolute right-4 top-6 rounded-lg border-2 bg-background border-green-800 text-green-700">
+            <Checks size={80} />
           </button>
         ) : (
           <button
-            className="absolute right-4 top-6 rounded-lg border-2 border-textComplementary  p-2 text-textComplementary"
+            className="size-8 p-1 flex justify-center items-center absolute right-4 top-6 rounded-lg border-2 border-textComplementary text-textPrimary bg-background"
             onClick={handleCopy}
           >
-            <CopySimple size={24} />
+            <CopySimple size={100} />
           </button>
         )}
       </div>
